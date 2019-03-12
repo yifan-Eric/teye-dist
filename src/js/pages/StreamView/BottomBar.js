@@ -68,7 +68,7 @@ class BottomBar extends React.Component{
                 <div className={'parent-col parent-col5'}>
                     <Card  bordered={false}>
                         <div>
-                            <p><Icon type="idcard" />查看随机用户的事件流</p>
+                            <p><Icon type="idcard" />随机用户的事件流</p>
                             <Button>用户概况</Button>
                         </div>
                     </Card>

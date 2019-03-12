@@ -15,13 +15,13 @@ class SecondCard extends React.Component {
         ];
     }
     componentDidMount(){
-        const preData = this.props.secondChartData.data;
-        this.anim = setInterval(()=>{
-            this.props.update(preData);
-        },1000*60)
+        // const preData = this.props.secondChartData.data;
         // this.anim = setInterval(()=>{
-        //     this.props.update();
+        //     this.props.update(preData);
         // },1000*60)
+        this.anim = setInterval(()=>{
+            this.props.update();
+        },1000*60)
     }
     componentWillUnmount(){
         clearInterval(this.anim);
@@ -86,10 +86,12 @@ SecondCard = connect(state => {
     return { secondChartData };
 }, dispatch => ({
     update(preData){
-        dispatch(action.updateSecondChart(preData));
+        // dispatch(action.updateSecondChart(preData));
+        dispatch(action.loadSecondChart());
     },
     reHref(){
         dispatch(appAction.loadTabPage('tBase/streamView'));
+        window.postMessage('_streamView');
     }
 }))(SecondCard);
 

@@ -3,14 +3,19 @@ import HeatMap from './HeatMap';
 import {connect} from 'react-redux';
 import BottomBar from './BottomBar';
 import {Spin} from "antd";
+import dashAction from 'actions/dashboard';
 require('less/streamView.less');
 
 class StreamView extends React.Component{
     constructor(props){
         super(props);
     }
+    componentWillMount(){
+        this.props.init();
+        this.props.mapLoading();
+    }
     render(){
-        const loading = false;
+        const {loading} = this.props;
         return (
             <div className="streamView-container head-toolbar display-flex flex-column">
                 <Toolbar/>
@@ -28,6 +33,18 @@ class StreamView extends React.Component{
         )
     }
 }
-StreamView = connect(null,null)(StreamView);
+StreamView = connect(state=>{
+    const {loading} = state['streamView'];
+    return {loading};
+},dispatch=>({
+    init(){
+        dispatch(dashAction.loadProducts());
+        dispatch(dashAction.loadAppVersions());
+    },
+    mapLoading(){
+        dispatch({type:'STREAMVIEW_LOADING',loading:true})
+        setTimeout(function(){dispatch({type:'STREAMVIEW_LOADING',loading:false});},800)
+    }
+}))(StreamView);
 
 module.exports = StreamView;

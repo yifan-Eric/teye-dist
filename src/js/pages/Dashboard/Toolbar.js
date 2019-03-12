@@ -37,6 +37,7 @@ class Toolbar extends React.Component{
             appVersion:appVersions,
             appName:productList
         }
+        console.log('search',searchParams);
         return (
             <div className="hd">
                 <SearchModal show={this.state.searchModalShow} onClose={()=>this.setState({searchModalShow: false})} onSearch={onSearch}/>

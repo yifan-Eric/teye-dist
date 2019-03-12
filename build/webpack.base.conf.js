@@ -15,11 +15,27 @@ function resolve(projectPath){
     return path.resolve(__dirname,'..' ,projectPath);
 }
 
+const pages = ['_dashboard','_streamView','_conversions'];
+
 var plugins = [
     // new webpack.optimize.CommonsChunkPlugin({name:['vendor','runtime']}),
     new webpack.optimize.CommonsChunkPlugin({name:'vendor'}),
     // new webpack.optimize.CommonsChunkPlugin({name:'common',filename:'[name].js',chunks:['login','app']}),
     new webpack.optimize.CommonsChunkPlugin({name:'app', children:true, async:true, minChunks:2}),
+    ...pages.map(o=>{
+        return new HtmlWebpackPlugin({
+            title:APP_NAME,
+            minify: {
+                caseSensitive: false,             //是否大小写敏感
+                collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
+                collapseWhitespace: true         //是否去除空格
+            },
+            chunks:[o, 'vendor'],
+            favicon:'./src/img/logo.png',
+            template:'./src/'+o+'.html',
+            filename:'./'+o+'.html' //结合output.path
+        })
+    }),
     new HtmlWebpackPlugin({
         title:'登录 - '+APP_NAME,
         minify: {
@@ -44,18 +60,30 @@ var plugins = [
         template:'./src/index.html',
         filename:'./index.html' //结合output.path
     }),
-    new HtmlWebpackPlugin({
-        title:APP_NAME,
-        minify: {
-            caseSensitive: false,             //是否大小写敏感
-            collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
-            collapseWhitespace: true         //是否去除空格
-        },
-        chunks:['_dashboard', 'vendor'],
-        favicon:'./src/img/logo.png',
-        template:'./src/_dashboard.html',
-        filename:'./_dashboard.html' //结合output.path
-    }),
+    // new HtmlWebpackPlugin({
+    //     title:APP_NAME,
+    //     minify: {
+    //         caseSensitive: false,             //是否大小写敏感
+    //         collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
+    //         collapseWhitespace: true         //是否去除空格
+    //     },
+    //     chunks:['_dashboard', 'vendor'],
+    //     favicon:'./src/img/logo.png',
+    //     template:'./src/_dashboard.html',
+    //     filename:'./_dashboard.html' //结合output.path
+    // }),
+    // new HtmlWebpackPlugin({
+    //     title:APP_NAME,
+    //     minify: {
+    //         caseSensitive: false,             //是否大小写敏感
+    //         collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
+    //         collapseWhitespace: true         //是否去除空格
+    //     },
+    //     chunks:['_streamView', 'vendor'],
+    //     favicon:'./src/img/logo.png',
+    //     template:'./src/_streamView.html',
+    //     filename:'./_streamView.html' //结合output.path
+    // }),
     new HappyPack({
         id: 'babel',
         loaders: ['babel-loader']
@@ -99,6 +127,7 @@ module.exports = {
         login: './src/js/login',
         app: './src/js/index',
         _dashboard: './src/js/_dashboard',
+        _streamView: './src/js/_streamView',
         //'news-viewer': './src/js/news-viewer',
         vendor:[
             'react',

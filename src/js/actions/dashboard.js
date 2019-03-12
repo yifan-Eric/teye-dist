@@ -216,84 +216,84 @@ actions.loadFirstChart = () => (dispatch,getState) => {
 //normalBar
 actions.loadSecondChart = () => dispatch => {
     //对接代码start
-    // ajax.get('/report/com.tct.camera/getAppPMActiveInfo',{}).then(obj=>{
-    //     const option = {
-    //         'title.text':'每分钟用户数',
-    //         'title.left':'left',
-    //         'title.top':'top',
-    //         'title.padding':[0,0],
-    //         'title.textStyle':{
-    //             fontSize: '12px'
-    //         },
-    //         // subTitle: moment(new Date()).format('YYYY-MM-DD'),
-    //         // legendData: [moment(new Date())],
-    //         'xAxis.show':false,
-    //         yAxis: {
-    //             show: false
-    //         },
-    //         color: ['#91d5ff'],
-    //         grid: {
-    //             left: '0%',
-    //             right: '0%',
-    //             bottom: '0%',
-    //             top: '5%',
-    //             containLabel: false
-    //         },
-    //         backgroundColor: 'rgba(0, 0, 0, 0)'
-    //     };
-    //     let data = [];
-    //     let x = [];
-    //     const hl = obj.halfHourDataList;
-    //     let halfHourNum = !isEmpty(hl)?hl[hl.length-1].activeUsers:0
-    //     obj.perMinuteDataList.forEach((o,i)=>{
-    //         data.push(o.activeUsers);
-    //         x.push((30-i)+'分钟前');
-    //     })
-    //     option['xAxis.data'] = x;
-    //
-    //     dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data,option,halfHourNum });
-    // })
+    ajax.get('/report/com.tct.camera/getAppPMActiveInfo',{}).then(obj=>{
+        const option = {
+            'title.text':'每分钟用户数',
+            'title.left':'left',
+            'title.top':'top',
+            'title.padding':[5,0],
+            'title.textStyle':{
+                fontSize: '12px'
+            },
+            // subTitle: moment(new Date()).format('YYYY-MM-DD'),
+            // legendData: [moment(new Date())],
+            'xAxis.show':false,
+            yAxis: {
+                show: false
+            },
+            color: ['#91d5ff'],
+            grid: {
+                left: '0%',
+                right: '0%',
+                bottom: '0%',
+                top: '5%',
+                containLabel: false
+            },
+            backgroundColor: 'rgba(0, 0, 0, 0)'
+        };
+        let data = [];
+        let x = [];
+        const hl = obj.halfHourDataList;
+        let halfHourNum = !isEmpty(hl)?hl[hl.length-1].num:0
+        obj.perMinuteDataList.forEach((o,i)=>{
+            data.push(o.num);
+            x.push((30-i)+'分钟前');
+        })
+        option['xAxis.data'] = x;
+
+        dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data,option,halfHourNum });
+    })
     //对接代码end
-    const option = {
-        'title.text':'Users pre minutes',
-        'title.left':'left',
-        'title.top':'top',
-        'title.padding':[0,0],
-        'title.textStyle':{
-            fontSize: '12px'
-        },
-        // subTitle: moment(new Date()).format('YYYY-MM-DD'),
-        // legendData: [moment(new Date())],
-        'xAxis.show':false,
-        yAxis: {
-            show: false
-        },
-        color: ['#91d5ff'],
-        grid: {
-            left: '0%',
-            right: '0%',
-            bottom: '0%',
-            top: '10%',
-            containLabel: false
-        },
-        backgroundColor: 'rgba(0, 0, 0, 0)'
-    };
-    let data = [];
-    let x = [];
-    let halfHourNum = 0;
-    for (let i = 0; i < 30; i++) {
-        const temp = parseInt(Math.random() * 200) + 600;
-        halfHourNum+=temp;
-        data.push(temp);
-        x.push((30-i)+'分钟前');
-    }
-    let listData = [
-        { id: 1, event: 'screen_view', count: 270000 },
-        { id: 2, event: 'user_engagement', count: 260000 },
-        { id: 3, event: 'select_content', count: 53000 }
-    ];
-    option['xAxis.data'] = x;
-    dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data,option,listData,halfHourNum });
+    // const option = {
+    //     'title.text':'Users pre minutes',
+    //     'title.left':'left',
+    //     'title.top':'top',
+    //     'title.padding':[0,0],
+    //     'title.textStyle':{
+    //         fontSize: '12px'
+    //     },
+    //     // subTitle: moment(new Date()).format('YYYY-MM-DD'),
+    //     // legendData: [moment(new Date())],
+    //     'xAxis.show':false,
+    //     yAxis: {
+    //         show: false
+    //     },
+    //     color: ['#91d5ff'],
+    //     grid: {
+    //         left: '0%',
+    //         right: '0%',
+    //         bottom: '0%',
+    //         top: '10%',
+    //         containLabel: false
+    //     },
+    //     backgroundColor: 'rgba(0, 0, 0, 0)'
+    // };
+    // let data = [];
+    // let x = [];
+    // let halfHourNum = 0;
+    // for (let i = 0; i < 30; i++) {
+    //     const temp = parseInt(Math.random() * 200) + 600;
+    //     halfHourNum+=temp;
+    //     data.push(temp);
+    //     x.push((30-i)+'分钟前');
+    // }
+    // let listData = [
+    //     { id: 1, event: 'screen_view', count: 270000 },
+    //     { id: 2, event: 'user_engagement', count: 260000 },
+    //     { id: 3, event: 'select_content', count: 53000 }
+    // ];
+    // option['xAxis.data'] = x;
+    // dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data,option,listData,halfHourNum });
 };
 actions.loadHotEvents = () => (dispatch,getState) => {
     const version = getState().dashboard.searchParams.appVersion;

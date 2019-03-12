@@ -22,7 +22,7 @@ class FirstCard extends React.Component {
                 hoverable={true}
             >
                 <Row>
-                    <Col xxl={19} style={{marginTop:10}}>
+                    <Col xxl={{span:19}} xl={{span:19}} style={{marginTop:10}}>
                         <ExCharts
                             container={id}
                             theme={'vintage'}
@@ -33,7 +33,7 @@ class FirstCard extends React.Component {
                             minHeight={250}
                         />
                     </Col>
-                    <Col xxl={{span:4,offset:1}} >
+                    <Col xxl={{span:4,offset:1}} xl={{span:4,offset:1}}>
                         <div className={'legendBlocks'}>
                             {
                                 JSON.stringify(chartData.option)!='{}'?chartData.option.legend.data.map((o, i) => {

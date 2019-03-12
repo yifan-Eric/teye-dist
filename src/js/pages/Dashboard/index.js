@@ -23,7 +23,7 @@ class Dashboard extends React.Component {
             <React.Fragment>
                 <div className="head-toolbar display-flex flex-column">
                     <Toolbar/>
-                    <div className="flex-grow-1 display-flex" style={{overflow:'auto'}}>
+                    <div className="flex-grow-1 display-flex" >
                         <div className="bd flex-grow-1" >
                             {
                                 loading ? (
