@@ -4,6 +4,7 @@ import {Spin,Tabs} from "antd";
 import Table1 from './Table1';
 import Table2 from './Table2';
 import action from 'actions/conversions';
+import dashAction from 'actions/dashboard';
 require('less/conversions.less');
 
 const TabPane = Tabs.TabPane;
@@ -44,8 +45,9 @@ class Conversions extends React.Component{
 }
 Conversions = connect(null,dispatch=>({
     init(){
+        dispatch(dashAction.loadProducts());
+        dispatch(dashAction.loadAppVersions());
         dispatch(action.loadFirstTable());
-
     }
 }))(Conversions);
 

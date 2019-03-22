@@ -36,7 +36,7 @@ class SixthCard extends React.Component {
                     className={'card sixthCard'}
                     title={
                         <div>
-                            {chartData.option.title.text}
+                            {chartData.option['title.text']}
                             <Divider type={'vertical'}/>
                             <Tooltip placement={'top'} title={chartData.tooltip}>
                                 <Icon type="question-circle" />
@@ -48,7 +48,7 @@ class SixthCard extends React.Component {
                         <Col span={6}>
                             <div className={'legendBlocks'}>
                                 {
-                                    chartData.option.legend.data.map((o, i) => {
+                                    chartData.option['legend.data']?chartData.option['legend.data'].map((o, i) => {
                                         const minute = Math.floor((this.props.tempData*60)/60);
                                         const second = (this.props.tempData*60)%60;
                                         return (
@@ -57,7 +57,7 @@ class SixthCard extends React.Component {
                                                 <div className={'middle'}><Icon type={'rise'}/>17%</div>
                                             </div>
                                         );
-                                    })
+                                    }):''
                                 }
                             </div>
                         </Col>

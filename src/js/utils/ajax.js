@@ -30,7 +30,7 @@ function ajax (method, url, data = {}, baseUrl, isRaw, isFormData) {
             if (isRaw) {
                 resolve(json);
                 // eslint-disable-next-line
-            } else if (json.code == 0) {
+            } else if (json.code == 0||json.code == 200) {
                 resolve(json.data);
             } else {
                 // key不匹配

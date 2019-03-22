@@ -4,7 +4,6 @@ import SubPage from 'components/App/SubPage';
 import {Col, Row} from "antd";
 import RegionMapCard from './RegionMapCard';
 import SecondCard from './SecondCard';
-import ThirdCard from './ThirdCard';
 
 class DetailPage extends React.PureComponent {
     constructor(props){
@@ -14,34 +13,30 @@ class DetailPage extends React.PureComponent {
         this.props.init(this.props.selectedCountry,this.props.data);
     }
     render(){
-        const {show,title,onClose,selectedCountry,data} = this.props;
+        const {selectedCountry} = this.props;
         return (
             <React.Fragment>
-                <SubPage
-                    show={show}
-                    title={title||'world'}
-                    onClose={onClose}
-                >
-                    <div className={'dash-container2'}>
-                        <Row gutter={12}>
-                            <Col lg={{span:12}} xxl={{span:10,offset:2}}>
-                                <RegionMapCard id={selectedCountry||'moriarty'} country={selectedCountry}/>
-                            </Col>
-                            <Col lg={{span:12}} xxl={{span:10}}>
-                                <SecondCard id={'second'} exData={data}/>
-                            </Col>
-                        </Row>
-                    </div>
-                </SubPage>
+                <div className={'dash-container2'}>
+                    <Row gutter={12}>
+                        <Col lg={{span:12}} xxl={{span:10,offset:2}}>
+                            <RegionMapCard id={selectedCountry||'moriarty'} country={selectedCountry}/>
+                        </Col>
+                        <Col lg={{span:12}} xxl={{span:10}}>
+                            <SecondCard id={'second'}/>
+                        </Col>
+                    </Row>
+                </div>
             </React.Fragment>
         )
     }
 }
-DetailPage = connect(null,dispatch=>({
+DetailPage = connect(state=>{
+    const {selectedCountry} = state['dashboard2'];
+    return {selectedCountry};
+}, dispatch=>({
     init(country,secondExData){
         dispatch(action.loadRegionData(country));
         dispatch(action.loadSecondData(secondExData));
     }
 }))(DetailPage);
-
 export default DetailPage;

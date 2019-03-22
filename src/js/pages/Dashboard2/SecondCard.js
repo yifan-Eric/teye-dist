@@ -5,8 +5,8 @@ import ExCharts from 'components/ExCharts';
 
 class SecondCard extends React.PureComponent {
     render(){
-        const {id,exData,secondCard:chartData} = this.props;
-        console.log(exData);
+        const {id,secondCard:chartData} = this.props;
+        const exData = chartData.exData;
         return(
             <Card
                 className={'card secondCard'}

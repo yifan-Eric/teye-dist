@@ -15,9 +15,11 @@ action.toggleLocale = newLocale => (dispatch) => {
  * 获取指定region数据
  */
 action.loadRegion = (country,tag,props) => dispatch => {
-    ajax.raw('get','/json/'+country+'.json',{},'http://'+location.host).then(json=>{
-        dispatch({type:tag,...props,mapJsonData: json})
-    })
+    if(country&&country!=='world'){
+        ajax.raw('get','/json/'+country+'.json',{},'http://'+location.host).then(json=>{
+            dispatch({type:tag,...props,mapJsonData: json})
+        })
+    }
 }
 
 /**

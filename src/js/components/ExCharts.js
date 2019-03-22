@@ -268,7 +268,7 @@ function drawNormalLine (data, option) {
             containLabel: true
         },
         title: {
-            text: option['title.text'],
+            text: option['title.text']||'',
             left: 'center',
             padding: [20, 0],
             show: option['title.show']!=undefined?option['title.show']:true
@@ -299,7 +299,6 @@ function drawNormalLine (data, option) {
             },
             'axisLabel.rotate':45,
         },
-        smooth:true,
         backgroundColor: option.backgroundColor || backgroundColor,
         series: []
     };
@@ -316,7 +315,9 @@ function drawNormalLine (data, option) {
             itemStyle:{},
             lineStyle:{
                 type:'solid'
-            }
+            },
+            symbol:'none',
+            smooth:true,
         });
     });
     return opt;

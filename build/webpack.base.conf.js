@@ -15,7 +15,7 @@ function resolve(projectPath){
     return path.resolve(__dirname,'..' ,projectPath);
 }
 
-const pages = ['_dashboard','_streamView','_conversions'];
+const pages = ['_dashboard','_streamView','_conversions','_dashboard2'];
 
 var plugins = [
     // new webpack.optimize.CommonsChunkPlugin({name:['vendor','runtime']}),
@@ -60,30 +60,6 @@ var plugins = [
         template:'./src/index.html',
         filename:'./index.html' //结合output.path
     }),
-    // new HtmlWebpackPlugin({
-    //     title:APP_NAME,
-    //     minify: {
-    //         caseSensitive: false,             //是否大小写敏感
-    //         collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
-    //         collapseWhitespace: true         //是否去除空格
-    //     },
-    //     chunks:['_dashboard', 'vendor'],
-    //     favicon:'./src/img/logo.png',
-    //     template:'./src/_dashboard.html',
-    //     filename:'./_dashboard.html' //结合output.path
-    // }),
-    // new HtmlWebpackPlugin({
-    //     title:APP_NAME,
-    //     minify: {
-    //         caseSensitive: false,             //是否大小写敏感
-    //         collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
-    //         collapseWhitespace: true         //是否去除空格
-    //     },
-    //     chunks:['_streamView', 'vendor'],
-    //     favicon:'./src/img/logo.png',
-    //     template:'./src/_streamView.html',
-    //     filename:'./_streamView.html' //结合output.path
-    // }),
     new HappyPack({
         id: 'babel',
         loaders: ['babel-loader']
@@ -128,6 +104,8 @@ module.exports = {
         app: './src/js/index',
         _dashboard: './src/js/_dashboard',
         _streamView: './src/js/_streamView',
+        _conversions: './src/js/_conversions',
+        _dashboard2: './src/js/_dashboard2',
         //'news-viewer': './src/js/news-viewer',
         vendor:[
             'react',
@@ -191,7 +169,8 @@ module.exports = {
             //     include:[resolve('src/less'),resolve('node_modules/antd')]
             // },
             {test: /\.js$/, use: 'happypack/loader?id=babel', include:resolve('src/js')},
-            {test: /\.(png|jpe?g|gif)$/,use: 'url-loader?limit=8192&name=[hash:8].[ext]' , include:resolve('src/img')}
+            // {test: /\.(png|jpe?g|gif)$/,use: 'url-loader?limit=8192&name=[hash:8].[ext]' , include:resolve('src/img')}
+            {test: /\.(png|jpe?g|gif)$/,use: 'url-loader?limit=8192&name=[name].[ext]' , include:resolve('src/img')}
         ],
         // unknownContextCritical : false
     },

@@ -1,9 +1,10 @@
 import ExCharts from 'components/ExCharts';
 import { connect } from 'react-redux';
+import action from 'actions/app';
 
 class HorizontalStackBar extends React.Component {
     handleClick = (e) => {
-        this.props.reHref(e.name,e.seriesName);
+        this.props.reHref(e.name,e.seriesName,this.props.selectedCountry);
     }
     render () {
         const { width, height, id, fourthChartData: chartData } = this.props;
@@ -24,11 +25,13 @@ class HorizontalStackBar extends React.Component {
 }
 
 HorizontalStackBar = connect(state => {
-    const { fourthChartData } = state['home'];
-    return { fourthChartData };
+    const { fourthChartData,selectedCountry } = state['home'];
+    return { fourthChartData,selectedCountry };
 }, dispatch => ({
     reHref(time,type,country){
-        dispatch({type:'HOME_FOURTHSUBPAGE_SHOW',subPageShow:true,time:time,actionType:type});
+        dispatch(action.loadTabPage('logMgr/dashboard2'))
+        dispatch({ type: 'DASHBOARD2_COUNTRY_CHANGE', selectedCountry: country});
+        dispatch({type:'DASHBOARD2_SECONDCARD_LOAD',exData:{time,actionType:type}})
     }
 }))(HorizontalStackBar);
 

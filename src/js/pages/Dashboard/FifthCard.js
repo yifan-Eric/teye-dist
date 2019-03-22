@@ -73,7 +73,7 @@ FifthCard = connect(state => {
     return { fifthChartData };
 }, dispatch=>({
     reHref(){
-        window.postMessage('_conversions');
+        window.postMessage(32);
         dispatch(appAction.loadTabPage('tBase/conversions'));
     }
 }))(FifthCard);

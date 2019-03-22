@@ -91,7 +91,7 @@ SecondCard = connect(state => {
     },
     reHref(){
         dispatch(appAction.loadTabPage('tBase/streamView'));
-        window.postMessage('_streamView');
+        window.postMessage(38);
     }
 }))(SecondCard);
 

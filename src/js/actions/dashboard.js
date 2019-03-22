@@ -46,13 +46,16 @@ function arrayFilter2(array,key){
  */
 function arrayFilter3(array,key){
     const preIndex = array.findIndex(o=>~~o[key]>0);
-    for(let i=preIndex+1;i<array.length;i++){
-        const preVal = array[i-1][key];
-        if(array[i][key]==0)
-            array[i][key] = preVal;
+    if(preIndex==-1)
+        return array;
+    else{
+        for(let i=preIndex+1;i<array.length;i++){
+            const preVal = array[i-1][key];
+            if(array[i][key]==0)
+                array[i][key] = preVal;
+        }
+        return array;
     }
-    console.log(array)
-    return array;
 }
 
 actions.loadProducts = () => dispatch => {
@@ -236,7 +239,7 @@ actions.loadSecondChart = () => dispatch => {
                 left: '0%',
                 right: '0%',
                 bottom: '0%',
-                top: '5%',
+                top: '20%',
                 containLabel: false
             },
             backgroundColor: 'rgba(0, 0, 0, 0)'
@@ -841,68 +844,130 @@ actions.loadFifthChart = (obj) => dispatch => {
     // });
     // dispatch({ type: 'DASHBOARD_FIFTHCHART_LOAD', data, option });
 }
-actions.loadSixthChart = () => dispatch => {
-    const option = {
-        'xAxis.data': [],
-        title: {
-            text: 'Daily user engagement',
-            show: false
-        },
-        'yAxis.axisLine.show':false,
-        'yAxis.splitLine.show':true,
-        // 'yAxis.axisLabel.rotate':45,
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-        grid: {
-            left: '2%',
-            right: '2%',
-            bottom: '2%',
-            top: '5%',
-            containLabel: true
-        },
-        multiple: true,
-        color: ['#096dd9', '#69c0ff'],
-        legend: {
-            show: false,
-            data: ['互动时长']
-        },
-        tooltip:{
-            trigger: 'axis',
-            formatter: function (params) {
-                const curTime = params[0].axisValue;
-                const preTime = moment(curTime).add(-30,'days').format('YYYY-MM-DD');
-                const title = curTime+'vs'+preTime;
-                const minute = Math.floor(params[0].data/60);
-                const second = params[0].data%60;
-                const content = '每周用户活动时长:'+minute+'分'+second+'秒';
-                const percent = ((params[0].data-params[1].data)*100/params[1].data).toFixed(2);
-                const icon = percent<0?'↓':'↑'
-                return title+"<br/>"+content+ ' '+icon+percent+'%'
+actions.loadSixthChart = () => (dispatch,getState) => {
+    const searchParams = getState().dashboard.searchParams;
+    const version = searchParams.appVersion;
+    const packageNames = searchParams.appName;
+    return ajax.get('/report/userEngagement',{packageNames,appVersions:version}).then(obj=>{
+        const option = {
+            'xAxis.data': [],
+            'title.text':'Daily user engagement',
+            'title.show':false,
+            'yAxis.axisLine.show':false,
+            'yAxis.splitLine.show':true,
+            // 'yAxis.axisLabel.rotate':45,
+            backgroundColor: 'rgba(0, 0, 0, 0)',
+            grid: {
+                left: '2%',
+                right: '2%',
+                bottom: '2%',
+                top: '5%',
+                containLabel: true
+            },
+            multiple: true,
+            color: ['#096dd9', '#69c0ff'],
+            'legend.show':false,
+            'legend.data':['互动时长'],
+            tooltip:{
+                trigger: 'axis',
+                formatter: function (params) {
+                    const curTime = params[0].axisValue;
+                    const preTime = moment(curTime).add(-30,'days').format('YYYY-MM-DD');
+                    const title = curTime+'vs'+preTime;
+                    const minute = Math.floor(params[0].data/60);
+                    const second = params[0].data%60;
+                    const content = '每周用户活动时长:'+minute+'分'+second+'秒';
+                    const percent = ((params[0].data-params[1].data)*100/params[1].data).toFixed(2);
+                    const icon = percent<0?'↓':'↑'
+                    return title+"<br/>"+content+ ' '+icon+percent+'%'
+                }
             }
+
+        };
+        let startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
+        for(let i=1;i<=30;i++){
+            option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
         }
 
-    };
-    let startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
-    for(let i=1;i<=30;i++){
-        option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
-    }
-
-    let data = [];
-    // option.legend.data.forEach(function (o) {
-    var temp1 = [],temp2 = [];
-    for (let i = 0; i < 30; i++) {
-        temp1.push(parseInt(Math.random() * 50) + 600);
-        temp2.push(parseInt(Math.random() * 50) + 550);
-    }
-    // temp.sort();
-    data.push(temp1);
-    data.push(temp2);
-    // });
-    let list = [
-        {id:1,screenType:'InternalPr...ewActivity',percent:'41.58%',ratio1:{flag:1,value:'2.7%'},aveTime:'0m15s',ratio2:{flag:1,value:'3.1%'}},
-        {id:2,screenType:'MovieActivity',percent:'33.13%',ratio1:{flag:0,value:'1.7%'},aveTime:'0m55s',ratio2:{flag:0,value:'0.3%'}},
-        {id:3,screenType:'GalleryActivity',percent:'15.24%',ratio1:{flag:0,value:'0.6%'},aveTime:'0m08s',ratio2:{flag:1,value:'0%'}},
-    ]
-    dispatch({ type: 'DASHBOARD_SIXTHCHART_LOAD', data, option,list });
+        let data = [];
+        // option.legend.data.forEach(function (o) {
+        var temp1 = [],temp2 = [];
+        for (let i = 0; i < 30; i++) {
+            temp1.push(parseInt(Math.random() * 50) + 600);
+            temp2.push(parseInt(Math.random() * 50) + 550);
+        }
+        // temp.sort();
+        data.push(temp1);
+        data.push(temp2);
+        // });
+        let list = [
+            {id:1,screenType:'InternalPr...ewActivity',percent:'41.58%',ratio1:{flag:1,value:'2.7%'},aveTime:'0m15s',ratio2:{flag:1,value:'3.1%'}},
+            {id:2,screenType:'MovieActivity',percent:'33.13%',ratio1:{flag:0,value:'1.7%'},aveTime:'0m55s',ratio2:{flag:0,value:'0.3%'}},
+            {id:3,screenType:'GalleryActivity',percent:'15.24%',ratio1:{flag:0,value:'0.6%'},aveTime:'0m08s',ratio2:{flag:1,value:'0%'}},
+        ]
+        dispatch({ type: 'DASHBOARD_SIXTHCHART_LOAD', data, option,list });
+    })
+    // const option = {
+    //     'xAxis.data': [],
+    //     title: {
+    //         text: 'Daily user engagement',
+    //         show: false
+    //     },
+    //     'yAxis.axisLine.show':false,
+    //     'yAxis.splitLine.show':true,
+    //     // 'yAxis.axisLabel.rotate':45,
+    //     backgroundColor: 'rgba(0, 0, 0, 0)',
+    //     grid: {
+    //         left: '2%',
+    //         right: '2%',
+    //         bottom: '2%',
+    //         top: '5%',
+    //         containLabel: true
+    //     },
+    //     multiple: true,
+    //     color: ['#096dd9', '#69c0ff'],
+    //     legend: {
+    //         show: false,
+    //         data: ['互动时长']
+    //     },
+    //     tooltip:{
+    //         trigger: 'axis',
+    //         formatter: function (params) {
+    //             const curTime = params[0].axisValue;
+    //             const preTime = moment(curTime).add(-30,'days').format('YYYY-MM-DD');
+    //             const title = curTime+'vs'+preTime;
+    //             const minute = Math.floor(params[0].data/60);
+    //             const second = params[0].data%60;
+    //             const content = '每周用户活动时长:'+minute+'分'+second+'秒';
+    //             const percent = ((params[0].data-params[1].data)*100/params[1].data).toFixed(2);
+    //             const icon = percent<0?'↓':'↑'
+    //             return title+"<br/>"+content+ ' '+icon+percent+'%'
+    //         }
+    //     }
+    //
+    // };
+    // let startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
+    // for(let i=1;i<=30;i++){
+    //     option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
+    // }
+    //
+    // let data = [];
+    // // option.legend.data.forEach(function (o) {
+    // var temp1 = [],temp2 = [];
+    // for (let i = 0; i < 30; i++) {
+    //     temp1.push(parseInt(Math.random() * 50) + 600);
+    //     temp2.push(parseInt(Math.random() * 50) + 550);
+    // }
+    // // temp.sort();
+    // data.push(temp1);
+    // data.push(temp2);
+    // // });
+    // let list = [
+    //     {id:1,screenType:'InternalPr...ewActivity',percent:'41.58%',ratio1:{flag:1,value:'2.7%'},aveTime:'0m15s',ratio2:{flag:1,value:'3.1%'}},
+    //     {id:2,screenType:'MovieActivity',percent:'33.13%',ratio1:{flag:0,value:'1.7%'},aveTime:'0m55s',ratio2:{flag:0,value:'0.3%'}},
+    //     {id:3,screenType:'GalleryActivity',percent:'15.24%',ratio1:{flag:0,value:'0.6%'},aveTime:'0m08s',ratio2:{flag:1,value:'0%'}},
+    // ]
+    // dispatch({ type: 'DASHBOARD_SIXTHCHART_LOAD', data, option,list });
 }
 
 

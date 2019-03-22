@@ -29,7 +29,8 @@ const apiTest = [
     '/report/getDeviceNumber',
     '/report/getAndroidVersion',
     '/report/com.tclhz.gallery/getAppVersionList',
-    '/report/device-report/getDeviceActiveOfDay'
+    '/report/device-report/getDeviceActiveOfDay',
+    '/report/userEngagement'
 ];
 
 export {apiTest,resourceBaseUrl}

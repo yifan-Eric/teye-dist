@@ -11,7 +11,7 @@ class RegionMapCard extends React.PureComponent{
         return (
             <Card
                 className={'card regionMapCard'}
-                title={country}
+                title={country||"world"}
                 hoverable={true}
             >
                 <ExCharts
