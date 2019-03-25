@@ -7,5 +7,6 @@ export default {
     'menuName_logMgr_care_suggestion': '用户建议',
     'menuName_logMgr_care_survey_online': '问卷调查',
     'menuName_logMgr_dashboard': '面板',
-    'menuName_logMgr_dashboard2': '面板2'
+    'menuName_logMgr_dashboard2': '面板2',
+    'menuName_logMgr_dashboard3': '面板3'
 };

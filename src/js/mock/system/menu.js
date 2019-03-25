@@ -62,7 +62,8 @@ module.exports = [
                         { id: 804, name: 'menuName_logMgr_care_electron_card', module: 'logMgr/care_electron_card', functions: ['SEARCH'] },
                         { id: 805, name: 'menuName_logMgr_logView', module: 'logMgr/logView', functions: ['SEARCH'] },
                         // { id: 806, name: 'menuName_logMgr_dashboard', module: 'logMgr/dashboard', functions: ['SEARCH'] },
-                        { id: 807, name: 'menuName_logMgr_dashboard2', module: 'logMgr/dashboard2', functions: ['SEARCH'] }
+                        { id: 806, name: 'menuName_logMgr_dashboard2', module: 'logMgr/dashboard2', functions: ['SEARCH'] },
+                        { id: 807, name: 'menuName_logMgr_dashboard3', module: 'logMgr/dashboard3', functions: ['SEARCH'] }
                     ]
                 },
                 {
@@ -153,7 +154,8 @@ module.exports = [
                         { id: 804, name: 'menuName_logMgr_care_electron_card', module: 'logMgr/care_electron_card', display: 1 },
                         { id: 805, name: 'menuName_logMgr_ub_analysis', module: 'logMgr/ub_analysis', display: 1 },
                         // { id: 806, name: 'menuName_logMgr_dashboard', module: 'logMgr/dashboard', display: 1 },
-                        { id: 807, name: 'menuName_logMgr_dashboard2', module: 'logMgr/dashboard2', display: 1 }
+                        { id: 806, name: 'menuName_logMgr_dashboard2', module: 'logMgr/dashboard2', display: 1 },
+                        { id: 807, name: 'menuName_logMgr_dashboard3', module: 'logMgr/dashboard3', display: 1 }
                     ]
                 },
                 {

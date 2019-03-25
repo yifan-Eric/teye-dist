@@ -51,7 +51,7 @@ actions.loadSecondData = (exData) => dispatch => {
         data.push(parseInt(Math.random()*9+2));
     })
 
-    dispatch({type:'DASHBOARD2_SECONDCARD_LOAD',option,data});
+    dispatch({type:'DASHBOARD2_SECONDCARD_LOAD',option,data,exData});
 }
 
 

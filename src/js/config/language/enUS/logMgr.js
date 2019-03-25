@@ -7,5 +7,6 @@ export default {
     'menuName_logMgr_care_suggestion': 'Care Suggestion',
     'menuName_logMgr_care_survey_online': 'Care Survey Online',
     'menuName_logMgr_dashboard': 'Dashboard',
-    'menuName_logMgr_dashboard2': 'Dashboard2'
+    'menuName_logMgr_dashboard2': 'Dashboard2',
+    'menuName_logMgr_dashboard3': 'Dashboard3'
 };

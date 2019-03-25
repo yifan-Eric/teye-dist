@@ -4,11 +4,13 @@
 import React from 'react';
 import ExCharts from 'components/ExCharts';
 import { connect } from 'react-redux';
+import action from 'actions/app';
+import dash3Action from 'actions/dashboard3';
 
 class NormalLine extends React.Component {
     handleClick = (time, value) => {
         if (value){
-            this.props.reHref(time, value);
+            this.props.reHref(this.props.selectedCountry,time, value);
         }
     };
     render () {
@@ -32,11 +34,16 @@ class NormalLine extends React.Component {
 }
 
 NormalLine = connect(state => {
-    const { thirdChartData } = state['home'];
-    return { thirdChartData };
+    const { thirdChartData,selectedCountry } = state['home'];
+    return { thirdChartData,selectedCountry };
 }, dispatch => ({
-    reHref(time,value){
-        dispatch({type:'HOME_THIRDSUBPAGE_SHOW',subPageShow:true,time:time,value:value});
+    reHref(country,time,value){
+        dispatch(action.loadTabPage('logMgr/dashboard3'));
+        dispatch(dash3Action.initAllChart(country,time,value))
+        dispatch({type:'DASHBOARD3_SEARCHPARAMS_CHANGE',country,time,value});
+        // dispatch({ type: 'DASHBOARD3_COUNTRY_CHANGE', selectedCountry: country});
+        // dispatch({type:'DASHBOARD3_SECONDCARD_LOAD',exData:{time,actionType:type}})
+        // dispatch({type:'HOME_THIRDSUBPAGE_SHOW',subPageShow:true,time:time,value:value});
     }
 }))(NormalLine);
 

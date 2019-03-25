@@ -1,13 +1,13 @@
 import {Row, Col, Button, Card, Spin,Select,Icon,Divider,Tag} from 'antd'
 import { connect } from 'react-redux';
-import action from 'actions/dashboard2';
-import 'less/dashboard_2.less';
+import action from 'actions/dashboard3';
+import 'less/dashboard_3.less';
 import DetailPage from './DetailPage';
 // import SearchModal from './SearchModal';
 // import moment from 'moment';
 import Toolbar from "./Toolbar";
 
-class Dashboard2 extends React.Component {
+class Dashboard3 extends React.Component {
     constructor(props){
         super(props);
         window.document.addEventListener('message',(e)=>{
@@ -16,13 +16,15 @@ class Dashboard2 extends React.Component {
     }
 
     componentWillMount () {
-        this.props.init();
+        const {selectedCountry,time,value} = this.props;
+        this.props.init(selectedCountry,time,value);
         this.props.loading();
         // this.props.init(this.props.selectedCountry,this.props.data);
     }
 
     initRNData = (rnData) => {
-        this.props.init(rnData.country,{time:rnData.time,actionType:rnData.type})
+        window.postMessage(JSON.stringify(rnData))
+        this.props.init(rnData.country,rnData.time,rnData.value);
     }
 
     render () {
@@ -45,19 +47,18 @@ class Dashboard2 extends React.Component {
         );
     }
 }
-Dashboard2 = connect(state=>{
-    const {selectedProduct,selectedCountry,detailPageLoading} = state['dashboard2'];
-    return {selectedProduct,selectedCountry,detailPageLoading};
+Dashboard3 = connect(state=>{
+    const {selectedProduct,selectedCountry,detailPageLoading,time,value} = state['dashboard3'];
+    return {selectedProduct,selectedCountry,detailPageLoading,time,value};
 }, dispatch => ({
-    init(country,secondExData){
-        dispatch(action.loadRegionData(country));
-        dispatch(action.loadSecondData(secondExData));
+    init(country,time,value){
+        dispatch(action.initAllChart(country,time,value))
     },
     //延个时，不然图表会出问题，暂时这么解决
     loading(){
-        dispatch({type:'DASHBOARD2_DETAILPAGE_LOADING',detailPageLoading:true})
-        setTimeout(function(){dispatch({type:'DASHBOARD2_DETAILPAGE_LOADING',detailPageLoading:false});},500)
+        dispatch({type:'DASHBOARD3_DETAILPAGE_LOADING',detailPageLoading:true})
+        setTimeout(function(){dispatch({type:'DASHBOARD3_DETAILPAGE_LOADING',detailPageLoading:false});},500)
     }
-}))(Dashboard2);
+}))(Dashboard3);
 
-module.exports = Dashboard2;
+module.exports = Dashboard3;

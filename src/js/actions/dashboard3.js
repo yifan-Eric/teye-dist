@@ -1,7 +1,17 @@
 import ajax from 'utils/ajax';
 import appAction from 'actions/app';
+import moment from 'moment';
 
 let actions = {};
+
+actions.initAllChart = (country,time,value) => dispatch => {
+    dispatch(actions.loadRegionData(country));
+    dispatch(actions.loadSecondData(time,value));
+    dispatch(actions.loadThirdData(time,value));
+    dispatch(actions.loadFourthData(time,value));
+    dispatch(actions.loadFifthData());
+    dispatch(actions.loadSixthData());
+}
 
 actions.loadRegionData = (country) => (dispatch,getState) => {
     const preData = getState().dashboard3.regionMapCard;
@@ -14,8 +24,8 @@ actions.loadRegionData = (country) => (dispatch,getState) => {
 };
 
 actions.loadSecondData = (time, value) => dispatch => {
-    const year = time.substring(0,4);
-    const month = time.substring(4);
+    const year = time?time.substring(0,4):moment().year();
+    const month = time?time.substring(4):moment().month();
     const days = new Date(year,month,0).getDate();
     let day;
     let timeList = [];
@@ -27,7 +37,7 @@ actions.loadSecondData = (time, value) => dispatch => {
 
     let option = {
         'title.show':false,
-        'title.text':time? year+'年'+month+'月ROM的激活量(千)':'',
+        'title.text':year+'年'+month+'月ROM的激活量(千)',
         'title.left':'left',
         'title.padding':[10,0],
         'title.textStyle':{
@@ -50,14 +60,14 @@ actions.loadSecondData = (time, value) => dispatch => {
 };
 
 actions.loadThirdData = (time, value) => dispatch => {
-    const year = time.substring(0,4);
-    const month = time.substring(4);
+    const year = time?time.substring(0,4):moment().year();
+    const month = time?time.substring(4):moment().month();
     const productList = ['A1X','A3','A3A TMO','Pepito VDF', 'A5','Curie', 'A3A 8 4G', 'A70A XL TMO', 'PEPITO VZW', 'U50A PLUS TMO',
         'A30A TMO', 'U3A 7 3G', 'N4', 'A70A XL MPCS'
     ];
     let option = {
         'title.show':false,
-        'title.text':time? year+'年'+month+'月各产品ROM的激活量(千)':'',
+        'title.text':year+'年'+month+'月各产品ROM的激活量(千)',
         'title.left':'left',
         'title.padding':[10,0],
         'title.textStyle':{
@@ -81,8 +91,8 @@ actions.loadThirdData = (time, value) => dispatch => {
 };
 
 actions.loadFourthData = (time, value) => dispatch => {
-    const year = time.substring(0,4);
-    const month = time.substring(4);
+    const year = time?time.substring(0,4):moment().year();
+    const month = time?time.substring(4):moment().month();
     const distributionChannel = ['电商平台','线下门店','运营商'];
     let data = getRandomNum(value*1000, distributionChannel.length);
     let seriesData = [];
@@ -90,7 +100,7 @@ actions.loadFourthData = (time, value) => dispatch => {
         seriesData.push({value: data[index], name: item})
     });
     let option = {
-        'title.text':time? year+'年'+month+'月各销售渠道ROM的激活量(千)':'',
+        'title.text':year+'年'+month+'月各销售渠道ROM的激活量(千)',
         'title.left':'left',
         'title.padding':[10,0],
         'title.textStyle':{

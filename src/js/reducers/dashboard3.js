@@ -2,6 +2,10 @@ import { objectAppend } from '../utils';
 
 const defaultState = {
     subPageShow:false,
+    selectCountry:'world',
+    time:'',
+    value:'',
+    detailPageLoading:true,
     regionMapCard:{
         option:{},
         data:{},
@@ -36,6 +40,14 @@ const defaultState = {
 export default (state,action) => {
     let newState = {};
     switch(action.type){
+        case 'DASHBOARD3_SEARCHPARAMS_CHANGE':
+            newState.selectedCountry = action.country;
+            newState.time = action.time;
+            newState.value = action.value;
+            break;
+        case 'DASHBOARD3_DETAILPAGE_LOADING':
+            newState.detailPageLoading = action.detailPageLoading;
+            break;
         case 'DASHBOARD3_SUBPAGE_SHOW':
             newState.subPageShow = action.subPageShow;
             break;
