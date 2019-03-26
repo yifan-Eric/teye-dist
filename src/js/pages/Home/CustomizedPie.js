@@ -4,10 +4,12 @@
 import React from 'react';
 import ExCharts from 'components/ExCharts';
 import { connect } from 'react-redux';
+import dash4Action from 'actions/dashboardDefect';
+import action from 'actions/app';
 
 class CustomizedPie extends React.PureComponent {
     handleClick = (e) => {
-        this.props.reHref(e.data.name);
+        this.props.reHref(this.props.selectedProduct,this.props.selectedCountry,e.data.name);
     }
     render () {
         const { width, height, id, secondChartData: chartData } = this.props;
@@ -27,11 +29,14 @@ class CustomizedPie extends React.PureComponent {
     }
 }
 CustomizedPie = connect(state => {
-    const { secondChartData } = state['home'];
-    return { secondChartData };
+    const { secondChartData ,selectedCountry,selectedProduct} = state['home'];
+    return { secondChartData ,selectedCountry,selectedProduct};
 }, dispatch => ({
-    reHref(pain){
-        dispatch({type:'HOME_SECONDSUBPAGE_SHOW',subPageShow:true,selectedProduct:pain});
+    reHref(product,country,pain){
+        dispatch(action.loadTabPage('logMgr/dashboard4'));
+        dispatch(dash4Action.initAllChart(product,country,pain))
+        dispatch({type:'DASHBOARD4_SEARCHPARAMS_CHANGE',country,product,pain});
+        // dispatch({type:'HOME_SECONDSUBPAGE_SHOW',subPageShow:true,selectedProduct:pain});
     }
 }))(CustomizedPie);
 

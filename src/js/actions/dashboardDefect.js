@@ -3,6 +3,13 @@ import appAction from 'actions/app';
 
 let actions = {};
 
+actions.initAllChart = (selectedProduct,selectedCountry) => dispatch => {
+    dispatch(actions.loadFirstChart(selectedProduct,selectedCountry));
+    dispatch(actions.loadSecondChart(selectedProduct,selectedCountry));
+    dispatch(actions.loadThirdChart(selectedProduct,selectedCountry));
+    dispatch(actions.loadFourthChart(selectedProduct,selectedCountry));
+}
+
 actions.loadFirstChart=(selectedProduct,selectedCountry)=>(dispatch,getState)=>{
     const state = getState().dashboardDefect;
     const preData = state.firstChartData;
@@ -20,8 +27,8 @@ actions.loadFirstChart=(selectedProduct,selectedCountry)=>(dispatch,getState)=>{
     //     data:[1],
     // }
     let data = [1];
-    dispatch({type:'FIRST_CHART_DATA',data,option,mapJsonData: preData.mapJsonData});
-    dispatch(appAction.loadRegion(selectedCountry,'FIRST_CHART_DATA',{data:preData.data,option:preData.option}))
+    dispatch({type:'DASHBOARD4_FIRST_CHART_DATA',data,option,mapJsonData: preData.mapJsonData});
+    dispatch(appAction.loadRegion(selectedCountry,'DASHBOARD4_FIRST_CHART_DATA',{data:preData.data,option:preData.option}))
 }
 actions.loadSecondChart=(selectedProduct,selectedCountry)=>dispatch=>{
     let data={
@@ -58,7 +65,7 @@ actions.loadSecondChart=(selectedProduct,selectedCountry)=>dispatch=>{
                 backgroundColor: "rgba(0, 0, 0, 0)"
             }
     }
-    dispatch({type:'SECOND_CHART_DATA',data:data});
+    dispatch({type:'DASHBOARD4_SECOND_CHART_DATA',data:data});
 
 }
 actions.loadThirdChart=(selectedProduct,selectedCountry)=>dispatch=>{
@@ -98,7 +105,7 @@ actions.loadThirdChart=(selectedProduct,selectedCountry)=>dispatch=>{
         data.option.series[0].data.push(parseInt(Math.random() * 100) + 200)
     }
 
-    dispatch({type:'THIRD_CHART_DATA',data:data});
+    dispatch({type:'DASHBOARD4_THIRD_CHART_DATA',data:data});
 }
 actions.loadFourthChart=(selectedProduct,selectedCountry)=>dispatch=>{
     let data= {
@@ -157,7 +164,7 @@ actions.loadFourthChart=(selectedProduct,selectedCountry)=>dispatch=>{
         }
     }
 
-    dispatch({type:'FOURTH_CHART_DATA',data:data});
+    dispatch({type:'DASHBOARD4_FOURTH_CHART_DATA',data:data});
 }
 
 export default actions;

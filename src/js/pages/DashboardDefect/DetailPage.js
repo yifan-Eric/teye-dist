@@ -18,30 +18,30 @@ class DetailPage extends React.PureComponent {
         const {show,selectedProduct,onClose,selectedCountry} = this.props;
         return (
             <React.Fragment>
-                <SubPage
-                    show={show}
-                    title={selectedProduct+'('+selectedCountry+')'}
-                    onClose={onClose}
-                >
-                    <div className={'dash-container2'}>
-                        <Row gutter={12} style={{marginBottom:10}}>
-                            <Col lg={{span:12}} xxl={{span:10,offset:2}}>
-                                <FirstCard id={'first'} country={selectedCountry}/>
-                            </Col>
-                            <Col lg={{span:12}} xxl={{span:10}}>
-                                <SecondCard id={'second'}/>
-                            </Col>
-                        </Row>
-                        <Row gutter={12} style={{marginBottom:10}}>
-                            <Col lg={{span:12}} xxl={{span:10,offset:2}}>
-                                <ThirdCard id={'third'} />
-                            </Col>
-                            <Col lg={{span:12}} xxl={{span:10}}>
-                                <FourthCard id={'fourth'}/>
-                            </Col>
-                        </Row>
-                    </div>
-                </SubPage>
+                {/*<SubPage*/}
+                    {/*show={show}*/}
+                    {/*title={selectedProduct+'('+selectedCountry+')'}*/}
+                    {/*onClose={onClose}*/}
+                {/*>*/}
+                {/*</SubPage>*/}
+                <div className={'dash-container3'}>
+                    <Row gutter={12} style={{marginBottom:10}}>
+                        <Col lg={{span:12}} xxl={{span:10,offset:2}}>
+                            <FirstCard id={'first'} country={selectedCountry}/>
+                        </Col>
+                        <Col lg={{span:12}} xxl={{span:10}}>
+                            <SecondCard id={'second'}/>
+                        </Col>
+                    </Row>
+                    <Row gutter={12} style={{marginBottom:10}}>
+                        <Col lg={{span:12}} xxl={{span:10,offset:2}}>
+                            <ThirdCard id={'third'} />
+                        </Col>
+                        <Col lg={{span:12}} xxl={{span:10}}>
+                            <FourthCard id={'fourth'}/>
+                        </Col>
+                    </Row>
+                </div>
             </React.Fragment>
         )
     }

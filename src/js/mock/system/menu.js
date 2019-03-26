@@ -63,7 +63,8 @@ module.exports = [
                         { id: 805, name: 'menuName_logMgr_logView', module: 'logMgr/logView', functions: ['SEARCH'] },
                         // { id: 806, name: 'menuName_logMgr_dashboard', module: 'logMgr/dashboard', functions: ['SEARCH'] },
                         { id: 806, name: 'menuName_logMgr_dashboard2', module: 'logMgr/dashboard2', functions: ['SEARCH'] },
-                        { id: 807, name: 'menuName_logMgr_dashboard3', module: 'logMgr/dashboard3', functions: ['SEARCH'] }
+                        { id: 807, name: 'menuName_logMgr_dashboard3', module: 'logMgr/dashboard3', functions: ['SEARCH'] },
+                        { id: 808, name: 'menuName_logMgr_dashboard4', module: 'logMgr/dashboard4', functions: ['SEARCH'] }
                     ]
                 },
                 {
@@ -155,7 +156,8 @@ module.exports = [
                         { id: 805, name: 'menuName_logMgr_ub_analysis', module: 'logMgr/ub_analysis', display: 1 },
                         // { id: 806, name: 'menuName_logMgr_dashboard', module: 'logMgr/dashboard', display: 1 },
                         { id: 806, name: 'menuName_logMgr_dashboard2', module: 'logMgr/dashboard2', display: 1 },
-                        { id: 807, name: 'menuName_logMgr_dashboard3', module: 'logMgr/dashboard3', display: 1 }
+                        { id: 807, name: 'menuName_logMgr_dashboard3', module: 'logMgr/dashboard3', display: 1 },
+                        { id: 808, name: 'menuName_logMgr_dashboard4', module: 'logMgr/dashboard4', display: 1 }
                     ]
                 },
                 {

@@ -15,7 +15,7 @@ function resolve(projectPath){
     return path.resolve(__dirname,'..' ,projectPath);
 }
 
-const pages = ['_dashboard','_streamView','_conversions','_dashboard2','_dashboard3'];
+const pages = ['_dashboard','_streamView','_conversions','_dashboard2','_dashboard3','_dashboard4'];
 
 var plugins = [
     // new webpack.optimize.CommonsChunkPlugin({name:['vendor','runtime']}),
@@ -107,6 +107,7 @@ module.exports = {
         _conversions: './src/js/_conversions',
         _dashboard2: './src/js/_dashboard2',
         _dashboard3: './src/js/_dashboard3',
+        _dashboard4: './src/js/_dashboard4',
         //'news-viewer': './src/js/news-viewer',
         vendor:[
             'react',

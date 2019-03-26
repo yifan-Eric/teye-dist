@@ -70,6 +70,14 @@ export default {
             { key: 'SEARCH', name: 'logView_operation_search' }
         ],
         page: (cb) => { require.ensure([], require => { cb(require('pages/Dashboard3')); }, 'dashboard3'); }
+    },
+    'logMgr/dashboard4': {
+        name: 'menuName_logMgr_dashboard4',
+        icon: 'bars',
+        operations: [
+            { key: 'SEARCH', name: 'logView_operation_search' }
+        ],
+        page: (cb) => { require.ensure([], require => { cb(require('pages/DashboardDefect')); }, 'dashboard4'); }
     }
 
 };

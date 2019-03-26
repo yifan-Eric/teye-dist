@@ -8,5 +8,6 @@ export default {
     'menuName_logMgr_care_survey_online': '问卷调查',
     'menuName_logMgr_dashboard': '面板',
     'menuName_logMgr_dashboard2': '面板2',
-    'menuName_logMgr_dashboard3': '面板3'
+    'menuName_logMgr_dashboard3': '面板3',
+    'menuName_logMgr_dashboard4': '面板4'
 };
