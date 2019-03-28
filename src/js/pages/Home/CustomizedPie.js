@@ -17,7 +17,7 @@ class CustomizedPie extends React.PureComponent {
             <React.Fragment>
                 <ExCharts
                     container={id}
-                    option={{ type: 'customized-pie' }}
+                    option={{ type: 'rose-pie' }}
                     data={chartData.data}
                     chartOption={chartData.option}
                     width={width}

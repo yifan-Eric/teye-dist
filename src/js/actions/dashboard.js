@@ -221,7 +221,7 @@ actions.loadSecondChart = () => dispatch => {
     //对接代码start
     ajax.get('/report/com.tct.camera/getAppPMActiveInfo',{}).then(obj=>{
         const option = {
-            'title.text':'每分钟用户数',
+            'title.text':'Users pre minutes',
             'title.left':'left',
             'title.top':'top',
             'title.padding':[5,0],
@@ -261,7 +261,7 @@ actions.loadSecondChart = () => dispatch => {
     //     'title.text':'Users pre minutes',
     //     'title.left':'left',
     //     'title.top':'top',
-    //     'title.padding':[0,0],
+    //     'title.padding':[5,0],
     //     'title.textStyle':{
     //         fontSize: '12px'
     //     },
@@ -276,7 +276,7 @@ actions.loadSecondChart = () => dispatch => {
     //         left: '0%',
     //         right: '0%',
     //         bottom: '0%',
-    //         top: '10%',
+    //         top: '20%',
     //         containLabel: false
     //     },
     //     backgroundColor: 'rgba(0, 0, 0, 0)'

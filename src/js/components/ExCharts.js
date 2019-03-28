@@ -16,7 +16,7 @@
 const echarts = require('echarts');
 // import bmap from 'bmap';
 
-const backgroundColor = 'rgba(0, 0, 0, 0.3)';
+const backgroundColor = 'rgba(0, 0, 0, 0.2)';
 const maskBgColor = 'rgba(0, 0, 0, 0.1)'
 const transparent = 'rgba(0, 0, 0, 0)'
 const colors = ['#722ed1', '#13c2c2', '#52c41a', '#1890ff', '#2f54eb', '#722ed1'];
@@ -55,6 +55,9 @@ class ExCharts extends React.Component {
                 break;
             case 'customized-pie':
                 this.chart.setOption(drawCustomizedPie(data, chartOption));
+                break;
+            case 'rose-pie':
+                this.chart.setOption(drawRoseChart(data,chartOption));
                 break;
             case 'heat-map': //热力地图
                 this.chart.setOption(drawHeatMap(data,chartOption,option.selectedCountry));
@@ -254,6 +257,85 @@ function drawCustomizedPie (data, option) {
             }
         ]
     };
+}
+
+/**
+ *
+ */
+function drawRoseChart(data,option){
+    return {
+        backgroundColor: backgroundColor,
+
+        title: {
+            text: option.title,
+            left: 'center',
+            top: 15,
+            textStyle: {
+                color: '#fff'
+            }
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        // grid: {
+        //     top:'20%',
+        //     left: '5%',
+        //     right: '5%',
+        //     // bottom: '10%',
+        //     containLabel: true
+        // },
+        toolbox: {
+            show : true,
+            // feature : {
+            //     mark : {show: true},
+            //     dataView : {show: true, readOnly: false},
+            //     magicType : {
+            //         show: true,
+            //         type: ['pie', 'funnel']
+            //     },
+            //     restore : {show: true},
+            //     saveAsImage : {show: true}
+            // }
+        },
+        calculable : true,
+        color:['#003a8c','#0050b3','#096dd9','#1890ff','#40a9ff','#69c0ff','#91d5ff'].reverse(),
+        series : [
+            {
+                name:'面积模式',
+                type:'pie',
+                radius : ['20%', '70%'],
+                // center : ['75%', '50%'],
+                center: ['50%', '60%'],
+                roseType : 'area',
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: 'rgba(255, 255, 255, 1)'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        },
+                        smooth: 0.2,
+                        length: 5,
+                        length2: 5
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+                data:data
+            }
+        ]
+    };
+
 }
 
 /**
@@ -502,7 +584,8 @@ function drawHorizontalStackBar (data, option) {
                 type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             }
         },
-        color: ['#faad14', '#13c2c2', '#52c41a', '#1890ff', '#2f54eb', '#722ed1'],
+        // color: ['#faad14', '#13c2c2', '#52c41a', '#1890ff', '#2f54eb', '#722ed1'],
+        color:['#0050b3','#096dd9','#1890ff','#40a9ff'],
         legend: {
             data: option.legendData,
             x: 'center',

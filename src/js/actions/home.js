@@ -186,7 +186,7 @@ actions.loadFirstChart = (country) => dispatch => {
                     name: '人数(千)'
                 }
             ],
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
             series: [
                 { name: '男性', type: 'bar' },
                 { name: '女性', type: 'bar' },
