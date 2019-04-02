@@ -847,8 +847,10 @@ actions.loadFifthChart = (obj) => dispatch => {
 actions.loadSixthChart = () => (dispatch,getState) => {
     const searchParams = getState().dashboard.searchParams;
     const version = searchParams.appVersion;
-    const packageNames = searchParams.appName;
-    return ajax.get('/report/userEngagement',{packageNames,appVersions:version}).then(obj=>{
+    //这里写死包名
+    // const packageNames = searchParams.appName;
+    const packageNames = 'com.tclhz.gallery'
+    return ajax.get('/report/userEngagement',{appVersions:version}).then(obj=>{
         const option = {
             'xAxis.data': [],
             'title.text':'Daily user engagement',
@@ -900,11 +902,22 @@ actions.loadSixthChart = () => (dispatch,getState) => {
         data.push(temp1);
         data.push(temp2);
         // });
-        let list = [
-            {id:1,screenType:'InternalPr...ewActivity',percent:'41.58%',ratio1:{flag:1,value:'2.7%'},aveTime:'0m15s',ratio2:{flag:1,value:'3.1%'}},
-            {id:2,screenType:'MovieActivity',percent:'33.13%',ratio1:{flag:0,value:'1.7%'},aveTime:'0m55s',ratio2:{flag:0,value:'0.3%'}},
-            {id:3,screenType:'GalleryActivity',percent:'15.24%',ratio1:{flag:0,value:'0.6%'},aveTime:'0m08s',ratio2:{flag:1,value:'0%'}},
-        ]
+        var list = [];
+        for(let i=0;i<3;i++){
+            list.push( {
+                id:i,
+                screenType:obj.activityCountList[i].activityName,
+                percent:(obj.activityCountList[i].interactPercent*100).toFixed(2)+'%',
+                ratio1:{flag:0,value:'1.7%'},
+                aveTime:parseInt(obj.activityCountList[i].duration/60)+' m '+obj.activityCountList[i].duration%60+' s',
+                ratio2:{flag:0,value:'0.3%'}}
+                )
+        }
+        // let list = [
+        //     {id:1,screenType:'InternalPr...ewActivity',percent:'41.58%',ratio1:{flag:1,value:'2.7%'},aveTime:'0m15s',ratio2:{flag:1,value:'3.1%'}},
+        //     {id:2,screenType:'MovieActivity',percent:'33.13%',ratio1:{flag:0,value:'1.7%'},aveTime:'0m55s',ratio2:{flag:0,value:'0.3%'}},
+        //     {id:3,screenType:'GalleryActivity',percent:'15.24%',ratio1:{flag:0,value:'0.6%'},aveTime:'0m08s',ratio2:{flag:1,value:'0%'}},
+        // ]
         dispatch({ type: 'DASHBOARD_SIXTHCHART_LOAD', data, option,list });
     })
     // const option = {
