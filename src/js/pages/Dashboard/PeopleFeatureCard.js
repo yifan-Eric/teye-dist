@@ -7,7 +7,6 @@ import FourthCard from "./FourthCard";
 class PeopleFeatureCard extends React.Component {
     render () {
         const { width, height, id, chartData } = this.props;
-        console.log('chartData',chartData);
         return (
             <div>
                 <Row gutter={6} style={{ marginBottom: '10px' }}>

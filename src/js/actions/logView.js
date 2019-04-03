@@ -340,7 +340,6 @@ actions.loadList = (pageNo, pageSize) => (dispatch, getState) => {
     const page = state.page;
     const params = state.searchParams;
     let list = [];
-    console.log(mockData);
     for (let i = 0; i < 10; i++) {
         let temp = mockData[Math.floor((Math.random() * 20))];
         temp.imei1 = format(temp.imei1);

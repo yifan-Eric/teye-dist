@@ -34,7 +34,8 @@ const defaultState = {
     },
     mapChartData:{
         data:[],
-        option:{}
+        option:{},
+        mapJsonData:{}
     },
     firstChartData: {},
     secondChartData: {
@@ -122,7 +123,8 @@ export default (state, action) => {
         case 'HOME_MAP_DATA':
             newState.mapChartData = {
                 data: action.data,
-                option: action.option
+                option: action.option,
+                mapJsonData: action.mapJsonData
             };
             break;
         case 'HOME_FIRST_DATA':

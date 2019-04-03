@@ -5,7 +5,6 @@ const TabPane = Tabs.TabPane;
 
 class FirstCard extends React.Component{
     renderTabBar = (props, DefaultTabBar) => {
-        console.log(props, DefaultTabBar);
         return (<DefaultTabBar/>)
     };
     render(){

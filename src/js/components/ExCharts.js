@@ -60,7 +60,7 @@ class ExCharts extends React.Component {
                 this.chart.setOption(drawRoseChart(data,chartOption));
                 break;
             case 'heat-map': //热力地图
-                this.chart.setOption(drawHeatMap(data,chartOption,option.selectedCountry));
+                this.chart.setOption(drawHeatMap(data,chartOption,option.selectedCountry,option.mapJsonData));
                 break;
             case 'radar-chart': //雷达图
                 this.chart.setOption(drawRadarChart(data, chartOption));
@@ -722,7 +722,11 @@ function drawWithBgPie (data, option, itemStyle) {
  * @param option
  * @returns {{title: {text: string, left: string, top: string, padding: number[], textStyle: {color: string}}, backgroundColor: string, visualMap: {min: number, max: number, splitNumber: number, inRange: {color: string[]}, textStyle: {color: string}}, geo: {map: string, label: {emphasis: {show: boolean, color: string}}, roam: boolean, zoom: number, itemStyle: {normal: {borderColor: string, areaColor: string}, emphasis: {areaColor: string}}, shadowColor: string, shadowBlur: number}, series: {name: string, type: string, coordinateSystem: string, data: *, symbolSize: number}[]}}
  */
-function drawHeatMap (data, option,selectedCountry) {
+function drawHeatMap (data, option,selectedCountry,mapJsonData) {
+    // console.log('AAA',mapJsonData);
+    // if(JSON.stringify(mapJsonData)!=='{}'){
+    //     echarts.registerMap('world', mapJsonData, {});
+    // }
     let opt = {
         title: {
             text: 'ROM全球用户分布图（热点图）',
@@ -971,9 +975,9 @@ function drawRegionMap(data,option,country,mapJsonData){
         //首字母大写
         country = country.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
         if(JSON.stringify(mapJsonData)!=='{}'){
-            const usaJson = mapJsonData;
             region = country;
-            echarts.registerMap(region, usaJson, {});
+            const json = mapJsonData;
+            echarts.registerMap(region, json, {});
         }else
             region = 'world';
     }catch (e) {

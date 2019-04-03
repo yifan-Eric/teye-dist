@@ -1,5 +1,6 @@
 import ajax from 'utils/ajax';
 import moment from 'moment';
+import appAction from 'actions/app';
 let actions = {};
 
 actions.toggleMap = (key) => dispatch => {
@@ -59,14 +60,17 @@ actions.refreshBubble = (product,chartData) => dispatch => {
     dispatch({ type: 'HOME_REFRESHBUBBLE_DATA', chartData });
 };
 
-actions.loadMap = () => dispatch => {
+actions.loadMap = () => (dispatch,getState) => {
     ajax.get('/report/device-report/getDeviceActiveOfDay',{}).then(data=>{
         console.log(data);
     })
+    const preData = getState().home.mapChartData
     let option = {
         useGeo:true
     }
-    dispatch({type:'HOME_MAP_DATA',option});
+    dispatch({type:'HOME_MAP_DATA',option,mapJsonData: preData.mapJsonData});
+    // dispatch(appAction.loadRegion('world','HOME_MAP_DATA',{option:preData.option}));
+    // dispatch({type:'HOME_MAP_DATA',option});
 }
 
 actions.loadFirstChart = (country) => dispatch => {

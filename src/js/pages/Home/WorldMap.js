@@ -43,7 +43,7 @@ class WorldMap extends React.Component {
             <React.Fragment>
                 <ExCharts
                     container={id}
-                    option={{ type: 'heat-map' ,selectedCountry:selectedCountry}}
+                    option={{ type: 'heat-map' ,selectedCountry:selectedCountry,mapJsonData:chartData.mapJsonData}}
                     data={convertData(
                         [{ name: '中国', value: 300 },
                         { name: '美国', value: 800 },

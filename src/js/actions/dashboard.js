@@ -34,7 +34,6 @@ function arrayFilter2(array,key){
         if(~~o[key]==0&&i>preIndex)
             array.splice(i,1);
     })
-    console.log(array);
     return array;
 }
 
@@ -792,7 +791,6 @@ actions.loadFifthChart = (obj) => dispatch => {
                     temp.push(0);
             })
             data.push(temp);
-            console.log('data',data)
         }
     }
     dispatch({ type: 'DASHBOARD_FIFTHCHART_LOAD', data, option });
@@ -850,7 +848,7 @@ actions.loadSixthChart = () => (dispatch,getState) => {
     //这里写死包名
     // const packageNames = searchParams.appName;
     const packageNames = 'com.tclhz.gallery'
-    return ajax.get('/report/userEngagement',{appVersions:version}).then(obj=>{
+    return ajax.get('/report/userEngagement',{appVersions:version,days:12}).then(obj=>{
         const option = {
             'xAxis.data': [],
             'title.text':'Daily user engagement',
@@ -886,22 +884,31 @@ actions.loadSixthChart = () => (dispatch,getState) => {
             }
 
         };
-        let startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
-        for(let i=1;i<=30;i++){
+        // let startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
+        // for(let i=1;i<=30;i++){
+        //     option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
+        // }
+        // let data = [];
+        // var temp1 = [],temp2 = [];
+        // for (let i = 0; i < 30; i++) {
+        //     temp1.push(parseInt(Math.random() * 50) + 600);
+        //     temp2.push(parseInt(Math.random() * 50) + 550);
+        // }
+        // data.push(temp1);
+        // data.push(temp2);
+        let startDate = moment().subtract(12,'days').format('YYYY-MM-DD');
+        for(let i=1;i<=12;i++){
             option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
         }
-
         let data = [];
-        // option.legend.data.forEach(function (o) {
         var temp1 = [],temp2 = [];
-        for (let i = 0; i < 30; i++) {
-            temp1.push(parseInt(Math.random() * 50) + 600);
-            temp2.push(parseInt(Math.random() * 50) + 550);
-        }
-        // temp.sort();
+        option['xAxis.data'].forEach((o)=>{
+            temp1.push(obj.durationList[o]?obj.durationList[o]:1);
+            temp2.push(1);
+        })
         data.push(temp1);
         data.push(temp2);
-        // });
+
         var list = [];
         for(let i=0;i<3;i++){
             list.push( {

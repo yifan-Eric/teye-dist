@@ -18,7 +18,6 @@ class Toolbar extends React.Component{
         this.state = {
             searchModalShow:false,
         };
-        console.log('width',docWidth);
     }
     getDateRange = (id) => {
         return moment().subtract(id, "days").format('YYYY年MM月DD日')+'~'+moment().subtract(1, "days").format('YYYY年MM月DD日')

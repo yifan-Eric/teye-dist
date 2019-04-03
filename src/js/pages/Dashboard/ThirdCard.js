@@ -19,7 +19,7 @@ class ThirdCard extends React.PureComponent {
         ]
     }
     renderTd = (val,data) => {
-        return (<div style={{backgroundColor:defaultColors[Math.floor(val/(100/6))]}}>
+        return (<div style={{backgroundColor:defaultColors[Math.ceil(val/(100/6))-1]}}>
             <span>{val}%</span>
         </div>)
     }
@@ -52,6 +52,7 @@ class ThirdCard extends React.PureComponent {
                         // showHeader={false}
                         bordered={false}
                         tableSize={'small'}
+                        rowKey={'time'}
                     />
                 </Card>
             </div>
