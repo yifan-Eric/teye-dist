@@ -376,7 +376,8 @@ actions.loadFifthChart = () => dispatch => {
             // subTitle: moment(new Date()).format('YYYY-MM-DD'),
             // legendData: [moment(new Date())],
             yAxis: {},
-            'xAxis.axisLabel.rotate': -45
+            'xAxis.axisLabel.rotate': -45,
+            color:'#40a9ff'
         };
         let data = [];
         let x = [];

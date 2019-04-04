@@ -31,7 +31,8 @@ const apiTest = [
     '/report/com.tclhz.gallery/getAppVersionList',
     '/report/device-report/getDeviceActiveOfDay',
     '/report/userEngagement',
-    '/report/index/getPainSpotList'
+    '/report/index/getPainSpotList',
+    '/report/getAppList'
 ];
 
 export {apiTest,resourceBaseUrl}

@@ -848,7 +848,7 @@ actions.loadSixthChart = () => (dispatch,getState) => {
     //这里写死包名
     // const packageNames = searchParams.appName;
     const packageNames = 'com.tclhz.gallery'
-    return ajax.get('/report/userEngagement',{appVersions:version,days:12}).then(obj=>{
+    return ajax.get('/report/userEngagement',{appVersions:version,days:12,packageNames}).then(obj=>{
         const option = {
             'xAxis.data': [],
             'title.text':'Daily user engagement',
