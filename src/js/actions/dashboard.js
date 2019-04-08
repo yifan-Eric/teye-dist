@@ -896,16 +896,25 @@ actions.loadSixthChart = () => (dispatch,getState) => {
         // }
         // data.push(temp1);
         // data.push(temp2);
-        let startDate = moment().subtract(12,'days').format('YYYY-MM-DD');
-        for(let i=1;i<=12;i++){
-            option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
-        }
+
         let data = [];
         var temp1 = [],temp2 = [];
-        option['xAxis.data'].forEach((o)=>{
-            temp1.push(obj.durationList[o]?obj.durationList[o]:1);
+        // let startDate = moment().subtract(12,'days').format('YYYY-MM-DD');
+        // for(let i=1;i<=12;i++){
+        //     option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
+        // }
+        // option['xAxis.data'].forEach((o)=>{
+        //     temp1.push(obj.durationList[o]?obj.durationList[o]:1);
+        //     temp2.push(1);
+        // })
+        // data.push(temp1);
+        // data.push(temp2);
+
+        for(let i in obj.durationList){
+            option['xAxis.data'].push(i);
+            temp1.push(obj.durationList[i]?obj.durationList[i]:1);
             temp2.push(1);
-        })
+        }
         data.push(temp1);
         data.push(temp2);
 

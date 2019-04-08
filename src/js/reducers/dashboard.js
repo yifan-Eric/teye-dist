@@ -16,7 +16,7 @@ const defaultState = {
     selectedProduct:'',
     detailPageLoading:true,
     searchParams:{
-        appVersion:'v8.2.T.0.T039.0',
+        appVersion:'v8.2.T.0.T060.0',
         appName:'Gallery',
         dateRange:28,
     },

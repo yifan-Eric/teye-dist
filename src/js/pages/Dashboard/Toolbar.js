@@ -2,8 +2,8 @@ import {connect} from 'react-redux';
 import {Button, Divider, Icon, Select, Tag,Skeleton} from "antd";
 import moment from 'moment';
 import action from 'actions/dashboard';
-import 'less/theme/toolbar.less'
-import SearchModal from "./SearchModal"
+import 'less/theme/toolbar.less';
+import SearchModal from "./SearchModal";
 
 const docWidth = document.body.clientWidth;
 let btnText ,inputWidth,btnShape;
@@ -16,7 +16,7 @@ class Toolbar extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            searchModalShow:false,
+            searchModalShow:false
         };
     }
     getDateRange = (id) => {
@@ -30,18 +30,19 @@ class Toolbar extends React.Component{
     handleTimeRangeChange = (value) => {
         this.props.onSearch({...this.props.searchParams,...{dateRange:value}});
     }
+
     render(){
         const {searchParams,appVersions,timeTypeList,productList,onSearch,exComp} = this.props;
         const dataMap = {
             appVersion:appVersions,
             appName:productList
         }
-        console.log('search',searchParams);
         return (
             <div className="hd">
                 <SearchModal show={this.state.searchModalShow} onClose={()=>this.setState({searchModalShow: false})} onSearch={onSearch}/>
                 <div className="actions">
                     {exComp}
+
                     <Button type={"dashed"} shape={btnShape} onClick={()=>this.setState({searchModalShow:true})}>{btnText}
                     <Icon type={'plus'} style={{marginLeft:0}}/>
                     </Button>

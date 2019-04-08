@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import action from 'actions/dashboard';
 import 'less/dashboard.less';
 import DetailPage from './DetailPage';
-import SearchModal from './SearchModal';
-import moment from 'moment';
 import Toolbar from "./Toolbar"
 
 class Dashboard extends React.Component {
@@ -12,7 +10,7 @@ class Dashboard extends React.Component {
         super(props);
     }
 
-    componentWillMount () {
+    componentDidMount(){
         this.props.init();
         this.props.loading();
     }
