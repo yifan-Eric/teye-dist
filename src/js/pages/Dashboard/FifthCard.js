@@ -7,6 +7,7 @@ import appAction from 'actions/app';
 class FifthCard extends React.Component {
     render () {
         const { width, height, id, fifthChartData: chartData,reHref } = this.props;
+        console.log('fifth',chartData);
         return (
             <React.Fragment>
                 <p className={'question'}>{chartData.question}</p>

@@ -43,6 +43,7 @@ Dashboard = connect(state=>{
     init () {
         dispatch(action.loadProducts());
         dispatch(action.loadAppVersions());
+        dispatch(action.refreshPage());
     },
     //延个时，不然图表会出问题，暂时这么解决
     loading(){

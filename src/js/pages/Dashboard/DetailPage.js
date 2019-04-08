@@ -14,9 +14,13 @@ import EighthCard from "./EighthCard";
 import TenthCard from "./TenthCard";
 
 class DetailPage extends React.PureComponent{
-    componentWillMount(){
-        this.props.init();
-    }
+    // componentWillMount(){
+    //     this.props.init();
+    // }
+    // componentDidMount(){
+    //     console.log('aa')
+    //     this.props.init();
+    // }
 
     render(){
         const {show,selectedProduct,onClose} = this.props;
