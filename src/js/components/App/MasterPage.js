@@ -5,6 +5,7 @@ import Sidebar from './Sidebar';
 import Copyright from './Copyright';
 import action from 'actions/app';
 import openNotification from 'components/ExNotification';
+import PotentialError from 'components/PotentialError';
 import { FormattedMessage } from 'react-intl';
 const TabPane = Tabs.TabPane;
 
@@ -81,9 +82,13 @@ class MasterPage extends React.Component {
                             >
                                 {
                                     panes.map(pane => <TabPane className="page-pane"
-                                        tab={<span><Icon type={pane.icon}/><FormattedMessage id={pane.title}/></span>}
-                                        key={pane.key}
-                                        closable={pane.key !== 'home'}>{pane.component}</TabPane>)
+                                                               tab={<span><Icon type={pane.icon}/><FormattedMessage id={pane.title}/></span>}
+                                                               key={pane.key}
+                                                               closable={pane.key !== 'home'}>
+                                        <PotentialError>
+                                        {pane.component}
+                                        </PotentialError>
+                                        </TabPane>)
                                 }
                             </Tabs>
                             <Copyright/>

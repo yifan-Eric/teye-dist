@@ -3,25 +3,20 @@ import ExCharts from 'components/ExCharts';
 import React from 'react';
 import { connect } from 'react-redux';
 import appAction from 'actions/app';
+import ExCard from 'components/ExCard';
 
 class FifthCard extends React.Component {
     render () {
         const { width, height, id, fifthChartData: chartData,reHref } = this.props;
-        console.log('fifth',chartData);
         return (
             <React.Fragment>
                 <p className={'question'}>{chartData.question}</p>
-                <Card
-                    className={'card fifthCard'}
-                    title={
-                        <div>
-                            {chartData.option.title.text}
-                            <Divider type={'vertical'}/>
-                            <Tooltip placement={'top'} title={chartData.tooltip}>
-                                <Icon type="question-circle" />
-                            </Tooltip>
-                        </div>}
-                    hoverable={true}
+                <ExCard
+                    className={'fifthCard'}
+                    title={chartData.option.title.text}
+                    tooltip={chartData.tooltip}
+                    height={370}
+                    actions={[<span style={{color:'#36AFEA'}} onClick={reHref}><Icon type="arrow-right"/>VIEW CONVERSION EVENTS</span>]}
                 >
                     <Row>
                         <Col span={24}>
@@ -59,11 +54,7 @@ class FifthCard extends React.Component {
                             />
                         </Col>
                     </Row>
-                    <div className={'footer'} onClick={reHref}>
-                        VIEW CONVERSION EVENTS
-                        <Icon type="arrow-right"/>
-                    </div>
-                </Card>
+                </ExCard>
             </React.Fragment>
         );
     }

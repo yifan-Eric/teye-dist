@@ -2,6 +2,8 @@ import React from 'react';
 import ajax from 'utils/ajax';
 import menuConfig from 'config/menu';
 import NProgress from 'nprogress';
+import {proBaseUrl} from "config/api"
+
 const Err403 = (cb) => { require.ensure([], require => { cb(require('pages/Error/403')); }); };
 let action = {};
 
@@ -17,7 +19,7 @@ action.toggleLocale = newLocale => (dispatch) => {
 action.loadRegion = (coun,tag,props) => dispatch => {
     const country = coun?coun:'world';
     if(country){
-        ajax.raw('get','/json/'+country+'.json',{},'http://'+location.host).then(json=>{
+        ajax.raw('get','/json/'+country+'.json',{},location.host?'http://'+location.host:proBaseUrl).then(json=>{
             dispatch({type:tag,...props,mapJsonData: json})
         })
     }

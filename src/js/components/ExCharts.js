@@ -60,7 +60,7 @@ class ExCharts extends React.Component {
                 this.chart.setOption(drawRoseChart(data,chartOption));
                 break;
             case 'heat-map': //热力地图
-                this.chart.setOption(drawHeatMap(data,chartOption,option.selectedCountry,option.mapJsonData));
+                this.chart.setOption(drawHeatMap(data,chartOption,option));
                 break;
             case 'radar-chart': //雷达图
                 this.chart.setOption(drawRadarChart(data, chartOption));
@@ -150,17 +150,20 @@ function drawNormalPie (data, option) {
         title: {
             text: option.title,
             subtext: option.subTitle,
-            x: 'center'
+            x: 'center',
+            top: 15,
         },
         backgroundColor: option.backgroundColor ||backgroundColor,
         tooltip: {
             trigger: 'item',
             formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
+        color:option.color?option.color:['#003a8c','#0050b3','#096dd9','#1890ff','#40a9ff','#69c0ff','#91d5ff'],
         legend: option.legend||{
             orient: 'vertical',
             left: 'left',
-            data: option.legendData
+            data: option.legendData,
+            show:false
         },
         series: option.series||[
             {
@@ -722,11 +725,9 @@ function drawWithBgPie (data, option, itemStyle) {
  * @param option
  * @returns {{title: {text: string, left: string, top: string, padding: number[], textStyle: {color: string}}, backgroundColor: string, visualMap: {min: number, max: number, splitNumber: number, inRange: {color: string[]}, textStyle: {color: string}}, geo: {map: string, label: {emphasis: {show: boolean, color: string}}, roam: boolean, zoom: number, itemStyle: {normal: {borderColor: string, areaColor: string}, emphasis: {areaColor: string}}, shadowColor: string, shadowBlur: number}, series: {name: string, type: string, coordinateSystem: string, data: *, symbolSize: number}[]}}
  */
-function drawHeatMap (data, option,selectedCountry,mapJsonData) {
-    // console.log('AAA',mapJsonData);
-    // if(JSON.stringify(mapJsonData)!=='{}'){
-    //     echarts.registerMap('world', mapJsonData, {});
-    // }
+function drawHeatMap (data, option,exData) {
+    const {selectedCountry,mapJsonData,feature:myFeature} = exData
+
     let opt = {
         title: {
             text: 'ROM全球用户分布图（热点图）',
@@ -743,7 +744,7 @@ function drawHeatMap (data, option,selectedCountry,mapJsonData) {
         backgroundColor: 'rgba(0,0,0,0)',
         grid: {
             left: '2%',
-            right: '2%',
+            right: '0%',
             bottom: '2%',
             top:'0%',
             containLabel: true
@@ -768,6 +769,15 @@ function drawHeatMap (data, option,selectedCountry,mapJsonData) {
             // }
             formatter: function (params) {
                 return params.name+':'+params.value;
+            }
+        },
+        toolbox:{
+            feature: myFeature?{...myFeature}:undefined,
+            bottom:25,
+            right:30,
+            itemSize:20,
+            iconStyle:{
+                borderWidth:2
             }
         },
         geo: option.useGeo?{

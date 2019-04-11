@@ -7,7 +7,12 @@
     "lint-fix": "eslint --fix --ext .js --ext .jsx src/js",
     "test_yh": "cross-env NODE_ENV=test_yh webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "test_jf": "cross-env NODE_ENV=test_jf webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "test_sx": "cross-env NODE_ENV=test_sx webpack-dev-server --inline --progress --config build/webpack.dev.conf.js"
+    "test_sx": "cross-env NODE_ENV=test_sx webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "elec_start": "npm run build&&electron .",
+    "elec_restart": "electron .",
+    "packageLinux": "electron-packager . 'Teye' --platform=linux --arch=x64 --out=./elec_dist --asar --app-version=2.0.1",
+    "packageWin": "electron-packager . 'Teye' --platform=win32 --arch=x64  --out=./elec_dist --asar --app-version=2.0.1",
+    "packageDarwin": "electron-packager . 'Teye' --platform=darwin --arch=x64  --out=./elec_dist --asar --app-version=2.0.1"
   },
   "keywords": [
     "react",
@@ -28,7 +33,9 @@
     "react-redux": "5.0.6",
     "redux": "3.7.2",
     "redux-thunk": "2.2.0",
-    "tf-react-cpn": "^2.2.1"
+    "rxjs": "^6.4.0",
+    "tf-react-cpn": "^2.2.1",
+    "tf-utils": "^2.2.5"
   },
   "devDependencies": {
     "babel-core": "6.26.0",
@@ -42,6 +49,8 @@
     "copy-webpack-plugin": "4.0.1",
     "cross-env": "5.1.0",
     "css-loader": "1.0.0",
+    "electron": "^4.1.4",
+    "electron-packager": "^13.1.1",
     "eslint": "^5.8.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.14.0",

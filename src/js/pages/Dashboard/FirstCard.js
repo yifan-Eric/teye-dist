@@ -2,24 +2,17 @@ import { Row, Col, Card, Tag, Icon,Badge,Tooltip,Divider,Skeleton } from 'antd';
 import ExCharts from 'components/ExCharts';
 import React from 'react';
 import { connect } from 'react-redux';
+import ExCard from 'components/ExCard';
 
 class FirstCard extends React.Component {
     render () {
         const { width, height, id, firstChartData: chartData } = this.props;
         return (
-            <Card
-                className={'card firstCard'}
-                title={
-                    <div>
-                        <Skeleton loading={!chartData.option['title.text']} paragraph={false} title={{width:100}}>
-                            {chartData.option['title.text']}
-                            <Divider type={'vertical'}/>
-                            <Tooltip placement={'top'} title={chartData.tooltip}>
-                                <Icon type="question-circle" />
-                            </Tooltip>
-                        </Skeleton>
-                    </div>}
-                hoverable={true}
+            <ExCard
+                className={'firstCard'}
+                title={chartData.option['title.text']}
+                tooltip={chartData.tooltip}
+                height={370}
             >
                 <Row>
                     <Col xxl={{span:19}} xl={{span:19}} style={{marginTop:10}}>
@@ -30,7 +23,7 @@ class FirstCard extends React.Component {
                             chartOption={chartData.option}
                             data={chartData.data}
                             width={'100%'}
-                            minHeight={250}
+                            minHeight={230}
                         />
                     </Col>
                     <Col xxl={{span:4,offset:1}} xl={{span:4,offset:1}}>
@@ -56,7 +49,7 @@ class FirstCard extends React.Component {
                                                     ~~preCount==0||~~lastCount==0?100:(Math.abs(lastCount-preCount)*100/preCount).toFixed(2)
                                                 }
                                                 {/*{*/}
-                                                    {/*[15.1,21.5,17.5][i]*/}
+                                                {/*[15.1,21.5,17.5][i]*/}
                                                 {/*}*/}
                                                 %
                                             </p>
@@ -67,7 +60,7 @@ class FirstCard extends React.Component {
                         </div>
                     </Col>
                 </Row>
-            </Card>
+            </ExCard>
         );
     }
 }

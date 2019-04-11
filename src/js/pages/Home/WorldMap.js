@@ -1,14 +1,19 @@
 // import echarts from 'echarts/lib/echarts';
 import React from 'react';
 import ExCharts from 'components/ExCharts';
+import {Icon} from 'antd';
 import { connect } from 'react-redux';
 import action from 'actions/home';
+import Overlay from 'components/Overlay';
 
-let geoCoordMap = {
+const geoCoordMap = {
     '中国': [116.46, 39.92],
     '美国': [-77.01, 38.91],
     '法国': [2.20, 42.52]
 };
+const mockData = [{ name: '中国', value: 300 },
+    { name: '美国', value: 800 },
+    { name: '法国', value: 500 }]
 
 let convertData = function (data) {
     var res = [];
@@ -25,6 +30,13 @@ class WorldMap extends React.Component {
     constructor (props) {
         super(props);
         // this.state = { selectCountry: '' };
+        this.state = {overlayActive: false}
+    }
+    closeOverlay = () => {
+        this.setState({ overlayActive: false })
+    }
+    showOverlay = () => {
+        this.setState({ overlayActive: true })
     }
     handleClick = (e) => {
         if (e.name !== this.props.selectedCountry) {
@@ -39,15 +51,52 @@ class WorldMap extends React.Component {
     }
     render () {
         const { width, height, id,selectedCountry, mapChartData:chartData } = this.props;
+        const bodyHeight = document.body.clientHeight;
         return (
             <React.Fragment>
+                {this.state.overlayActive &&
+                <Overlay
+                    onClose={this.closeOverlay}
+                    style={{
+                        width:'100%',
+                        height:'100%',
+                        backgroundColor:'rgba(0,0,0,.8)'
+                    }}
+                    overlayCloseStyle={{
+                        color:'white',
+                        fontSize:60
+                    }}
+                >
+                    <ExCharts
+                        container={'full-heat-map'}
+                        option={{
+                            type: 'heat-map' ,
+                            selectedCountry:selectedCountry,
+                        }}
+                        data={convertData(mockData)}
+                        chartOption={chartData.option}
+                        width={'100%'}
+                        minHeight={(bodyHeight-100)*0.9}
+                    />
+                </Overlay>}
                 <ExCharts
                     container={id}
-                    option={{ type: 'heat-map' ,selectedCountry:selectedCountry,mapJsonData:chartData.mapJsonData}}
-                    data={convertData(
-                        [{ name: '中国', value: 300 },
-                        { name: '美国', value: 800 },
-                        { name: '法国', value: 500 }])}
+                    option={{
+                        type: 'heat-map' ,
+                        selectedCountry:selectedCountry,
+                        mapJsonData:chartData.mapJsonData,
+                        feature:{
+                            myFullScreen: {
+                                show: true,
+                                title: '全屏查看',
+                                icon: 'path://M432.45,595.444c0,2.177-4.661,6.82-11.305,6.82c-6.475,0-11.306-4.567-11.306-6.82s4.852-6.812,11.306-6.812C427.841,588.632,432.452,593.191,432.45,595.444L432.45,595.444z M421.155,589.876c-3.009,0-5.448,2.495-5.448,5.572s2.439,5.572,5.448,5.572c3.01,0,5.449-2.495,5.449-5.572C426.604,592.371,424.165,589.876,421.155,589.876L421.155,589.876z M421.146,591.891c-1.916,0-3.47,1.589-3.47,3.549c0,1.959,1.554,3.548,3.47,3.548s3.469-1.589,3.469-3.548C424.614,593.479,423.062,591.891,421.146,591.891L421.146,591.891zM421.146,591.891',
+                                onclick: ()=>{
+                                    this.showOverlay();
+                                }
+                            }
+                        }
+                    }}
+                    data={convertData(mockData)}
                     chartOption={chartData.option}
                     width={width}
                     minHeight={height}

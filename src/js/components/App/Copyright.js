@@ -20,7 +20,20 @@ class Copyright extends React.PureComponent {
                 <span><FormattedMessage id={'copyright'}/> © 2018 All Rights Reserved {APP_NAME}</span>
 
                 {this.state.overlayActive &&
-                <Overlay onClose={this.closeOverlay}>overlay content</Overlay>}
+                <Overlay
+                    onClose={this.closeOverlay}
+                    style={{
+                        width:360,
+                        height:300,
+                        backgroundColor:'#fff'
+                    }}
+                    overlayCloseStyle={{
+                        color:'black',
+                        fontSize:20
+                    }}
+                >
+                    overlay content
+                </Overlay>}
                 <a shape="circle" icon="search" size={'small'} className={'btn systemInfo'} onClick={this.showOverlay}>
                     <Icon type={'search'}/>
                 </a>

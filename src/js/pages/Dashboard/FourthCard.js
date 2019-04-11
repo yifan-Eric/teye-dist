@@ -75,14 +75,13 @@ class FourthCard extends React.Component {
                 <p className={'question'}>{chartData.question}</p>
                 <Card
                     className={'card fourthCard'}
-                    style={{width: '100%'}}
+                    style={{width: '100%',height:370}}
                     tabList={this.tabList}
                     activeTabKey={this.state.activeTab}
                     onTabChange={(key) => {
                         this.onTabChange(key, 'activeTab');
                     }}
                 >
-                    {/*{this.contents[this.state.activeTab]}*/}
                     {content}
                 </Card>
             </React.Fragment>

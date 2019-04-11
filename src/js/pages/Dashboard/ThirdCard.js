@@ -3,6 +3,7 @@ import ExTable from 'components/ExTable';
 import { Card , Icon,Divider,Tooltip,Skeleton } from 'antd';
 import React from 'react';
 import appAction from 'actions/app';
+import ExCard from 'components/ExCard';
 const defaultColors = ['#91d5ff','#69c0ff','#40a9ff','#1890ff','#096dd9','#0050b3'];
 
 class ThirdCard extends React.PureComponent {
@@ -28,20 +29,11 @@ class ThirdCard extends React.PureComponent {
         return (
             <div>
                 <p className={'question'}>{chartData.question}</p>
-                <Card
-                    className={'card thirdCard'}
-                    title={
-                        <div>
-                            <Skeleton loading={!chartData.option['title.text']} paragraph={false} title={{width:100}}>
-                            {chartData.option['title.text']}
-                            <Divider type={'vertical'}/>
-                            <Tooltip placement={'top'} title={chartData.tooltip}>
-                                <Icon type="question-circle" />
-                            </Tooltip>
-                            </Skeleton>
-                        </div>}
-                    hoverable={true}
-                    bodyStyle={{height:268}}
+                <ExCard
+                    className={'thirdCard'}
+                    title={chartData.option['title.text']}
+                    tooltip={chartData.tooltip}
+                    height={370}
                     actions={[<span style={{color:'#36AFEA'}} onClick={reHref}><Icon type="arrow-right"/>VIEW NEW USER RETENTION</span>]}
                 >
                     <ExTable
@@ -54,7 +46,34 @@ class ThirdCard extends React.PureComponent {
                         tableSize={'small'}
                         rowKey={'time'}
                     />
-                </Card>
+                </ExCard>
+                {/*<Card*/}
+                    {/*className={'card thirdCard'}*/}
+                    {/*title={*/}
+                        {/*<div>*/}
+                            {/*<Skeleton loading={!chartData.option['title.text']} paragraph={false} title={{width:100}}>*/}
+                            {/*{chartData.option['title.text']}*/}
+                            {/*<Divider type={'vertical'}/>*/}
+                            {/*<Tooltip placement={'top'} title={chartData.tooltip}>*/}
+                                {/*<Icon type="question-circle" />*/}
+                            {/*</Tooltip>*/}
+                            {/*</Skeleton>*/}
+                        {/*</div>}*/}
+                    {/*hoverable={true}*/}
+                    {/*bodyStyle={{height:268}}*/}
+                    {/*actions={[<span style={{color:'#36AFEA'}} onClick={reHref}><Icon type="arrow-right"/>VIEW NEW USER RETENTION</span>]}*/}
+                {/*>*/}
+                    {/*<ExTable*/}
+                        {/*className={'thirdTable'}*/}
+                        {/*loading={false}*/}
+                        {/*columns={this.columns}*/}
+                        {/*dataSource={chartData.list}*/}
+                        {/*// showHeader={false}*/}
+                        {/*bordered={false}*/}
+                        {/*tableSize={'small'}*/}
+                        {/*rowKey={'time'}*/}
+                    {/*/>*/}
+                {/*</Card>*/}
             </div>
         );
     }

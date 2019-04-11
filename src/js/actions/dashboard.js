@@ -912,7 +912,7 @@ actions.loadSixthChart = () => (dispatch,getState) => {
 
         for(let i in obj.durationList){
             option['xAxis.data'].push(i);
-            temp1.push(obj.durationList[i]?obj.durationList[i]:1);
+            temp1.push(obj.durationList[i]?obj.durationList[i]/1000:1);
             temp2.push(1);
         }
         data.push(temp1);
@@ -925,7 +925,7 @@ actions.loadSixthChart = () => (dispatch,getState) => {
                 screenType:obj.activityCountList[i].activityName,
                 percent:(obj.activityCountList[i].interactPercent*100).toFixed(2)+'%',
                 ratio1:{flag:0,value:'1.7%'},
-                aveTime:parseInt(obj.activityCountList[i].duration/60)+' m '+obj.activityCountList[i].duration%60+' s',
+                aveTime:parseInt(obj.activityCountList[i].duration/(60*1000))+' m '+(obj.activityCountList[i].duration/1000)%60+' s',
                 ratio2:{flag:0,value:'0.3%'}}
                 )
         }

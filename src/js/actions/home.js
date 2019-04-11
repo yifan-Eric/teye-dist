@@ -277,7 +277,8 @@ actions.loadSecondChart = () => dispatch => {
     ajax.get('/report/index/getPainSpotList',{}).then(backData=>{
         const option = {
             title: '用户痛点',
-            legendData: []
+            legendData: [],
+            color:['#003a8c','#0050b3','#096dd9','#1890ff','#40a9ff','#69c0ff','#91d5ff'].reverse()
         };
         option.legendData = backData.map((o,i)=>{
             return o.name;

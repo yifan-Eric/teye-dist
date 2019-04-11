@@ -1,13 +1,15 @@
+const proBaseUrl = 'http://63.33.199.83:8066',
+    devBaseUrl = 'http://63.33.199.83:8066';
 export default (function () {
     var config = {};
     switch(process.env.NODE_ENV){
         case 'production':
-            config.baseUrl = 'http://63.33.199.83:8066' ;
+            config.baseUrl = proBaseUrl ;
             // config.baseUrl = 'http://18.222.66.96/big-data' ;
             break;
         case 'development':
             // config.baseUrl = 'http://' + location.host;
-            config.baseUrl = 'http://63.33.199.83:8066' ;
+            config.baseUrl = devBaseUrl ;
             break;
         default:
             config.baseUrl = 'http://' + location.host + '/' + process.env.NODE_ENV.split('_')[1];
@@ -35,4 +37,4 @@ const apiTest = [
     '/report/getAppList'
 ];
 
-export {apiTest,resourceBaseUrl}
+export {apiTest,resourceBaseUrl,proBaseUrl,devBaseUrl}

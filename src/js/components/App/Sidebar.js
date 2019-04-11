@@ -3,6 +3,7 @@ import appAction from 'actions/app';
 import { Layout, Menu, Icon } from 'antd';
 import SidebarInfo from './SidebarInfo';
 import SidebarDate from './SidebarDate';
+import PotentialError from 'components/PotentialError';
 import { FormattedMessage } from 'react-intl';
 const { SubMenu } = Menu;
 const { Sider } = Layout;
@@ -84,34 +85,36 @@ class Sidebar extends React.Component {
             return <Sider className="sidebar" width={0}></Sider>;
         }
         return (
-            <Sider
-                className="sidebar"
-                width={230}
-                onCollapse={this.toggle}
-                collapsible
-                collapsed={this.state.collapsed}>
-                <SidebarInfo/>
-                <div className="menu-wrapper">
-                    <Menu
-                        mode="inline"
-                        // theme={APP_EDITION=='jianjiao'?'light':'dark'}
-                        // theme={'dark'}
-                        openKeys={this.state.openKeys}
-                        onOpenChange={this.onOpenChange}
-                        selectable={false}
-                        onClick={onClick}
-                        inlineCollapsed={true}
-                    >
-                        {
-                            menu.map((item, index) => {
-                                item.index = index;
-                                return this.renderItem(item, 1);
-                            })
-                        }
-                    </Menu>
-                </div>
-                <SidebarDate/>
-            </Sider>
+            <PotentialError>
+                <Sider
+                    className="sidebar"
+                    width={230}
+                    onCollapse={this.toggle}
+                    collapsible
+                    collapsed={this.state.collapsed}>
+                    <SidebarInfo/>
+                    <div className="menu-wrapper">
+                        <Menu
+                            mode="inline"
+                            // theme={APP_EDITION=='jianjiao'?'light':'dark'}
+                            // theme={'dark'}
+                            openKeys={this.state.openKeys}
+                            onOpenChange={this.onOpenChange}
+                            selectable={false}
+                            onClick={onClick}
+                            inlineCollapsed={true}
+                        >
+                            {
+                                menu.map((item, index) => {
+                                    item.index = index;
+                                    return this.renderItem(item, 1);
+                                })
+                            }
+                        </Menu>
+                    </div>
+                    <SidebarDate/>
+                </Sider>
+            </PotentialError>
         );
     }
 }

@@ -4,6 +4,7 @@ import ExTable from 'components/ExTable';
 import appAction from 'actions/app';
 import React from 'react';
 import { connect } from 'react-redux';
+import ExCard from 'components/ExCard';
 
 class SixthCard extends React.Component {
     constructor(props){
@@ -32,17 +33,12 @@ class SixthCard extends React.Component {
         return (
             <React.Fragment>
                 <p className={'question'}>{chartData.question}</p>
-                <Card
-                    className={'card sixthCard'}
-                    title={
-                        <div>
-                            {chartData.option['title.text']}
-                            <Divider type={'vertical'}/>
-                            <Tooltip placement={'top'} title={chartData.tooltip}>
-                                <Icon type="question-circle" />
-                            </Tooltip>
-                        </div>}
-                    hoverable={true}
+                <ExCard
+                    className={'sixthCard'}
+                    title={chartData.option['title.text']}
+                    height={370}
+                    tooltip={chartData.tooltip}
+                    actions={[<span style={{color:'#36AFEA'}} onClick={reHref}><Icon type="arrow-right"/>VIEW CONVERSION EVENTS</span>]}
                 >
                     <Row gutter={4}>
                         <Col span={6}>
@@ -84,11 +80,7 @@ class SixthCard extends React.Component {
                             />
                         </Col>
                     </Row>
-                    <div className={'footer'} onClick={reHref}>
-                        VIEW CONVERSION EVENTS
-                        <Icon type="arrow-right"/>
-                    </div>
-                </Card>
+                </ExCard>
             </React.Fragment>
         );
     }
