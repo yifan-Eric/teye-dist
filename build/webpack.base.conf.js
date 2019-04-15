@@ -22,6 +22,11 @@ var plugins = [
     new webpack.optimize.CommonsChunkPlugin({name:'vendor'}),
     // new webpack.optimize.CommonsChunkPlugin({name:'common',filename:'[name].js',chunks:['login','app']}),
     new webpack.optimize.CommonsChunkPlugin({name:'app', children:true, async:true, minChunks:2}),
+    // ...pages.map(o=>{
+    //     return new webpack.optimize.CommonsChunkPlugin({
+    //         name:o, children:true, async:true, minChunks:2
+    //     })
+    // }),
     ...pages.map(o=>{
         return new HtmlWebpackPlugin({
             title:APP_NAME,
@@ -108,7 +113,6 @@ module.exports = {
         _dashboard2: './src/js/_dashboard2',
         _dashboard3: './src/js/_dashboard3',
         _dashboard4: './src/js/_dashboard4',
-        //'news-viewer': './src/js/news-viewer',
         vendor:[
             'react',
             'react-dom',
@@ -117,6 +121,7 @@ module.exports = {
             'redux',
             'redux-thunk',
             'nprogress',
+            'antd'
         ]
     },
     output: {
@@ -157,18 +162,21 @@ module.exports = {
             {
                 test: /\.less$/,
                 use:'happypack/loader?id=less',
+                // include:[resolve('src/less')]
                 include:[resolve('src/less'),resolve('node_modules/antd')]
             },
+
             // {
             //     test: /\.less$/,
             //     use: ExtractTextPlugin.extract({
             //         fallback: 'style-loader',
             //         use: ['css-loader', {
             //             loader: 'less-loader',
-            //             options:  { javascriptEnabled: true, modifyVars:theme}
+            //             options:  { javascriptEnabled: true,modifyVars:theme}
             //         }]
             //     }),
-            //     include:[resolve('src/less'),resolve('node_modules/antd')]
+            //     // include:[resolve('src/less')]
+            //     include:[resolve('node_modules/antd')]
             // },
             {test: /\.js$/, use: 'happypack/loader?id=babel', include:resolve('src/js')},
             // {test: /\.(png|jpe?g|gif)$/,use: 'url-loader?limit=8192&name=[hash:8].[ext]' , include:resolve('src/img')}

@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import action from 'actions/dashboard';
 import appAction from 'actions/app';
 import ExCard from 'components/ExCard';
-import {Observable} from 'rxjs';
+// import {Observable} from 'rxjs';
 
 class SecondCard extends React.Component {
     constructor (props) {
@@ -21,18 +21,16 @@ class SecondCard extends React.Component {
         // this.anim = setInterval(()=>{
         //     this.props.update(preData);
         // },1000*60)
-        // console.log(Observable);
-        // let observable = Observable.interval(1000*5);
-        // observable.subscribe(x=>console.log(x))
-        // let observable = Rx.Observable.interval(1000*5).subscribe(this.props.update);
-        // setTimeout(()=>{observable.unsubscribe()},1000);
-        // this.observable.unsubscribe();
+
+        // this.observable = Observable.interval(1000*5).subscribe(this.props.update);
+
         this.anim = setInterval(()=>{
             this.props.update();
         },1000*60)
     }
     componentWillUnmount(){
         clearInterval(this.anim);
+        // this.observable.unsubscribe();
     }
     render () {
         const { width, height, id, secondChartData: chartData ,reHref} = this.props;

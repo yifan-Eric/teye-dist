@@ -158,7 +158,8 @@ function drawNormalPie (data, option) {
             trigger: 'item',
             formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
-        color:option.color?option.color:['#003a8c','#0050b3','#096dd9','#1890ff','#40a9ff','#69c0ff','#91d5ff'],
+        color:['#520038','#780650','#9e1068','#c41d7f','#d14190','#de68a5','#eb94be'],
+        // color:option.color?option.color:['#003a8c','#0050b3','#096dd9','#1890ff','#40a9ff','#69c0ff','#91d5ff'],
         legend: option.legend||{
             orient: 'vertical',
             left: 'left',
@@ -587,8 +588,8 @@ function drawHorizontalStackBar (data, option) {
                 type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             }
         },
-        // color: ['#faad14', '#13c2c2', '#52c41a', '#1890ff', '#2f54eb', '#722ed1'],
-        color:['#0050b3','#096dd9','#1890ff','#40a9ff'],
+        color: ['#faad14', '#13c2c2', '#52c41a', '#1890ff', '#2f54eb', '#722ed1'],
+        // color:['#0050b3','#096dd9','#1890ff','#40a9ff'],
         legend: {
             data: option.legendData,
             x: 'center',

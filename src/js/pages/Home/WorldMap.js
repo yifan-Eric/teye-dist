@@ -5,6 +5,7 @@ import {Icon} from 'antd';
 import { connect } from 'react-redux';
 import action from 'actions/home';
 import Overlay from 'components/Overlay';
+import FullScreenMode from './FullScreenMode';
 
 const geoCoordMap = {
     '中国': [116.46, 39.92],
@@ -51,7 +52,7 @@ class WorldMap extends React.Component {
     }
     render () {
         const { width, height, id,selectedCountry, mapChartData:chartData } = this.props;
-        const bodyHeight = document.body.clientHeight;
+
         return (
             <React.Fragment>
                 {this.state.overlayActive &&
@@ -67,17 +68,7 @@ class WorldMap extends React.Component {
                         fontSize:60
                     }}
                 >
-                    <ExCharts
-                        container={'full-heat-map'}
-                        option={{
-                            type: 'heat-map' ,
-                            selectedCountry:selectedCountry,
-                        }}
-                        data={convertData(mockData)}
-                        chartOption={chartData.option}
-                        width={'100%'}
-                        minHeight={(bodyHeight-100)*0.9}
-                    />
+                    <FullScreenMode/>
                 </Overlay>}
                 <ExCharts
                     container={id}

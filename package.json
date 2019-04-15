@@ -33,7 +33,7 @@
     "react-redux": "5.0.6",
     "redux": "3.7.2",
     "redux-thunk": "2.2.0",
-    "rxjs": "^6.4.0",
+    "rxjs": "6.0.0-alpha.3",
     "tf-react-cpn": "^2.2.1",
     "tf-utils": "^2.2.5"
   },

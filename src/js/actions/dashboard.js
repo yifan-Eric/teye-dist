@@ -216,9 +216,12 @@ actions.loadFirstChart = () => (dispatch,getState) => {
 };
 
 //normalBar
-actions.loadSecondChart = () => dispatch => {
+actions.loadSecondChart = () => (dispatch,getState) => {
+    const state = getState().dashboard;
+    const searchParams = state.searchParams;
+    const version = searchParams.appVersion;
     //对接代码start
-    ajax.get('/report/com.tct.camera/getAppPMActiveInfo',{}).then(obj=>{
+    ajax.get('/report/com.tct.camera/getAppPMActiveInfo',{version}).then(obj=>{
         const option = {
             'title.text':'Users pre minutes',
             'title.left':'left',

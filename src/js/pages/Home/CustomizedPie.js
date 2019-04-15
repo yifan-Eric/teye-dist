@@ -18,6 +18,7 @@ class CustomizedPie extends React.PureComponent {
                 <ExCharts
                     container={id}
                     option={{ type: 'normal-pie' }}
+                    // option={{type:'customized-pie'}}
                     data={chartData.data}
                     chartOption={chartData.option}
                     width={width}
