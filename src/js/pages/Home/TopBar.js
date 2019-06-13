@@ -7,12 +7,21 @@ import { connect } from 'react-redux';
 import action from 'actions/home';
 let plugin = require('components/NumScroll');
 
+function getMockData(val,randomVal){
+    const baseVal = 20000000;
+    const fakeVal = val*100;
+    return baseVal+fakeVal+randomVal;
+
+}
+
+
 class TopBar extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
             curTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-            activeNum: parseInt((Math.random() + 2) * 10000000),
+            // activeNum: parseInt(((Math.random())*0.2 + 2) * 10000000),
+            randomVal: parseInt(Math.random()*100),
             searchKey:''
         };
     }
@@ -23,16 +32,21 @@ class TopBar extends React.Component {
             });
         }, 1000);
         plugin.test('#dataNums', {
-            deVal: this.state.activeNum
+            // deVal: this.state.activeNum
+            deVal: getMockData(~~this.props.activityCount,this.state.randomVal)
         });
         this.numInterval = setInterval(() => {
-            let temp = this.state.activeNum;
-            this.setState({ activeNum: parseInt((Math.random() - 0.1) * 100 + temp) });
+            // let temp = this.state.activeNum;
+            // this.setState({ activeNum: parseInt((Math.random() - 0.1) * 100 + temp) });
+            this.setState({randomVal: parseInt(Math.random()*100)})
+            this.props._getActivityCount();
         }, 3000);
     }
+
     componentDidUpdate () {
         plugin.test('#dataNums', {
-            deVal: parseInt(this.state.activeNum)
+            // deVal: parseInt(this.state.activeNum)
+            deVal: getMockData(~~this.props.activityCount,this.state.randomVal)
         });
     }
     componentWillUnmount () {
@@ -83,8 +97,8 @@ class TopBar extends React.Component {
 }
 
 TopBar = connect(state => {
-    const { mapType,bubbleChartData } = state['home'];
-    return { mapType,bubbleChartData };
+    const { mapType,bubbleChartData,activityCount } = state['home'];
+    return { mapType,bubbleChartData,activityCount };
 }, dispatch => ({
     toggleChange (e) {
         dispatch(action.toggleMap(e.target.value));
@@ -92,6 +106,9 @@ TopBar = connect(state => {
     onSearch(chartData,value){
         dispatch(action.refreshBubble(value,chartData));
         // console.log(value);
+    },
+    _getActivityCount(){
+        dispatch(action.getActivityCount());
     }
 }))(TopBar);
 

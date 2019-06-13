@@ -17,7 +17,8 @@ const defaultState = {
     detailPageLoading:true,
     searchParams:{
         appVersion:'v8.2.T.0.T060.0',
-        appName:'Gallery',
+        appName:1,
+        // appName:'Simple Launcher',
         dateRange:28,
     },
     appVersions:[],
@@ -102,7 +103,7 @@ const defaultState = {
         question:"你的应用表现有多稳定？",
         data:{},
         option:{}
-    }
+    },
 };
 
 export default (state, action) => {

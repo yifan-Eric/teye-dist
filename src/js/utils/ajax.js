@@ -9,8 +9,8 @@ function ajax (method, url, data = {}, baseUrl, isRaw, isFormData) {
     if (apiTest.indexOf(url) == -1) {
         // 虚拟接口服务
         require('../mock')(url, data);
-        data = '';
-        method = 'GET';
+        // data = '';
+        // method = 'GET';
     }
     // 空字符串字段不传出去
     for (let key in data) {
@@ -25,7 +25,7 @@ function ajax (method, url, data = {}, baseUrl, isRaw, isFormData) {
             data: data,
             dataType: 'json',
             processData: !isFormData,
-            contentType: isFormData ? false : undefined
+            contentType: isFormData ? false : 'application/json'
         }).done(json => {
             if (isRaw) {
                 resolve(json);

@@ -22,6 +22,7 @@ import dashboard3 from './dashboard3';
 import streamView from './streamView';
 import conversions from './conversions';
 import events from './events';
+import appMgr from './appMgr';
 
 export default combineReducers({
     app,
@@ -43,7 +44,8 @@ export default combineReducers({
     dashboardDefect,
     streamView,
     conversions,
-    events
+    events,
+    appMgr
 
     // home,
     // ...news,

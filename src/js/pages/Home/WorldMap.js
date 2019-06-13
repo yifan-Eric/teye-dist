@@ -7,21 +7,37 @@ import action from 'actions/home';
 import Overlay from 'components/Overlay';
 import FullScreenMode from './FullScreenMode';
 
+// const geoCoordMap = {
+//     '中国': [116.46, 39.92],
+//     '美国': [-77.01, 38.91],
+//     '法国': [2.20, 42.52]
+// };
+// const mockData = [{ name: '中国', value: 300 },
+//     { name: '美国', value: 800 },
+//     { name: '法国', value: 500 }]
+
 const geoCoordMap = {
-    '中国': [116.46, 39.92],
-    '美国': [-77.01, 38.91],
-    '法国': [2.20, 42.52]
+    'india':[77.13,28.37],
+    'brazil':[-47.55,-15.47],
+    'indonesia':[106.49,-6.09],
+    'mexico':[-99.10,19.20],
+    'bangladesh':[90.26,23.43],
+    'russia':[37.35,55.45],
+    'pakistan':[73.10,33.40],
+    'usa':[-77.02,39.91],
+    'ukraine':[30.28,50.30],
+    'turkey':[32.54,39.57]
 };
-const mockData = [{ name: '中国', value: 300 },
-    { name: '美国', value: 800 },
-    { name: '法国', value: 500 }]
 
 let convertData = function (data) {
     var res = [];
     for (var i = 0; i < data.length; i++) {
         var geoCoord = geoCoordMap[data[i].name];
         if (geoCoord) {
-            res.push(geoCoord.concat(data[i].value));
+            res.push({
+                name: data[i].name,
+                value: geoCoord.concat(data[i].value)
+            });
         }
     }
     return res;
@@ -43,16 +59,15 @@ class WorldMap extends React.Component {
         if (e.name !== this.props.selectedCountry) {
             console.log(1,e.name,this.props.selectedCountry)
             // this.setState({ selectCountry: e.name });
-            this.props.bindSelectedCountry(e.name);
+            this.props.bindSelectedCountry(this.props.selectedCountry,e.name);
         }else{
             console.log(2,e.name,this.props.selectedCountry)
             // this.setState({selectCountry:''});
-            this.props.clearSelectedCountry();
+            this.props.clearSelectedCountry(this.props.selectedCountry);
         }
     }
     render () {
         const { width, height, id,selectedCountry, mapChartData:chartData } = this.props;
-
         return (
             <React.Fragment>
                 {this.state.overlayActive &&
@@ -87,7 +102,12 @@ class WorldMap extends React.Component {
                             }
                         }
                     }}
-                    data={convertData(mockData)}
+                    data={
+                        chartData.option.useGeo?
+                            convertData(chartData.data)
+                            :
+                            Object.keys(chartData.data).map(o=>chartData.data[o])
+                    }
                     chartOption={chartData.option}
                     width={width}
                     minHeight={height}
@@ -108,13 +128,14 @@ WorldMap = connect(state=>{
         dispatch(action.loadFourthChart(name));
         dispatch(action.loadFifthChart());
     },
-    bindSelectedCountry(name){
+    bindSelectedCountry(pre,name){
         dispatch({type:'HOME_COUNTRY_CHANGE',selectedCountry:name});
+        dispatch(action.refreshMap(pre,name));
         this.onClick(name);
     },
-    clearSelectedCountry(){
-        console.log('11');
+    clearSelectedCountry(pre){
         dispatch({type:'HOME_COUNTRY_CHANGE',selectedCountry:'world'});
+        dispatch(action.refreshMap(pre,'world'));
         this.onClick();
     }
 }))(WorldMap);

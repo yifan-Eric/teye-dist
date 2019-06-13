@@ -29,9 +29,9 @@ class WorldMap extends React.Component {
                     container={id}
                     option={{ type: 'heat-map' }}
                     data={
-                        [{ name: 'India', value: 188 },
-                            { name: 'Indonesia', value: 46 },
-                            { name: 'Brazil', value: 32 }]
+                        [{ name: 'India', value: 107350 },
+                            { name: 'Indonesia', value: 33802 },
+                            { name: 'Brazil', value: 28294 }]
                     }
                     chartOption={chartData.option}
                     width={width}

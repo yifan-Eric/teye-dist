@@ -2,8 +2,17 @@ import { connect } from 'react-redux';
 import ExFormItem from 'components/ExFormItem';
 import ExModal from 'components/ExModal';
 import { Form } from 'antd';
+import action from 'actions/dashboard';
 
 const SearchForm = Form.create({
+    onFieldsChange(props, changedFields) {
+        var changed = Object.keys(changedFields).map(o=>{
+            var obj = new Object();
+            obj[o] = changedFields[o].value;
+            return obj;
+        })
+        props.onChange(props.searchParams,changed[0]);
+    },
     mapPropsToFields: (props) => {
         const params = props.searchParams;
         return {
@@ -23,16 +32,29 @@ const SearchForm = Form.create({
 });
 
 class SearchModal extends React.Component {
+    constructor(props){
+        super(props);
+        //搜索框需要复制一份searchParams作为state,不能干扰store里面的searchParams
+        this.state = {searchParams:props.searchParams}
+    }
     handleSave = () => {
         const form = this.form;
         form.validateFields((err, data) => {
             if (err) { return; }
-            this.props.onSearch({...this.props.searchParams,...data});
+            this.props.onSearch({...this.state.searchParams,...data});
             this.props.onClose();
         });
     }
     saveFormRef = (form) => {
         this.form = form;
+    }
+    fieldsOnChange = (props,changeFields) => {
+        var newData = {...props,...changeFields};
+        if(newData['appName']=='')
+            newData.appVersion = '';
+        this.setState({searchParams: newData})
+        if(changeFields.hasOwnProperty('appName'))
+            this.props.refreshAppVersion(changeFields['appName']);
     }
     render () {
         const { show, onClose,appVersions,productList } = this.props;
@@ -45,9 +67,10 @@ class SearchModal extends React.Component {
             >
                 <SearchForm
                     ref={this.saveFormRef}
-                    searchParams={this.props.searchParams}
+                    searchParams={this.state.searchParams}
                     appVersions={appVersions}
                     prodList={productList}
+                    onChange={this.fieldsOnChange}
                 />
             </ExModal>
         );
@@ -55,8 +78,12 @@ class SearchModal extends React.Component {
 }
 
 SearchModal = connect(state => {
-    const { searchParams,appVersions,productList } = state['dashboard'];
-    return { searchParams,appVersions,productList };
-}, null)(SearchModal);
+    const { appVersions,productList } = state['dashboard'];
+    return { appVersions,productList };
+}, dispatch=>({
+    refreshAppVersion(appId){
+        dispatch(action.loadAppVersions(appId));
+    }
+}))(SearchModal);
 
 export default SearchModal;

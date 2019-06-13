@@ -8,6 +8,7 @@ export default {
     'menuName_systemConfig_menu': '菜单管理',
     'menuName_systemConfig_user': '用户管理',
     'menuName_systemConfig_autoTask': '自动化任务',
+    'menuName_systemConfig_appMgr':'应用管理',
 
     'systemConfig_role_msg1': '请在左边角色栏选择一个角色'
 };

@@ -1,12 +1,25 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+// const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HappyPack = require('happypack');
 
 const path=require('path');
 const theme=require('../theme');
 const APP_NAME='Teye';
+//
+// /**
+//  * 动态查找所有入口文件,暂时没什么用
+//  */
+// var glob = require("glob");
+// var files = glob.sync('./src/vendor/json/*.json');
+// var newEntries = [];
+// files.forEach(function(f){
+//     var name = /.*\/vendor\/json\/(.*?)\.json/.exec(f)[1];//得到pages/Dashboard/index这样的文件名
+//     // console.log(name)
+//     newEntries.push('"'+name+'"');
+// });
+// console.log(newEntries.join(','))
 
 // 生产环境
 var isProd = process.env.NODE_ENV === 'production';
@@ -18,15 +31,15 @@ function resolve(projectPath){
 const pages = ['_dashboard','_streamView','_conversions','_dashboard2','_dashboard3','_dashboard4'];
 
 var plugins = [
-    // new webpack.optimize.CommonsChunkPlugin({name:['vendor','runtime']}),
-    new webpack.optimize.CommonsChunkPlugin({name:'vendor'}),
-    // new webpack.optimize.CommonsChunkPlugin({name:'common',filename:'[name].js',chunks:['login','app']}),
-    new webpack.optimize.CommonsChunkPlugin({name:'app', children:true, async:true, minChunks:2}),
-    // ...pages.map(o=>{
-    //     return new webpack.optimize.CommonsChunkPlugin({
-    //         name:o, children:true, async:true, minChunks:2
-    //     })
+    // new webpack.optimize.CommonsChunkPlugin({
+    //     name: 'vendor',
+    //     minChunks: function (module) {
+    //         // this assumes your vendor imports exist in the node_modules directory
+    //         return module.context && module.context.includes('node_modules');
+    //     }
     // }),
+    new webpack.optimize.CommonsChunkPlugin({name:'vendor'}),
+    new webpack.optimize.CommonsChunkPlugin({name:'app', children:true, async:true, minChunks:2}),
     ...pages.map(o=>{
         return new HtmlWebpackPlugin({
             title:APP_NAME,
@@ -97,9 +110,9 @@ var plugins = [
         'APP_NAME': JSON.stringify(APP_NAME),
         'APP_EDITION': JSON.stringify('default')
     }),
-    new ExtractTextPlugin({
-        filename: '[name].css' //路径以及命名
-    })
+    // new ExtractTextPlugin({
+    //     filename: '[name].css' //路径以及命名
+    // })
 ];
 
 module.exports = {

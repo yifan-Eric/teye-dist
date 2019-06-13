@@ -1,7 +1,15 @@
 import ajax from 'utils/ajax';
+import {getCountryName,getAllCountries} from "utils";
 import moment from 'moment';
 import appAction from 'actions/app';
 let actions = {};
+
+
+actions.getActivityCount = () => dispatch =>{
+    ajax.get('/report/getActivityCount?packageName=flink-com.tclhz.gallery').then((data)=>{
+        dispatch({type:'HOME_ACTIVITY_COUNT_LOAD',data});
+    })
+}
 
 actions.toggleMap = (key) => dispatch => {
     dispatch({ type: 'HOME_TOGGLE_MAP', mapType: key });
@@ -61,16 +69,59 @@ actions.refreshBubble = (product,chartData) => dispatch => {
 };
 
 actions.loadMap = () => (dispatch,getState) => {
-    ajax.get('/report/device-report/getDeviceActiveOfDay',{}).then(data=>{
-        console.log(data);
+    // ajax.get('/report/device-report/getDeviceActiveOfDay',{}).then(data=>{
+    //     console.log(data);
+    // })
+    let data = [];
+    ajax.get('/report/getAppDistribution',{
+        packageName:'com.tclhz.gallery',
+        topK:10,
+        fieldName:'appVersion',
+        fieldValue:'v8.2.T.0.T060.0'}).then(obj=>{
+            let temp = {};
+            getAllCountries().forEach(o=>{temp[o] = {name:o,value:0,selected:false};});
+            console.log('temp',temp);
+            obj.forEach(o=>{
+                const countryName = getCountryName(o.countryNo);
+                if(countryName)
+                    temp[countryName].value = o.counts*80+parseInt(Math.random()*1000)
+            });
+            const preData = getState().home.mapChartData
+            let option = {
+                type:'map',
+                title:{
+                    show:false
+                },
+                visualMap:{
+                    min: 0,
+                    max: 110000*80,
+                    splitNumber: 10,
+                    inRange: {
+                        color: ['#e6f7ff','#91d5ff','#40a9ff','#1890ff','#096dd9','#0050b3','#003a8c','#002766']
+                    },
+                    textStyle: {
+                        color: '#fff'
+                    },
+                    calculable: true,
+                    itemHeight:'150px',
+                    show:true
+                },
+                useGeo:false
+            }
+            dispatch({type:'HOME_MAP_DATA',option,mapJsonData: preData.mapJsonData,data:temp});
     })
-    const preData = getState().home.mapChartData
-    let option = {
-        useGeo:true
-    }
-    dispatch({type:'HOME_MAP_DATA',option,mapJsonData: preData.mapJsonData});
     // dispatch(appAction.loadRegion('world','HOME_MAP_DATA',{option:preData.option}));
     // dispatch({type:'HOME_MAP_DATA',option});
+}
+
+actions.refreshMap = (pre,cur) => (dispatch,getState) => {
+    const preData = getState().home.mapChartData.data;
+    let data = JSON.parse(JSON.stringify(preData));
+    data[pre].selected = false;
+    data[cur].selected = true;
+    console.log(pre,cur)
+    console.log('data',data[cur])
+    dispatch({type:'HOME_MAP_DATA',data});
 }
 
 actions.loadFirstChart = (country) => dispatch => {
@@ -102,8 +153,14 @@ actions.loadFirstChart = (country) => dispatch => {
         pi[o] = [];
         si[o] = [];
         for (let i = 0; i < 5; i++) {
-            pi[o].push(parseInt((Math.random() * 2000) + 1000) * s);
-            si[o].push(parseInt((Math.random() * 2000) + 1000) * s);
+            const base = 1000,LDetla = 2000,NDetla = 1000,SDetla = 500;
+            if(i==0||i==4){
+                pi[o].push(parseInt((Math.random() * base) + SDetla) * s);
+                si[o].push(parseInt((Math.random() * base) + LDetla) * s);
+            }else{
+                pi[o].push(parseInt((Math.random() * base) + NDetla) * s);
+                si[o].push(parseInt((Math.random() * base) + NDetla) * s);
+            }
         }
     });
     dataMap.dataPI = dataFormatter(pi);
@@ -330,7 +387,23 @@ actions.loadThirdChart = () => dispatch => {
         },
         {
             "date":"201812",
-            "number":31243.064
+            "number":32143.064
+        },
+        {
+            "date":"201901",
+            "number":32990.85
+        },
+        {
+            "date":"201902",
+            "number":34141.668
+        },
+        {
+            "date":"201903",
+            "number":35524.002
+        },
+        {
+            "date":"201904",
+            "number":37105.185
         }
     ]
     const option = {
@@ -360,7 +433,7 @@ actions.loadFourthChart = (country) => dispatch => {
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 7; j++) {
             if (!data[i]) { data[i] = []; }
-            data[i].push((Math.random() * 3).toFixed(1) + 1);
+            data[i].push((Math.random() * 2).toFixed(1) + 1);
         }
     }
     data.sort((o1, o2) => {

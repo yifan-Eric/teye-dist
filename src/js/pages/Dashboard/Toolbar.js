@@ -39,7 +39,12 @@ class Toolbar extends React.Component{
         }
         return (
             <div className="hd">
-                <SearchModal show={this.state.searchModalShow} onClose={()=>this.setState({searchModalShow: false})} onSearch={onSearch}/>
+                <SearchModal
+                    show={this.state.searchModalShow}
+                    onClose={()=>this.setState({searchModalShow: false})}
+                    onSearch={onSearch}
+                    searchParams={searchParams}
+                />
                 <div className="actions">
                     {exComp}
 

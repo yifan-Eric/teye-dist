@@ -25,6 +25,7 @@ Timeline = connect(state => {
     return { firstChartData };
 }, dispatch=>({
     handleClick(e){
+        e.componentSubType==='bar'&&
         dispatch({type:'HOME_FIRSTSUBPAGE_SHOW',subPageShow:true,tag:e.name,gender:e.seriesName});
     }
 }))(Timeline);

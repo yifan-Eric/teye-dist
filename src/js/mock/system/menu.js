@@ -74,7 +74,8 @@ module.exports = [
                         { id: 900, name: 'menuName_systemConfig_role', module: 'systemConfig/role', functions: ['CREATE', 'UPDATE', 'DELETE'] },
                         { id: 901, name: 'menuName_systemConfig_menu', module: 'systemConfig/menu', functions: ['CREATE', 'UPDATE', 'EDIT', 'DELETE'] },
                         { id: 902, name: 'menuName_systemConfig_user', module: 'systemConfig/user', functions: ['CREATE', 'UPDATE', 'DELETE', 'ADD_STAFF', 'ADD_ORG', 'RESET', 'LEAVE'] },
-                        { id: 903, name: 'menuName_systemConfig_autoTask', module: 'systemConfig/autoTask', functions: [] }
+                        { id: 903, name: 'menuName_systemConfig_autoTask', module: 'systemConfig/autoTask', functions: [] },
+                        { id: 904, name: 'menuName_systemConfig_appMgr', module: 'systemConfig/appMgr', functions: [] }
                     ]
                 }
             ]
@@ -167,7 +168,8 @@ module.exports = [
                         { id: 900, name: 'menuName_systemConfig_role', module: 'systemConfig/role', display: 1 },
                         { id: 901, name: 'menuName_systemConfig_menu', module: 'systemConfig/menu', display: 1 },
                         { id: 902, name: 'menuName_systemConfig_user', module: 'systemConfig/user', display: 1 },
-                        { id: 903, name: 'menuName_systemConfig_autoTask', module: 'systemConfig/autoTask', display: 1 }
+                        { id: 903, name: 'menuName_systemConfig_autoTask', module: 'systemConfig/autoTask', display: 1 },
+                        { id: 904, name: 'menuName_systemConfig_appMgr', module: 'systemConfig/appMgr', display:1 }
 
                     ],
                     display: 1

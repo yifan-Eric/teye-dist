@@ -55,3 +55,24 @@ export function isEmpty(val){
 export function getSubMenu(list){
 
 }
+
+const countryMap = {
+    IN:'India',
+    BR:'Brazil',
+    ID:'Indonesia',
+    MX:'Mexico',
+    BD:'Bangladesh',
+    RU:'Russia',
+    PK:'Pakistan',
+    US:'United States',
+    UA:'Ukraine',
+    TR:'Turkey'
+}
+const countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua_and_Barbuda","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia_and_Herzegovina","Botswana","Brazil","British_Indian_Ocean_Territory","British_Virgin_Islands","Brunei","Bulgaria","Burkina_Faso","Burundi","Cambodia","Cameroon","Canada","Cape_Verde","Cayman_Islands","Central_African_Republic","Chad","Chile","China","Colombia","Comoros","Congo-Brazzaville","Congo-Kinshasa","Cook_Islands","Coral_Sea_Islands_Territory","Costa_Rica","Croatia","Cuba","Cyprus","Czechia","Denmark","Djibouti","Dominica","Dominican_Republic","East_Timor","Ecuador","Egypt","El_Salvador","Equatorial_Guinea","Eritrea","Estonia","Ethiopia","Falkland_Islands","Faroe_Islands","Federated_States_of_Micronesia","Fiji","Finland","France","Gabon","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Guatemala","Guernsey","Guinea-Bissau","Guinea","Guyana","Haiti","Honduras","Hungary","Iceland","India","Indonesia","Iraq","Ireland","Islamic_Republic_of_Iran","Isle_of_Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Juguang","Kazakhstan","Kenya","Kiribati","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxemburg","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall_Islands","Mauritania","Mauritius","Mexico","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nepal","New_Zealand","Nicaragua","Niger","Nigeria","Niue","North_Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua_New_Guinea","Paraguay","Peru","Philippines","Pitcairn_Islands","Poland","Portugal","Qatar","Republic_of_Kosovo","Romania","Russia","Russian_Federation","Rwanda","Sahrawi_Arab_Democratic_Republic","Saint_Helena_Ascension_and_Tristan_da_Cunha","Saint_Kitts_and_Nevis","Saint_Lucia","Saint_Vincent_and_the_Grenadines","Samoa","San_Marino","Saudi_Arabia","Senegal","Serbia","Seychelles","Sierra_Leone","Singapore","Slovakia","Slovenia","Solomon_Islands","Somalia","South_Africa","South_Georgia_and_the_South_Sandwich_Islands","South_Korea","South_Sudan","Spain","Sri_Lanka","Sudan","Suriname","Swaziland","Sweden","Syria","Tajikistan","Tanzania","Thailand","The_Bahamas","The_Gambia","The_Netherlands","Togo","Tokelau","Tonga","Trinidad_and_Tobago","Tunisia","Turkey","Turkmenistan","Turks_and_Caicos_Islands","Tuvalu","Uganda","Ukraine","United States","United_Arab_Emirates","United_Kingdom","Uruguay","Uzbekistan","Vanuatu","Vatican_City","Venezuela","Vietnam","world","Yemen","Zambia","Zimbabwe"]
+
+export function getCountryName(countryNo){
+    return countryNo&&countryMap[countryNo];
+}
+export function getAllCountries(){
+    return countries.map(o=>o.replace(/_/g,' '))
+}

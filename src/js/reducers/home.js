@@ -2,6 +2,7 @@ import { objectAppend } from '../utils';
 
 const defaultState = {
     mapType: 'map',
+    activityCount:0,
     // secondSubPageShow:false,
     secondSubPage:{
         show:false
@@ -59,6 +60,9 @@ const defaultState = {
 export default (state, action) => {
     let newState = {};
     switch (action.type) {
+        case 'HOME_ACTIVITY_COUNT_LOAD':
+            newState.activityCount = action.data;
+            break;
         case 'HOME_FIRSTSUBPAGE_SHOW':
             newState.firstSubPage =  {
                 show:action.subPageShow,
@@ -123,8 +127,8 @@ export default (state, action) => {
         case 'HOME_MAP_DATA':
             newState.mapChartData = {
                 data: action.data,
-                option: action.option,
-                mapJsonData: action.mapJsonData
+                option: action.option||state['mapChartData'].option,
+                mapJsonData: action.mapJsonData||state['mapChartData'].mapJsonData
             };
             break;
         case 'HOME_FIRST_DATA':

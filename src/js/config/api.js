@@ -34,7 +34,9 @@ const apiTest = [
     '/report/device-report/getDeviceActiveOfDay',
     '/report/userEngagement',
     '/report/index/getPainSpotList',
-    '/report/getAppList'
+    '/report/getAppList',
+    '/report/getActivityCount?packageName=flink-com.tclhz.gallery',
+    '/report/app/version/list'
 ];
 
 export {apiTest,resourceBaseUrl,proBaseUrl,devBaseUrl}

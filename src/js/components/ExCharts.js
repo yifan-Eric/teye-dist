@@ -751,9 +751,9 @@ function drawHeatMap (data, option,exData) {
             containLabel: true
         },
         visualMap: option.visualMap||{
-            min: 0,
-            max: 800,
-            splitNumber: 5,
+            min: 70000,
+            max: 1100000,
+            splitNumber: 8,
             inRange: {
                 color: ['#d94e5d', '#eac736', '#50a3ba'].reverse()
             },
@@ -765,11 +765,13 @@ function drawHeatMap (data, option,exData) {
         },
         tooltip: {
             trigger: 'item',
+            // confine:true,
             // axisPointer: { // 坐标轴指示器，坐标轴触发有效
             //     type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
             // }
             formatter: function (params) {
-                return params.name+':'+params.value;
+                //使用geo时，获取value有变化
+                return params.name + ' : ' + (params.value[2]?params.value[2]:params.data.value);
             }
         },
         toolbox:{
@@ -823,10 +825,16 @@ function drawHeatMap (data, option,exData) {
             map:'world',
             data:data,
             symbolSize: 15,
-            itemStyle:{
+            itemStyle: {
+                normal: {
+                    // areaColor: '#323c48',
+                    borderColor: '#096dd9',
+                    // borderWidth:1,
+                    areaColor: '#e6f7ff'
+                    // borderColor:''
+                },
                 emphasis: {
-                    // areaColor: '#2a333d'
-                    areaColor: '#40a9ff',
+                    areaColor: '#faad14',
                 }
             },
         }]

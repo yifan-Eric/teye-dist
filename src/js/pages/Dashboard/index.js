@@ -11,7 +11,7 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount(){
-        this.props.init();
+        this.props.init(this.props.searchParams.appName);
         this.props.loading();
     }
 
@@ -40,9 +40,10 @@ Dashboard = connect(state=>{
     const {subPageShow,selectedProduct,timeTypeList,timeType,detailPageLoading,searchParams,appVersions} = state['dashboard'];
     return {subPageShow,selectedProduct,timeTypeList,timeType,detailPageLoading,searchParams,appVersions};
 }, dispatch => ({
-    init () {
-        dispatch(action.loadProducts());
-        dispatch(action.loadAppVersions());
+    init (appName) {
+        // dispatch(action.loadProducts());
+        dispatch(action.loadApps());
+        dispatch(action.loadAppVersions(appName));
         dispatch(action.refreshPage());
     },
     //延个时，不然图表会出问题，暂时这么解决

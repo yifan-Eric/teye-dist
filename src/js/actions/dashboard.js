@@ -57,23 +57,31 @@ function arrayFilter3(array,key){
     }
 }
 
-actions.loadProducts = () => dispatch => {
-    return ajax.get('/getProducts',{}).then(list=>{
-        dispatch({type:'DASHBOARD_PRODUCT_LOAD',list:list.map((o,i)=>{
-            return {id:o,name:o};
-            })});
+/**
+ * 查询app列表
+ * @returns {function(*): *}
+ */
+actions.loadApps = () => dispatch => {
+    return ajax.get('/report/app/list',{}).then(list=>{
+        dispatch({type:'DASHBOARD_PRODUCT_LOAD',list:list.map(o=>({id:o.appId,name:o.appName,packageName:o.packageName}))});
     })
 }
 
-actions.loadAppVersions = () => dispatch => {
-    return ajax.get('/report/com.tclhz.gallery/getAppVersionList',{}).then(data=>{
-        dispatch({
-            type:'DASHBOARD_APPVERSION_LOAD',
-            list:Object.keys(data.appVersionList).map(o=>{
-                return {id:data.appVersionList[o],name:data.appVersionList[o]}
+/**
+ * 查询app版本列表
+ * @param appId
+ * @returns {function(*): *}
+ */
+actions.loadAppVersions = (appId) => (dispatch,getState) => {
+    if(!appId)
+        dispatch({type:'DASHBOARD_APPVERSION_LOAD', list:[]});
+    else
+        return ajax.get('/report/app/version/list',{appId}).then(data=>{
+            dispatch({
+                type:'DASHBOARD_APPVERSION_LOAD',
+                list:data.appVersionList?data.appVersionList.map(o=>({id:o.version,name:o.version})):[]
             })
         })
-    })
 }
 
 actions.refreshPage = () => dispatch => {
@@ -97,9 +105,12 @@ actions.refreshPage = () => dispatch => {
 actions.loadFirstChart = () => (dispatch,getState) => {
     const state = getState().dashboard;
     const searchParams = state.searchParams;
-    const version = searchParams.appVersion;
+    const {appVersion,appName} = searchParams;
+    const targetProd = state.productList.find(o=>o.id==appName);
+    const pkgName = targetProd?targetProd.packageName:'com.tclhz.gallery';
+    const url = '/report/'+pkgName+'/appUserActiveInfo';
     //对接代码start
-    ajax.get('/report/com.tct.camera/appUserActiveInfo',{appVersion:version}).then(obj=>{
+    return ajax.get(url,{appVersion:appVersion}).then(obj=>{
 
         const option = {
             // 'xAxis.type':'time',
@@ -250,7 +261,7 @@ actions.loadSecondChart = () => (dispatch,getState) => {
         let x = [];
         const hl = obj.halfHourDataList;
         let halfHourNum = !isEmpty(hl)?hl[hl.length-1].num:0
-        obj.perMinuteDataList.forEach((o,i)=>{
+        obj.perMinuteDataList.reverse().forEach((o,i)=>{
             data.push(o.num);
             x.push((30-i)+'分钟前');
         })
@@ -390,8 +401,8 @@ actions.loadFourthChart = () => (dispatch,getState) => {
                     show:false
                 },
                 visualMap:{
-                    min: 0,
-                    max: 800,
+                    min: 10000,
+                    max: 110000,
                     // splitNumber: 5,
                     inRange: {
                         color: ['#d94e5d', '#eac736', '#50a3ba'].reverse()

@@ -140,6 +140,7 @@ Home = connect(state => {
     return { mapType,firstSubPage,thirdSubPage,fourthSubPage,fifthSubPage,selectedProduct ,selectedCountry,regionDefectData,secondSubPage};
 }, dispatch => ({
     loadData () {
+        dispatch(action.getActivityCount());
         dispatch(action.loadMap());
         dispatch(action.loadBubble());
         dispatch(action.loadFirstChart());
