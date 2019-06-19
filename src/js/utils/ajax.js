@@ -3,9 +3,15 @@ import $ajax from 'tf-utils/lib/ajax';
 import { message } from 'antd';
 const ReactDOM = require('react-dom');
 const Err50x = (cb) => { require.ensure([], require => { cb(require('pages/Error/50x')); }); };
-import {apiTest} from 'config/api';
+import {apiTest,loginUrl} from 'config/api';
+import {getCookie} from "./cookies";
 
 function ajax (method, url, data = {}, baseUrl, isRaw, isFormData) {
+    //access_token:如果没有access_token，则返回登录，start
+    // if(!getCookie('access_token'))
+    //     location.href = loginUrl;
+    //end
+
     if (apiTest.indexOf(url) == -1) {
         // 虚拟接口服务
         require('../mock')(url, data);
@@ -37,7 +43,7 @@ function ajax (method, url, data = {}, baseUrl, isRaw, isFormData) {
                 message.error(json.msg);
                 // eslint-disable-next-line
                 if (json.code == 1003) {
-                    location.href = 'login.html';
+                    location.href = loginUrl;
                 }
                 reject(json);
             }

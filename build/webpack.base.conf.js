@@ -54,18 +54,18 @@ var plugins = [
             filename:'./'+o+'.html' //结合output.path
         })
     }),
-    new HtmlWebpackPlugin({
-        title:'登录 - '+APP_NAME,
-        minify: {
-            caseSensitive: false,             //是否大小写敏感
-            collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
-            collapseWhitespace: true         //是否去除空格
-        },
-        chunks:['login', 'vendor'],
-        favicon:'./src/img/logo.png',
-        template:'./src/login.html',
-        filename:'./login.html' //结合output.path
-    }),
+    // new HtmlWebpackPlugin({
+    //     title:'登录 - '+APP_NAME,
+    //     minify: {
+    //         caseSensitive: false,             //是否大小写敏感
+    //         collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
+    //         collapseWhitespace: true         //是否去除空格
+    //     },
+    //     chunks:['login', 'vendor'],
+    //     favicon:'./src/img/logo.png',
+    //     template:'./src/login.html',
+    //     filename:'./login.html' //结合output.path
+    // }),
     new HtmlWebpackPlugin({
         title:APP_NAME,
         minify: {
@@ -130,11 +130,11 @@ module.exports = {
             'react',
             'react-dom',
             'react-redux',
-            'react-intl',
-            'redux',
-            'redux-thunk',
-            'nprogress',
-            'antd'
+            // 'react-intl',
+            // 'redux',
+            // 'redux-thunk',
+            // 'nprogress',
+            // 'antd'
         ]
     },
     output: {

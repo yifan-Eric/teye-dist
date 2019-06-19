@@ -36,7 +36,7 @@ action.loadTabPage = (module) => (dispatch, getState) => {
     const menu = state.menuObj[module];
     const panes = state.panes;
     const index = panes.findIndex(o => o.key === module);
-    localStorage.setItem('activeTab',module);
+    localStorage.setItem('teye_activeTab',module);
 
     if (~index) {
         // 已经存在，直接激活
@@ -219,8 +219,8 @@ action.loadUserMenu = (reloadOnly) => dispatch => ajax.get('/menu/user').then(da
         obj
     });
     let module = '';
-    if(localStorage.getItem('activeTab')&&localStorage.getItem('activeTab')!='null')
-        module = localStorage.getItem('activeTab');
+    if(localStorage.getItem('teye_activeTab')&&localStorage.getItem('teye_activeTab')!='null')
+        module = localStorage.getItem('teye_activeTab');
     else
         module = 'home';
     // const module = localStorage.getItem('activeTab')||'home';

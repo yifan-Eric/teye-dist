@@ -18,7 +18,8 @@ export default (function () {
     return config;
 })();
 
-const resourceBaseUrl = 'http://18.222.66.96'
+const resourceBaseUrl = 'http://18.222.66.96';
+const loginUrl = 'https://www.test-teye.com/chaos/login.html';
 
 const apiTest = [
     '/getAllData',
@@ -39,4 +40,4 @@ const apiTest = [
     '/report/app/version/list'
 ];
 
-export {apiTest,resourceBaseUrl,proBaseUrl,devBaseUrl}
+export {apiTest,resourceBaseUrl,proBaseUrl,devBaseUrl,loginUrl}

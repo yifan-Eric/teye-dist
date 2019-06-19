@@ -45,7 +45,7 @@ class Conversions extends React.Component{
 }
 Conversions = connect(null,dispatch=>({
     init(){
-        dispatch(dashAction.loadProducts());
+        dispatch(dashAction.loadApps());
         dispatch(dashAction.loadAppVersions());
         dispatch(action.loadFirstTable());
     }

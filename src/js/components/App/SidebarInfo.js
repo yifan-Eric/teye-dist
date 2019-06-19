@@ -3,6 +3,7 @@ import { Avatar } from 'antd';
 import defaultAvatar from 'img/logo.png';
 import appAction from 'actions/app';
 import Icon from 'components/Icon';
+import {loginUrl} from 'config/api';
 
 class SidebarInfo extends React.Component {
     render () {
@@ -46,7 +47,7 @@ SidebarInfo = connect(state => {
      */
     onLogout () {
         dispatch(appAction.logout()).then(() => {
-            location.href = 'login.html';
+            location.href = loginUrl;
         });
     }
 }))(SidebarInfo);

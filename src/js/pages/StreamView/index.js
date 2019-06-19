@@ -38,7 +38,7 @@ StreamView = connect(state=>{
     return {loading};
 },dispatch=>({
     init(){
-        dispatch(dashAction.loadProducts());
+        dispatch(dashAction.loadApps());
         dispatch(dashAction.loadAppVersions());
     },
     mapLoading(){
