@@ -1,12 +1,8 @@
 import {connect} from 'react-redux';
 import {Col,Row,Card,Radio,Statistic,Icon,Button} from 'antd';
 import ExCharts from 'components/ExCharts';
-import dashboardAction from 'actions/dashboard';
 
 class BottomBar extends React.Component{
-    componentWillMount(){
-        this.props.init();
-    }
     componentDidMount(){
         document.addEventListener('resize',function(){
             console.log('test',arguments);
@@ -81,10 +77,6 @@ class BottomBar extends React.Component{
 BottomBar = connect(state=>{
     const { secondChartData } = state['dashboard'];
     return {secondChartData};
-},dispatch=>({
-    init(){
-        dispatch(dashboardAction.loadSecondChart());
-    }
-}))(BottomBar)
+},null)(BottomBar)
 
 export default BottomBar;

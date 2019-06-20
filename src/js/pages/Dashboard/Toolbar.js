@@ -22,13 +22,26 @@ class Toolbar extends React.Component{
     getDateRange = (id) => {
         return moment().subtract(id, "days").format('YYYY年MM月DD日')+'~'+moment().subtract(1, "days").format('YYYY年MM月DD日')
     }
+
     handleTagClick = (key) => {
         let temp = {};
         temp[key] = '';
         this.props.onSearch({...this.props.searchParams,...temp});
     }
+
     handleTimeRangeChange = (value) => {
         this.props.onSearch({...this.props.searchParams,...{dateRange:value}});
+    }
+
+    shouldComponentUpdate(nextProps,nextState){
+        let shouldUpdate = false;
+        Object.keys(nextProps.searchParams).forEach(o=>{
+            if(nextProps.searchParams[o]!==this.props.searchParams[o])
+                shouldUpdate = true;
+        })
+        if(nextState.searchModalShow!==this.state.searchModalShow)
+            shouldUpdate = true;
+        return shouldUpdate;
     }
 
     render(){
@@ -56,7 +69,8 @@ class Toolbar extends React.Component{
                         Object.keys(searchParams).map(o=>{
                             return searchParams[o]!==''&&appVersions.length&&productList.length&&o!='dateRange'?
                                 <Tag
-                                    closable
+                                    //暂时不允许关闭，参数之间存在父子关系
+                                    // closable
                                     visible={true}
                                     color="#108ee9"
                                     key={o}
@@ -64,7 +78,10 @@ class Toolbar extends React.Component{
                                     style={{maxWidth:150}}
                                 >
                                     {/*{o+'='+ dataMap[o].find(item=>item.id===searchParams[o]).name}*/}
-                                    {dataMap[o].find(item=>item.id===searchParams[o]).name}
+                                    {
+                                        dataMap[o].find(item=>item.id===searchParams[o])?
+                                            dataMap[o].find(item=>item.id===searchParams[o]).name:''
+                                    }
                                 </Tag>:''
                         })
                     }
@@ -96,8 +113,13 @@ Toolbar = connect(state=>{
     return {searchParams,appVersions,timeTypeList,productList};
 },dispatch=>({
     onSearch (params) {
-        dispatch({ type: 'DASHBOARD_SEARCHPARAMS_CHANGE', params });
-        dispatch(action.refreshPage());
+        dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:true})
+        Promise.all([
+            dispatch({ type: 'DASHBOARD_SEARCHPARAMS_CHANGE', params }),
+            dispatch(action.refreshPage())
+        ]).then(()=>{
+            setTimeout(function(){dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:false});},1000)
+        })
     }
 }))(Toolbar);
 

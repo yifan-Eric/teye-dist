@@ -5,6 +5,7 @@ import 'less/dashboard.less';
 import DetailPage from './DetailPage';
 import Toolbar from "./Toolbar"
 
+
 class Dashboard extends React.Component {
     constructor(props){
         super(props);
@@ -12,15 +13,17 @@ class Dashboard extends React.Component {
 
     componentDidMount(){
         this.props.init(this.props.searchParams.appName);
-        this.props.loading();
     }
 
     render () {
-        const {subPageShow:show,selectedProduct,onClose,onSearch,detailPageLoading:loading} = this.props;
+        const {subPageShow:show,selectedProduct,onClose,onSearch,detailPageLoading:loading,productList,appVersions} = this.props;
         return (
             <React.Fragment>
                 <div className="head-toolbar display-flex flex-column">
-                    <Toolbar/>
+                    {
+                        //确保在加载完productList和appVersions后再加载Toolbar
+                        productList.length>0&&appVersions.length>0&&<Toolbar/>
+                    }
                     <div className="flex-grow-1 display-flex" >
                         <div className="bd flex-grow-1" >
                             {
@@ -37,19 +40,15 @@ class Dashboard extends React.Component {
     }
 }
 Dashboard = connect(state=>{
-    const {subPageShow,selectedProduct,timeTypeList,timeType,detailPageLoading,searchParams,appVersions} = state['dashboard'];
-    return {subPageShow,selectedProduct,timeTypeList,timeType,detailPageLoading,searchParams,appVersions};
+    const {subPageShow,selectedProduct,timeTypeList,timeType,detailPageLoading,searchParams,appVersions,productList} = state['dashboard'];
+    return {subPageShow,selectedProduct,timeTypeList,timeType,detailPageLoading,searchParams,appVersions,productList};
 }, dispatch => ({
     init (appName) {
-        // dispatch(action.loadProducts());
-        dispatch(action.loadApps());
-        dispatch(action.loadAppVersions(appName));
-        dispatch(action.refreshPage());
-    },
-    //延个时，不然图表会出问题，暂时这么解决
-    loading(){
         dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:true})
-        setTimeout(function(){dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:false});},500)
+        Promise.all([dispatch(action.loadApps()),dispatch(action.loadAppVersions(appName))]).then(()=>{
+            dispatch(action.refreshPage());
+            dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:false});
+        })
     }
 }))(Dashboard);
 

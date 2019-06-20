@@ -62,8 +62,10 @@ function arrayFilter3(array,key){
  * @returns {function(*): *}
  */
 actions.loadApps = () => dispatch => {
-    return ajax.get('/report/app/list',{}).then(list=>{
-        dispatch({type:'DASHBOARD_PRODUCT_LOAD',list:list.map(o=>({id:o.appId,name:o.appName,packageName:o.packageName}))});
+     return ajax.get('/report/app/list',{}).then(list=>{
+        dispatch({
+            type:'DASHBOARD_PRODUCT_LOAD',
+            list:list.map(o=>({id:o.appId,name:o.appName,packageName:o.packageName}))});
     })
 }
 
@@ -99,6 +101,7 @@ actions.refreshPage = () => dispatch => {
     //Added-End by yaolin.fu for XR-7139756 on 18-12-26
     //对接代码注释
     dispatch(actions.loadHotEvents());
+    return true;
 }
 
 //normalLine
@@ -137,10 +140,13 @@ actions.loadFirstChart = () => (dispatch,getState) => {
             multiple: true,
             color: ['#4285f4','#ab47bc','#00acc1'],
 
-            legend: {
-                show: false,
-                data: ['28-Day', '7-Day', '1-Day']
-            }
+            // legend: {
+            //     show: false,
+            //     data: ['28-Day', '7-Day', '1-Day']
+            // }
+            'legend.show':false,
+            'legend.data': ['28-Day', '7-Day', '1-Day']
+
         };
         // let startDate = moment().subtract(31, "days").format("YYYY-MM-DD");
         // for(let i=1;i<=30;i++){
@@ -155,7 +161,7 @@ actions.loadFirstChart = () => (dispatch,getState) => {
             '1-Day':'appDailyActiveList'
         }
 
-        option.legend.data.forEach(function (o,i) {
+        option['legend.data'].forEach(function (o,i) {
             var temp = [];
             const array = arrayFilter3(obj[keyValue[o]],'activeUsers');
             // const array = obj[keyValue[o]];
@@ -231,8 +237,11 @@ actions.loadSecondChart = () => (dispatch,getState) => {
     const state = getState().dashboard;
     const searchParams = state.searchParams;
     const version = searchParams.appVersion;
+    const packageName = state.productList.find(o=>{
+        return o.id==searchParams.appName;
+    }).packageName;
     //对接代码start
-    ajax.get('/report/com.tct.camera/getAppPMActiveInfo',{version}).then(obj=>{
+    return ajax.get('/report/'+packageName+'/getAppPMActiveInfo',{version}).then(obj=>{
         const option = {
             'title.text':'Users pre minutes',
             'title.left':'left',
@@ -312,8 +321,13 @@ actions.loadSecondChart = () => (dispatch,getState) => {
     // dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data,option,listData,halfHourNum });
 };
 actions.loadHotEvents = () => (dispatch,getState) => {
-    const version = getState().dashboard.searchParams.appVersion;
-    ajax.get('/report/hotevent',{'packageNames':'com.tclhz.gallery','appVersions':version}).then(data=>{
+    const state = getState().dashboard;
+    const searchParams = state.searchParams;
+    const version = searchParams.appVersion;
+    const packageName = state.productList.find(o=>{
+        return o.id==searchParams.appName;
+    }).packageName;
+    return ajax.get('/report/hotevent',{'packageNames':packageName,'appVersions':version}).then(data=>{
         let listData = [];
         if(!isEmpty(data)){
             const list = data.eventSum;
@@ -340,9 +354,15 @@ actions.updateSecondChart = (preData) => dispatch => {
     dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data:preData,halfHourNum});
 }
 
-actions.loadThirdChart = () => dispatch => {
+actions.loadThirdChart = () => (dispatch,getState) => {
+    const state = getState().dashboard;
+    const searchParams = state.searchParams;
+    const version = searchParams.appVersion;
+    const packageName = state.productList.find(o=>{
+        return o.id==searchParams.appName;
+    }).packageName;
     //对接代码start
-    ajax.get('/report/retention',{}).then((data)=>{
+    return ajax.get('/report/retention',{packageName:packageName}).then((data)=>{
         const option = {
             'title.text':'Retention cohorts'
         }
@@ -391,9 +411,14 @@ actions.loadThirdChart = () => dispatch => {
 }
 
 actions.loadFourthChart = () => (dispatch,getState) => {
-    const version = getState().dashboard.searchParams.appVersion;
+    const state = getState().dashboard;
+    const searchParams = state.searchParams;
+    const version = searchParams.appVersion;
+    const packageName = state.productList.find(o=>{
+        return o.id==searchParams.appName;
+    }).packageName;
     // 对接代码start
-    ajax.get('/report/getAppDistribution',{packageName:'com.tclhz.gallery',topK:3,fieldName:'appVersion',fieldValue:version}).then(data=>{
+    ajax.get('/report/getAppDistribution',{packageName:packageName,topK:3,fieldName:'appVersion',fieldValue:version}).then(data=>{
         let firstChart = {
             option:{
                 type:'map',
@@ -429,8 +454,8 @@ actions.loadFourthChart = () => (dispatch,getState) => {
             firstChart
         })
     })
-    let promise1 = ajax.get('/report/getDeviceNumber',{topK:3,packageName:'com.tclhz.gallery',fieldName:'appVersion',fieldValue:version});
-    let promise2 = ajax.get('/report/getAndroidVersion',{topK:3,packageName:'com.tclhz.gallery',fieldName:'appVersion',fieldValue:version})
+    let promise1 = ajax.get('/report/getDeviceNumber',{topK:3,packageName:packageName,fieldName:'appVersion',fieldValue:version});
+    let promise2 = ajax.get('/report/getAndroidVersion',{topK:3,packageName:packageName,fieldName:'appVersion',fieldValue:version})
     Promise.all([promise1,promise2]).then(data=>{
         let secondChart = {
             option:{
@@ -761,10 +786,12 @@ actions.loadFifthChart = (obj) => dispatch => {
     //对接代码start
     const option = {
         'xAxis.data': [],
-        title: {
-            text: 'Top conversion events',
-            show: false
-        },
+        'title.text':'Top conversion events',
+        'title.show':false,
+        // title: {
+        //     text: 'Top conversion events',
+        //     show: false
+        // },
         'yAxis.type':'value',
         'yAxis.axisLine.show':false,
         'yAxis.splitLine.show':true,
@@ -778,10 +805,12 @@ actions.loadFifthChart = (obj) => dispatch => {
         },
         multiple: true,
         color: ['#4285f4','#ab47bc','#00acc1'],
-        legend: {
-            show: false,
-            data: []
-        }
+        'legend.show':false,
+        'legend.data':[]
+        // legend: {
+        //     show: false,
+        //     data: []
+        // }
 
     };
     let data = [];
@@ -796,7 +825,7 @@ actions.loadFifthChart = (obj) => dispatch => {
         }).reverse();
         const map = obj.eventScaleMap;
         for(let key in map){
-            option.legend.data.push(key);
+            option['legend.data'].push(key);
             let temp = [];
             option['xAxis.data'].forEach((o)=>{
                 if(map[key][o])
@@ -857,12 +886,13 @@ actions.loadFifthChart = (obj) => dispatch => {
     // dispatch({ type: 'DASHBOARD_FIFTHCHART_LOAD', data, option });
 }
 actions.loadSixthChart = () => (dispatch,getState) => {
-    const searchParams = getState().dashboard.searchParams;
+    const state = getState().dashboard;
+    const searchParams = state.searchParams;
     const version = searchParams.appVersion;
-    //这里写死包名
-    // const packageNames = searchParams.appName;
-    const packageNames = 'com.tclhz.gallery'
-    return ajax.get('/report/userEngagement',{appVersions:version,days:12,packageNames}).then(obj=>{
+    const packageName = state.productList.find(o=>{
+        return o.id==searchParams.appName;
+    }).packageName;
+    return ajax.get('/report/userEngagement',{appVersions:version,days:12,packageNames:packageName}).then(obj=>{
         const option = {
             'xAxis.data': [],
             'title.text':'Daily user engagement',

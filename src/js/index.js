@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { Provider, connect } from 'react-redux';
 
 // import { LocaleProvider} from 'antd';
@@ -13,8 +13,8 @@ import intl from 'intl';
 import zh from 'react-intl/locale-data/zh';
 // react-intl语言包
 import en from 'react-intl/locale-data/en';
-// 需要放入本地数据库
 
+// 需要放入本地数据库
 import store from 'appStore';
 import App from 'components/App';
 import MasterPage from 'components/App/MasterPage';

@@ -13,7 +13,7 @@ class FifthCard extends React.Component {
                 <p className={'question'}>{chartData.question}</p>
                 <ExCard
                     className={'fifthCard'}
-                    title={chartData.option.title.text}
+                    title={chartData.option['title.text']}
                     tooltip={chartData.tooltip}
                     height={370}
                     actions={[<span style={{color:'#36AFEA'}} onClick={reHref}><Icon type="arrow-right"/>VIEW CONVERSION EVENTS</span>]}
@@ -22,7 +22,7 @@ class FifthCard extends React.Component {
                         <Col span={24}>
                             <div className={'legendBlocks'}>
                                 {
-                                    chartData.option.legend.data.map((o, i) => {
+                                    chartData.option['legend.data']&&chartData.option['legend.data'].map((o, i) => {
                                         return (
                                             <div className={'legendBlock'} key={i}>
                                                 <div className={'top'}>

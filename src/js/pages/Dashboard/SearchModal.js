@@ -49,13 +49,17 @@ class SearchModal extends React.Component {
         this.form = form;
     }
     fieldsOnChange = (props,changeFields) => {
+        console.log('changeFields',changeFields)
         var newData = {...props,...changeFields};
-        if(newData['appName']=='')
-            newData.appVersion = '';
-        this.setState({searchParams: newData})
-        if(changeFields.hasOwnProperty('appName'))
+        // if(newData['appName']=='')
+        //     newData.appVersion = '';
+        if(changeFields.hasOwnProperty('appName')){
             this.props.refreshAppVersion(changeFields['appName']);
+            newData.appVersion = '';
+        }
+        this.setState({searchParams: newData});
     }
+
     render () {
         const { show, onClose,appVersions,productList } = this.props;
         return (

@@ -10,15 +10,16 @@ class StreamView extends React.Component{
     constructor(props){
         super(props);
     }
-    componentWillMount(){
-        this.props.init();
-        this.props.mapLoading();
+    componentDidMount(){
+        this.props.init(this.props.searchParams.appName);
     }
     render(){
-        const {loading} = this.props;
+        const {loading,productList,appVersions} = this.props;
         return (
             <div className="streamView-container head-toolbar display-flex flex-column">
-                <Toolbar/>
+                {
+                    productList.length>0&&appVersions.length>0&&<Toolbar/>
+                }
                 <div className="flex-grow-1 display-flex">
                     <div className="bd flex-grow-1" style={{overflow:'auto',padding:0}}>
                         {
@@ -35,15 +36,18 @@ class StreamView extends React.Component{
 }
 StreamView = connect(state=>{
     const {loading} = state['streamView'];
-    return {loading};
+    const {productList,appVersions,searchParams} = state['dashboard'];
+    return {loading,productList,appVersions,searchParams};
 },dispatch=>({
-    init(){
-        dispatch(dashAction.loadApps());
-        dispatch(dashAction.loadAppVersions());
-    },
-    mapLoading(){
+    init(packageName){
         dispatch({type:'STREAMVIEW_LOADING',loading:true})
-        setTimeout(function(){dispatch({type:'STREAMVIEW_LOADING',loading:false});},800)
+        Promise.all([
+            dispatch(dashAction.loadApps()),
+            dispatch(dashAction.loadAppVersions(packageName))
+        ]).then(()=>{
+            dispatch({type:'STREAMVIEW_LOADING',loading:false});
+            dispatch(dashAction.loadSecondChart());
+        })
     }
 }))(StreamView);
 

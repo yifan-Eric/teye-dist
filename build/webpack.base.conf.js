@@ -38,22 +38,26 @@ var plugins = [
     //         return module.context && module.context.includes('node_modules');
     //     }
     // }),
-    new webpack.optimize.CommonsChunkPlugin({name:'vendor'}),
-    new webpack.optimize.CommonsChunkPlugin({name:'app', children:true, async:true, minChunks:2}),
-    ...pages.map(o=>{
-        return new HtmlWebpackPlugin({
-            title:APP_NAME,
-            minify: {
-                caseSensitive: false,             //是否大小写敏感
-                collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
-                collapseWhitespace: true         //是否去除空格
-            },
-            chunks:[o, 'vendor'],
-            favicon:'./src/img/logo.png',
-            template:'./src/'+o+'.html',
-            filename:'./'+o+'.html' //结合output.path
-        })
+    new webpack.optimize.CommonsChunkPlugin({
+        names: ["vendor3","vendor2","vendor1"],
+        minChunks: Infinity
     }),
+    // new webpack.optimize.CommonsChunkPlugin({name:'vendor'}),
+    new webpack.optimize.CommonsChunkPlugin({name:'app', children:true, async:true, minChunks:2}),
+    // ...pages.map(o=>{
+    //     return new HtmlWebpackPlugin({
+    //         title:APP_NAME,
+    //         minify: {
+    //             caseSensitive: false,             //是否大小写敏感
+    //             collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
+    //             collapseWhitespace: true         //是否去除空格
+    //         },
+    //         chunks:[o, 'vendor1','vendor2','vendor3'],
+    //         favicon:'./src/img/logo.png',
+    //         template:'./src/'+o+'.html',
+    //         filename:'./'+o+'.html' //结合output.path
+    //     })
+    // }),
     // new HtmlWebpackPlugin({
     //     title:'登录 - '+APP_NAME,
     //     minify: {
@@ -73,7 +77,7 @@ var plugins = [
             collapseBooleanAttributes: true, //是否简写boolean格式的属性如：disabled="disabled" 简写为disabled
             collapseWhitespace: true         //是否去除空格
         },
-        chunks:['app', 'vendor'],
+        chunks:['app', 'vendor1','vendor2','vendor3'],
         favicon:'./src/img/logo.png',
         template:'./src/index.html',
         filename:'./index.html' //结合output.path
@@ -126,21 +130,31 @@ module.exports = {
         _dashboard2: './src/js/_dashboard2',
         _dashboard3: './src/js/_dashboard3',
         _dashboard4: './src/js/_dashboard4',
-        vendor:[
+        vendor1:[
             'react',
             'react-dom',
             'react-redux',
-            // 'react-intl',
-            // 'redux',
-            // 'redux-thunk',
-            // 'nprogress',
-            // 'antd'
+            "redux",
+            "redux-thunk",
+        ],
+        vendor2:[
+            'antd'
+        ],
+        vendor3:[
+            "cropperjs",
+            "intl",
+            "nprogress",
+            "react-intl"
         ]
     },
     output: {
-        publicPath:isProd ? './' : '/', //给require.ensure用；webpack-dev-server的网站名
-        path: resolve('./dist'), //js的发布路径,是相对于package.json文件而言
+        //给require.ensure用；webpack-dev-server的网站名
+        publicPath:isProd ? './' : '/',
+        //js的发布路径,是相对于package.json文件而言
+        path: resolve('./dist'),
+        //对应与entry中要打包出来分文件
         filename: isProd ? '[name].[chunkhash:8].js' : '[name].js',
+        //对应于非entry中但仍需要打包出来的文件，比如按需加载require,ensure
         chunkFilename:isProd ? '[name].chunk.[chunkhash:8].js' : '[name].chunk.js'
     },
     externals: {

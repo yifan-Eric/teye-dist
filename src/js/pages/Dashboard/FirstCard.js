@@ -29,7 +29,7 @@ class FirstCard extends React.Component {
                     <Col xxl={{span:4,offset:1}} xl={{span:4,offset:1}}>
                         <div className={'legendBlocks'}>
                             {
-                                JSON.stringify(chartData.option)!='{}'?chartData.option.legend.data.map((o, i) => {
+                                JSON.stringify(chartData.option)!='{}'&&chartData.option['legend.data'].map((o, i) => {
                                     const length = chartData.data[i].length;
                                     const lastCount = chartData.data[i][length-1];
                                     const preCount = chartData.data[i][length-2];
@@ -55,7 +55,7 @@ class FirstCard extends React.Component {
                                             </p>
                                         </div>
                                     );
-                                }):''
+                                })
                             }
                         </div>
                     </Col>
