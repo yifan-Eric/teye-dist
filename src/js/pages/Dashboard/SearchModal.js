@@ -25,7 +25,7 @@ const SearchForm = Form.create({
     const { getFieldDecorator } = form;
     return (
         <Form>
-            <ExFormItem type={'select'} label={'Stream'} name={'appName'} noClear={true} list={prodList} withEmpty={true} getFieldDecorator={getFieldDecorator}/>
+            <ExFormItem type={'select'} label={'Stream'} name={'appName'} noClear={true} list={prodList} getFieldDecorator={getFieldDecorator}/>
             <ExFormItem type={'select'} label={'App Version'} name={'appVersion'} noClear={true} list={appVersions} withEmpty={true} getFieldDecorator={getFieldDecorator}/>
         </Form>
     );

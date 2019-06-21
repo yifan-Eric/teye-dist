@@ -135,10 +135,10 @@ export default (state, action) => {
         case 'DASHBOARD_SECONDCHART_LOAD':
             const preState = state.secondChartData;
             newState.secondChartData = {
-                listData: action.listData||preState.listData,
-                data: action.data||preState.data,
-                option: action.option||preState.option,
-                halfHourNum: action.halfHourNum||preState.halfHourNum
+                listData: action.listData,
+                data: action.data,
+                option: action.option,
+                halfHourNum: action.halfHourNum
             };
             break;
         case 'DASHBOARD_THIRDCHART_LOAD':

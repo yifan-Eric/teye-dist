@@ -88,7 +88,6 @@ actions.loadAppVersions = (appId) => (dispatch,getState) => {
 
 actions.refreshPage = () => dispatch => {
     dispatch(actions.loadFirstChart());
-    dispatch(actions.loadSecondChart());
     dispatch(actions.loadThirdChart());
     dispatch(actions.loadFourthChart());
     dispatch(actions.loadFifthChart());
@@ -99,8 +98,11 @@ actions.refreshPage = () => dispatch => {
     //Added-Begin by yaolin.fu for XR-7139756 on 18-12-26
     dispatch(actions.loadTenthChart());
     //Added-End by yaolin.fu for XR-7139756 on 18-12-26
-    //对接代码注释
-    dispatch(actions.loadHotEvents());
+    //secondChart的数据来自两个接口，需要同时返回才能更新数据
+    Promise.all([dispatch(actions.loadSecondChart()),dispatch(actions.loadHotEvents())]).then((arr)=>{
+        console.log(arr);
+        dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', ...arr[0],...arr[1] });
+    })
     return true;
 }
 
@@ -276,7 +278,8 @@ actions.loadSecondChart = () => (dispatch,getState) => {
         })
         option['xAxis.data'] = x;
 
-        dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data,option,halfHourNum });
+        // dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data,option,halfHourNum });
+        return {data,option,halfHourNum};
     })
     //对接代码end
     // const option = {
@@ -338,8 +341,9 @@ actions.loadHotEvents = () => (dispatch,getState) => {
                 })
             }
         }
-        dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', listData });
+        // dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', listData });
         dispatch(actions.loadFifthChart(data));
+        return {listData}
     })
 }
 /**
@@ -347,12 +351,12 @@ actions.loadHotEvents = () => (dispatch,getState) => {
  * @param preData
  * @returns {Function}
  */
-actions.updateSecondChart = (preData) => dispatch => {
-    preData.shift();
-    preData.push(parseInt(Math.random() * 200) + 600);
-    let halfHourNum = preData.reduce((sum,o)=>sum+o);
-    dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data:preData,halfHourNum});
-}
+// actions.updateSecondChart = (preData) => dispatch => {
+//     preData.shift();
+//     preData.push(parseInt(Math.random() * 200) + 600);
+//     let halfHourNum = preData.reduce((sum,o)=>sum+o);
+//     dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data:preData,halfHourNum});
+// }
 
 actions.loadThirdChart = () => (dispatch,getState) => {
     const state = getState().dashboard;
@@ -368,15 +372,18 @@ actions.loadThirdChart = () => (dispatch,getState) => {
         }
         let list = [];
         data.forEach((o,i)=>{
-            let temp = {
-                time:moment(o.timeScale.begin).format('MM/DD')+'~'+moment(o.timeScale.end).add(-1).format('MM/DD'),
-                no:i
+            if(o){
+                o.list[0].retention = 1
+                let temp = {
+                    time:moment(o.timeScale.begin).format('MM/DD')+'~'+moment(o.timeScale.end).add(-1).format('MM/DD'),
+                    no:i
+                }
+                o.list.forEach((item,j)=>{
+                    if(item.retention>0)
+                        temp['rate'+j] = (item.retention*100).toFixed(1);
+                })
+                list.push(temp)
             }
-            o.list.forEach((item,j)=>{
-                if(item.retention>0)
-                    temp['rate'+j] = (item.retention*100).toFixed(1);
-            })
-            list.push(temp)
         })
         list.reverse();
         dispatch({type:'DASHBOARD_THIRDCHART_LOAD',list,option})
@@ -892,7 +899,8 @@ actions.loadSixthChart = () => (dispatch,getState) => {
     const packageName = state.productList.find(o=>{
         return o.id==searchParams.appName;
     }).packageName;
-    return ajax.get('/report/userEngagement',{appVersions:version,days:12,packageNames:packageName}).then(obj=>{
+    return ajax.get('/report/userEngagement',{appVersions:version,days:12,packageNames:packageName}).then((obj)=>{
+        !obj&&(obj={})
         const option = {
             'xAxis.data': [],
             'title.text':'Daily user engagement',
@@ -953,25 +961,28 @@ actions.loadSixthChart = () => (dispatch,getState) => {
         // })
         // data.push(temp1);
         // data.push(temp2);
-
-        for(let i in obj.durationList){
+        console.log('obj',obj)
+        const durationList = obj.durationList||[]
+        for(let i in durationList){
             option['xAxis.data'].push(i);
-            temp1.push(obj.durationList[i]?obj.durationList[i]/1000:1);
+            temp1.push(durationList[i]?durationList[i]/1000:1);
             temp2.push(1);
         }
         data.push(temp1);
         data.push(temp2);
 
         var list = [];
-        for(let i=0;i<3;i++){
-            list.push( {
-                id:i,
-                screenType:obj.activityCountList[i].activityName,
-                percent:(obj.activityCountList[i].interactPercent*100).toFixed(2)+'%',
-                ratio1:{flag:0,value:'1.7%'},
-                aveTime:parseInt(obj.activityCountList[i].duration/(60*1000))+' m '+(obj.activityCountList[i].duration/1000)%60+' s',
-                ratio2:{flag:0,value:'0.3%'}}
-                )
+        if(obj&&JSON.stringify(obj)!=='{}'){
+            for(let i=0;i<3;i++){
+                list.push( {
+                    id:i,
+                    screenType:obj.activityCountList[i].activityName,
+                    percent:(obj.activityCountList[i].interactPercent*100).toFixed(2)+'%',
+                    ratio1:{flag:0,value:'1.7%'},
+                    aveTime:parseInt(obj.activityCountList[i].duration/(60*1000))+' m '+(obj.activityCountList[i].duration/1000)%60+' s',
+                    ratio2:{flag:0,value:'0.3%'}}
+                    )
+            }
         }
         // let list = [
         //     {id:1,screenType:'InternalPr...ewActivity',percent:'41.58%',ratio1:{flag:1,value:'2.7%'},aveTime:'0m15s',ratio2:{flag:1,value:'3.1%'}},
