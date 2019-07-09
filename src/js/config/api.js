@@ -1,5 +1,6 @@
-const proBaseUrl = 'http://63.33.199.83:8066',
-    devBaseUrl = 'http://63.33.199.83:8066';
+const proBaseUrl = 'https://www.tct-teye.com',
+    devBaseUrl = 'http://63.33.199.83:8066',
+    mapCDN = 'http://d2svindzvhonk3.cloudfront.net';
 export default (function () {
     var config = {};
     switch(process.env.NODE_ENV){
@@ -40,4 +41,4 @@ const apiTest = [
     '/report/app/version/list'
 ];
 
-export {apiTest,resourceBaseUrl,proBaseUrl,devBaseUrl,loginUrl}
+export {apiTest,resourceBaseUrl,proBaseUrl,devBaseUrl,loginUrl,mapCDN}

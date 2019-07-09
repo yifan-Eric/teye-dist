@@ -2,7 +2,7 @@ import React from 'react';
 import ajax from 'utils/ajax';
 import menuConfig from 'config/menu';
 import NProgress from 'nprogress';
-import {proBaseUrl} from "config/api"
+import {proBaseUrl,mapCDN} from "config/api"
 
 const Err403 = (cb) => { require.ensure([], require => { cb(require('pages/Error/403')); }); };
 let action = {};
@@ -23,7 +23,30 @@ action.loadRegion = (coun,tag,props) => dispatch => {
         ajax.raw('get','/json/'+country+'.json',{},location.host?'http://'+location.host:proBaseUrl).then(json=>{
             dispatch({type:tag,...props,mapJsonData: json})
         })
+        // ajax.raw('get','/map/'+country+'.json',{},mapCDN).then(json=>{
+        //     dispatch({type:tag,...props,mapJsonData: json});
+        // })
     }
+}
+/**
+ * 将当前模块的最新查询条件保存到localstorage中
+ */
+action.setSearchParamsInLocalStorage = (searchParams,reduceAction) => () => {
+    localStorage.setItem('chaos_last_searchParams',JSON.stringify(searchParams));
+    localStorage.setItem('chaos_last_search_reduceAction',reduceAction);
+}
+/**
+ * 将上次用户在某个模块的查询条件获取出来
+ */
+action.getSearchParamsFromLocalStorage = () => dispatch => {
+    const searchParams = localStorage.getItem('chaos_last_searchParams');
+    const reduceAction = localStorage.getItem('chaos_last_search_reduceAction');
+    if(reduceAction){
+        dispatch({type:reduceAction,params:JSON.parse(searchParams)});
+    }
+    return new Promise((resolve)=>{
+        resolve(searchParams?JSON.parse(searchParams):undefined)
+    });
 }
 
 /**

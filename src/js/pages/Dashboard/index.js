@@ -1,9 +1,11 @@
 import {Row, Col, Button, Card, Spin,Select,Icon,Divider,Tag} from 'antd'
 import { connect } from 'react-redux';
 import action from 'actions/dashboard';
+import appAction from 'actions/app';
 import 'less/dashboard.less';
 import DetailPage from './DetailPage';
 import Toolbar from "./Toolbar"
+
 
 
 class Dashboard extends React.Component {
@@ -44,10 +46,13 @@ Dashboard = connect(state=>{
     return {subPageShow,selectedProduct,timeTypeList,timeType,detailPageLoading,searchParams,appVersions,productList};
 }, dispatch => ({
     init (appName) {
-        dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:true})
-        Promise.all([dispatch(action.loadApps()),dispatch(action.loadAppVersions(appName))]).then(()=>{
-            dispatch(action.refreshPage());
-            dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:false});
+        dispatch(appAction.getSearchParamsFromLocalStorage()).then(searchParams=>{
+            const _appName = searchParams?searchParams.appName:appName;
+            dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:true})
+            Promise.all([dispatch(action.loadApps()),dispatch(action.loadAppVersions(_appName))]).then(()=>{
+                dispatch(action.refreshPage());
+                dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:false});
+            })
         })
     }
 }))(Dashboard);

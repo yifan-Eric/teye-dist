@@ -100,7 +100,6 @@ actions.refreshPage = () => dispatch => {
     //Added-End by yaolin.fu for XR-7139756 on 18-12-26
     //secondChart的数据来自两个接口，需要同时返回才能更新数据
     Promise.all([dispatch(actions.loadSecondChart()),dispatch(actions.loadHotEvents())]).then((arr)=>{
-        console.log(arr);
         dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', ...arr[0],...arr[1] });
     })
     return true;
@@ -128,7 +127,7 @@ actions.loadFirstChart = () => (dispatch,getState) => {
             'yAxis.splitLine.show':true,
             'yAxis.axisLabel.rotate':45,
 
-            'title.text':'Active users (K)',
+            'title.text':'Active users',
             'title.show':false,
 
             backgroundColor: 'rgba(0, 0, 0, 0)',
@@ -167,7 +166,7 @@ actions.loadFirstChart = () => (dispatch,getState) => {
             var temp = [];
             const array = arrayFilter3(obj[keyValue[o]],'activeUsers');
             // const array = obj[keyValue[o]];
-            data.push(array.map(item=>(item.activeUsers/1000).toFixed(2)));
+            data.push(array.map(item=>item.activeUsers));
             // for (let j = 0; j < option['xAxis.data'].length ; j++) {
             //     temp.push((obj[keyValue[o]][j].activeUsers/1000).toFixed(2));
             // }

@@ -78,6 +78,7 @@ var plugins = [
             collapseWhitespace: true         //是否去除空格
         },
         chunks:['app', 'vendor1','vendor2','vendor3'],
+        inject:false,
         favicon:'./src/img/logo.png',
         template:'./src/index.html',
         filename:'./index.html' //结合output.path
@@ -150,6 +151,7 @@ module.exports = {
     output: {
         //给require.ensure用；webpack-dev-server的网站名
         publicPath:isProd ? './' : '/',
+        // publicPath:isProd?'http://d2svindzvhonk3.cloudfront.net/teye-web/':'/',
         //js的发布路径,是相对于package.json文件而言
         path: resolve('./dist'),
         //对应与entry中要打包出来分文件

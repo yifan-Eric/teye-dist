@@ -43,9 +43,10 @@ NormalBar = connect(state => {
 }, dispatch => ({
     reHref(appName,tempData){
         // dispatch({type:'HOME_FIFTHSUBPAGE_SHOW',subPageShow:true,selectedProduct:appName});
-        dispatch(action.loadTabPage('tBase/dashboard'))
-        dispatch({ type: 'DASHBOARD_SEARCHPARAMS_CHANGE', params:{appName:appName} });
-        dispatch({type:'DASHBOARD_SIXTHCHART1_LOAD',tempData});
+        //暂时不跳转
+        // dispatch(action.loadTabPage('tBase/dashboard'))
+        // dispatch({ type: 'DASHBOARD_SEARCHPARAMS_CHANGE', params:{appName:appName} });
+        // dispatch({type:'DASHBOARD_SIXTHCHART1_LOAD',tempData});
         // setTimeout(function(){
         //     dispatch({type:'DASHBOARD_SUBPAGE_SHOW',subPageShow:true});
         //     dispatch({type:'DASHBOARD_SELECTEDPROD_CHANGE',selectedProduct:appName})

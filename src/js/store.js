@@ -16,11 +16,11 @@ if (window.history && window.history.pushState) {
         //点击浏览器回退就返回home页面，暂时不做其他路由
         store.dispatch(action.loadTabPage('home'));
         window.history.pushState('forward', null, '');
-        window.history.forward(1);
+        window.history.forward();
     });
 }
 window.history.pushState('forward', null, ''); //在IE中必须得有这两行
-window.history.forward(1);
+window.history.forward();
 
 //保证在生产版本中不打印Log,降低性能损害
 if (process.env.NODE_ENV==='production') {

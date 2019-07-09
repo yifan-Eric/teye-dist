@@ -7,6 +7,7 @@ import ExCard from 'components/ExCard';
 class FirstCard extends React.Component {
     render () {
         const { width, height, id, firstChartData: chartData } = this.props;
+        console.log(chartData)
         return (
             <ExCard
                 className={'firstCard'}
@@ -42,7 +43,7 @@ class FirstCard extends React.Component {
                                                 <Badge dot style={{backgroundColor:chartData.option.color[i],marginTop:10,marginRight:15,height:10,width:10}}/>
                                                 {o}
                                             </div>
-                                            <div className={'middle'}>{lastCount}K</div>
+                                            <div className={'middle'}>{lastCount>=1000?(lastCount/1000).toFixed(2)+'K':lastCount}</div>
                                             <p className={'bottom'} style={{color: color}}>
                                                 <Icon type={type} />
                                                 {

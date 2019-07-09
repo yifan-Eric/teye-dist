@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import {Button, Divider, Icon, Select, Tag,Skeleton} from "antd";
 import moment from 'moment';
 import action from 'actions/dashboard';
+import appAction from 'actions/app';
 import 'less/theme/toolbar.less';
 import SearchModal from "./SearchModal";
 
@@ -50,6 +51,7 @@ class Toolbar extends React.Component{
             appVersion:appVersions,
             appName:productList
         }
+        console.log('dataMap',dataMap,searchParams);
         return (
             <div className="hd">
                 <SearchModal
@@ -118,6 +120,8 @@ Toolbar = connect(state=>{
             dispatch({ type: 'DASHBOARD_SEARCHPARAMS_CHANGE', params }),
             dispatch(action.refreshPage())
         ]).then(()=>{
+            //请求成功就将当前查询条件存储到localStorage
+            dispatch(appAction.setSearchParamsInLocalStorage(params,'DASHBOARD_SEARCHPARAMS_CHANGE'));
             setTimeout(function(){dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:false});},1000)
         })
     }
