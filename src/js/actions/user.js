@@ -244,11 +244,13 @@ action.loadUserInfo = loadUserInfo;
  */
 function addUser (data) {
     return (dispatch,getState) => {
+        try{
         const state = getState().user;
         let userPageObj = state.userPageObj;
         let objId = data.orgId;
         let obj = userPageObj[objId];
-        if(obj) return Promise.resolve();
+        data.id = (Math.random() * 100000).toFixed(0) / 1 + 1000000;
+        if(!obj) return Promise.resolve();
         let name = state.orgList.find(i=>i.id === objId).name
         let tempObj = Object.assign( {
             roles: [{ roleCode: 'IT' }],
@@ -261,7 +263,10 @@ function addUser (data) {
         _obj[id] = obj;
         _obj = JSON.parse(JSON.stringify(_obj));
         dispatch({type:"SAVE_USERPAGEOBJ",obj:_obj})
-
+        console.log(obj,"oooooo")
+    }catch(e){
+        console.log("e",e)
+    }
         return Promise.resolve()
     };
 }
