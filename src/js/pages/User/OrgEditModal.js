@@ -76,7 +76,6 @@ OrgEditModal = connect(state => {
      * @param data
      */
     onSubmit (data) {
-        data.parentId = data.parentId == 0 ? '' : data.parentId;
         if (data.id > 0) {
             dispatch(action.updateOrg(data)).then(() => {
                 this.props.onClose();

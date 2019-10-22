@@ -16,7 +16,7 @@ const defaultState = {
     selectedProduct:'',
     detailPageLoading:true,
     searchParams:{
-        appVersion:'v8.2.T.0.T060.0',
+        appVersion:['v8.2.T.0.T060.0'],
         appName:1,
         // appName:'Simple Launcher',
         dateRange:28,
@@ -124,6 +124,13 @@ export default (state, action) => {
             break;
         case 'DASHBOARD_APPVERSION_LOAD':
             newState.appVersions = action.list;
+            break;
+        case 'DASHBOARD_CLEAR_DATA':
+            newState.firstChartData = {
+                data:[],
+                option:state.firstChartData.option,
+                tooltip:state.firstChartData.tooltip
+            }
             break;
         case 'DASHBOARD_FIRSTCHART_LOAD':
             newState.firstChartData = {

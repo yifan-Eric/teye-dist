@@ -14,7 +14,7 @@ module.exports = [
             'data': {
                 'pageNo': 1,
                 'pageSize': 10,
-                'result|10': [
+                'result|5': [
                     {
                         'id': '@increment',
                         // 'loginName':'@first',
@@ -26,8 +26,8 @@ module.exports = [
                         'sex': '@pick(["男", "女"])'
                     }
                 ],
-                'totalCount': 30,
-                'totalPages': 3
+                'totalCount': 5,
+                'totalPages': 1
             }
         }
     },

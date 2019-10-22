@@ -14,13 +14,16 @@ actions.initAllChart = (country,time,value) => dispatch => {
 }
 
 actions.loadRegionData = (country) => (dispatch,getState) => {
-    const preData = getState().dashboard3.regionMapCard;
-    const data = [{}];
-    let option = {
-        'title.text':country||'world'
-    };
-    dispatch({type:'DASHBOARD3_REGIONMAPCARD_LOAD',data,option,mapJsonData: preData.mapJsonData});
-    dispatch(appAction.loadRegion(country,'DASHBOARD3_REGIONMAPCARD_LOAD',{data:preData.data,option:preData.option}));
+    ajax.get("/map/initData")
+        .then(data=>{
+            const preData = getState().dashboard3.regionMapCard;
+            let option = {
+                'title.text':country||'world'
+            };
+            dispatch({type:'DASHBOARD3_REGIONMAPCARD_LOAD',data,option,mapJsonData: preData.mapJsonData});
+            dispatch(appAction.loadRegion(country || 'world','DASHBOARD3_REGIONMAPCARD_LOAD',{data,option}));
+        })
+
 };
 
 actions.loadSecondData = (time, value) => dispatch => {

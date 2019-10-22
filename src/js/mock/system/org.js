@@ -5,28 +5,30 @@ module.exports = [
         url: '/org/tree',
         params: '从cookie里面获取',
         result: {
-            'code': '0',
-            'data': [
-                { id: 1, name: 'APPD' },
+            code: '0',
+            data: [
+                { id: 1, name: 'APPD', parentId: 0 },
                 {
                     id: 4,
                     name: 'SMO',
+                    parentId: 0,
                     list: [
-                        { id: 5, name: 'Project' },
+                        { id: 5, name: 'Project', parentId: 4 },
                         {
                             id: 7,
                             name: 'Platform',
+                            parentId: 4,
                             list: [
-                                { id: 8, name: 'SQM' },
-                                { id: 9, name: 'AUTO' },
-                                { id: 10, name: 'CTR' }
+                                { id: 8, parentId: 7, name: 'SQM' },
+                                { id: 9, parentId: 7, name: 'AUTO' },
+                                { id: 10, parentId: 7, name: 'CTR' }
                             ]
                         },
-                        { id: 6, name: 'Product' }
+                        { id: 6, name: 'Product', parentId: 4 }
                     ]
                 },
-                { id: 2, name: 'SYSD' },
-                { id: 3, name: 'UXD' }
+                { id: 2, parentId: 0, name: 'SYSD' },
+                { id: 3, parentId: 0, name: 'UXD' }
             ]
         }
     },
@@ -39,8 +41,8 @@ module.exports = [
             name: '组织名称'
         },
         result: {
-            'code': '0',
-            'data': {}
+            code: '0',
+            data: {}
         }
     },
     {
@@ -53,8 +55,8 @@ module.exports = [
             name: '组织名称'
         },
         result: {
-            'code': '0',
-            'data': {}
+            code: '0',
+            data: {}
         }
     },
     {
@@ -65,8 +67,8 @@ module.exports = [
             id: '组织ID'
         },
         result: {
-            'code': '0',
-            'data': {}
+            code: '0',
+            data: {}
         }
     }
 ];

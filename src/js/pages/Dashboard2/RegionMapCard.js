@@ -8,6 +8,7 @@ class RegionMapCard extends React.PureComponent{
 
     render(){
         const {id,country,regionMapCard:chartData} = this.props;
+        console.log("chartData",chartData)
         return (
             <Card
                 className={'card regionMapCard'}

@@ -68,6 +68,8 @@ class WorldMap extends React.Component {
     }
     render () {
         const { width, height, id,selectedCountry, mapChartData:chartData } = this.props;
+        let a =                            Object.keys(chartData.data).map(o=>chartData.data[o])
+        console.log("a",JSON.stringify(a))
         return (
             <React.Fragment>
                 {this.state.overlayActive &&

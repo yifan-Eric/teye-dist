@@ -58,15 +58,15 @@
 <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=GkPIRjNz1LGH6pnrYWZCU2pwIW4O6y8u"></script>
 <script src="https://cdn.bootcss.com/echarts/4.2.0-rc.2/echarts.min.js"></script>
 <!--<script src="https://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>-->
-<script src="https://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+<!-- <script src="https://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script> -->
 <script src="https://cdn.bootcss.com/moment.js/2.24.0/moment.min.js"></script>
 <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/extension/bmap.min.js" async></script>
 <script>
     function loadScripts(){
         // const cdn = 'http://d2svindzvhonk3.cloudfront.net/teye-web/';
-        let process = $LAB;
+        var process = $LAB;
         '<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>'
-        process = process.script('<%=htmlWebpackPlugin.files.chunks[chunk].entry %>')
+        process = process.script('<%=htmlWebpackPlugin.files.chunks[chunk].entry %>');
         '<% } %>'
     }
     loadScripts();

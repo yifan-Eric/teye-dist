@@ -75,7 +75,7 @@ class Sidebar extends React.Component {
                 </SubMenu>
             );
         } else {
-            return <Menu.Item key={item.module}><Icon type={item.icon} /><span data-key={item.module}><FormattedMessage id={item.name}/></span></Menu.Item>;
+            return (item.display!==0 &&<Menu.Item key={item.module}><Icon type={item.icon} /><span data-key={item.module}><FormattedMessage id={item.name}/></span></Menu.Item>);
         }
     }
 

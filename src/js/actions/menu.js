@@ -6,13 +6,20 @@ let action = {};
  * @returns {Function}
  */
 function loadList () {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch({ type: 'MENU_LOADING', loading: true });
-        return ajax.get('/menu').then(data => {
+        return new Promise((resolve, reject) => {
+            let menuList = getState().menu.menuList;
+            if (menuList) {
+                resolve(menuList);
+            } else {
+                resolve(ajax.get('/menu'));
+            }
+        }).then(data => {
+            let __data = JSON.parse(JSON.stringify(data));
+            dispatch({ type: 'SAVE_MENU_LIST', menuList: __data });
             let menuList = [];
-            let treeData = [
-                { name: '(根目录)', list: data }
-            ];
+            let treeData = [{ name: '(根目录)', list: data }];
 
             // 递归添加<tr>
             function recursive (item) {
@@ -20,7 +27,6 @@ function loadList () {
                 if (item.level > 0) {
                     menuList.push(item);
                 }
-
                 if (item.list && item.list.length) {
                     item.list.forEach(function (o, i, list) {
                         o.level = item.level + 1;
@@ -50,26 +56,88 @@ function loadList () {
 }
 action.loadList = loadList;
 
+function handleMenu (item, type, data) {
+    if (item.id == data.parentId) {
+        if (type === 'add') {
+            item.list.push(data);
+        } else if (type === 'update') {
+            let index = item.list.findIndex(i => i.id === data.id);
+            let temp = item.list[index];
+            temp = Object.assign({}, temp, data);
+            item.list.splice(index, 1, temp);
+        } else if (type === 'delete') {
+            let index = item.list.findIndex(i => i.id === data.id);
+            item.list.splice(index, 1);
+        }
+    } else {
+        if (item.list) {
+            item.list.forEach(i => handleMenu(i, type, data));
+        }
+    }
+}
+
 /**
  * 添加菜单
  * @param data
  * @returns {Function}
  */
-action.addMenu = data => dispatch => ajax.post('/menu/create', data);
+action.addMenu = data => (dispatch, getState) => {
+    let menuList = JSON.parse(JSON.stringify(getState().menu.menuList));
+    data.id = (Math.random() * 100000).toFixed(0) / 1 + 1000000;
+
+    if (data.parentId === 0) {
+        menuList.push(data);
+    } else {
+        menuList.forEach(i => {
+            handleMenu(i, 'add', data);
+        });
+    }
+    menuList = JSON.parse(JSON.stringify(menuList));
+    dispatch({ type: 'SAVE_MENU_LIST', menuList });
+    return Promise.resolve();
+};
 
 /**
  * 更新菜单
  * @param data
  * @returns {Function}
  */
-action.updateMenu = data => dispatch => ajax.post('/menu/update', data);
+action.updateMenu = data => (dispatch, getState) => {
+    let menuList = JSON.parse(JSON.stringify(getState().menu.menuList));
+    if (data.parentId == 0) {
+        let index = menuList.findIndex(i => i.id == data.id);
+        let temp = menuList[index];
+        temp = Object.assign({}, temp, data);
+        menuList.splice(index, 1, temp);
+    } else {
+        menuList.forEach(i => {
+            handleMenu(i, 'update', data);
+        });
+    }
+    menuList = JSON.parse(JSON.stringify(menuList));
+    dispatch({ type: 'SAVE_MENU_LIST', menuList });
+    return Promise.resolve();
+};
 
 /**
  * 删除菜单
- * @param id
+ * @param data
  * @returns {Function}
  */
-action.deleteMenu = id => dispatch => ajax.post('/menu/delete', { id });
+action.deleteMenu = data => (dispatch, getState) => {
+    let menuList = JSON.parse(JSON.stringify(getState().menu.menuList));
+    if (data.parentId == 0) {
+        let index = menuList.findIndex(i => i.id == data.id);
+        menuList.splice(index, 1);
+    } else {
+        menuList.forEach(i => {
+            handleMenu(i, 'delete', data);
+        });
+    }
+    menuList = JSON.parse(JSON.stringify(menuList));
+    dispatch({ type: 'SAVE_MENU_LIST', menuList });
+    return Promise.resolve();
+};
 
 /**
  * 移动菜单

@@ -5,6 +5,7 @@ import action from 'actions/dashboard';
 import appAction from 'actions/app';
 import 'less/theme/toolbar.less';
 import SearchModal from "./SearchModal";
+import { isEmpty } from '../../utils';
 
 const docWidth = document.body.clientWidth;
 let btnText ,inputWidth,btnShape;
@@ -51,7 +52,17 @@ class Toolbar extends React.Component{
             appVersion:appVersions,
             appName:productList
         }
-        console.log('dataMap',dataMap,searchParams);
+        //将属性的值为数组的项依次提取出
+        let _searchParams = {}
+        Object.keys(searchParams).forEach(o=>{
+            if(typeof(searchParams[o])!=='object'){
+                _searchParams[o] = searchParams[o];
+            }else{
+                searchParams[o].toString().split(',').forEach((item,i)=>{
+                    _searchParams[o+i] = item;
+                })
+            }
+        })
         return (
             <div className="hd">
                 <SearchModal
@@ -68,9 +79,10 @@ class Toolbar extends React.Component{
                     </Button>
                     <Divider type={'vertical'}/>
                     {
-                        Object.keys(searchParams).map(o=>{
-                            return searchParams[o]!==''&&appVersions.length&&productList.length&&o!='dateRange'?
-                                <Tag
+                        Object.keys(_searchParams).map(o=>{
+                            if(_searchParams[o]!==''&&appVersions.length&&productList.length&&o!='dateRange'){
+                                let target = dataMap[o.replace(/\d/,'')].find(item=>item.id===_searchParams[o]);
+                                return isEmpty(target)?'':<Tag
                                     //暂时不允许关闭，参数之间存在父子关系
                                     // closable
                                     visible={true}
@@ -79,12 +91,10 @@ class Toolbar extends React.Component{
                                     onClose={this.handleTagClick.bind(this,o)}
                                     style={{maxWidth:150}}
                                 >
-                                    {/*{o+'='+ dataMap[o].find(item=>item.id===searchParams[o]).name}*/}
-                                    {
-                                        dataMap[o].find(item=>item.id===searchParams[o])?
-                                            dataMap[o].find(item=>item.id===searchParams[o]).name:''
-                                    }
-                                </Tag>:''
+                                    {target.name}
+                                </Tag>
+                            }
+                            return '';
                         })
                     }
                 </div>
@@ -122,7 +132,8 @@ Toolbar = connect(state=>{
         ]).then(()=>{
             //请求成功就将当前查询条件存储到localStorage
             dispatch(appAction.setSearchParamsInLocalStorage(params,'DASHBOARD_SEARCHPARAMS_CHANGE'));
-            setTimeout(function(){dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:false});},1000)
+            dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:false});
+            // setTimeout(function(){dispatch({type:'DASHBOARD_DETAILPAGE_LOADING',detailPageLoading:false});},1000)
         })
     }
 }))(Toolbar);

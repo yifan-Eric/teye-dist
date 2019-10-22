@@ -15,12 +15,14 @@ const EditForm = Form.create()((props) => {
             <ExFormItem label="上级目录"
                 type="select"
                 name="parentId"
+                disabled={!!data.parentId}
                 initialValue={data.parentId || 0}
                 list={list.map(o => ({
                     id: o.id,
                     name: o.indents.join('') + o.name
                 }))}
                 required
+                
                 getFieldDecorator={getFieldDecorator}/>
             {
                 data.id > 0 ? (
@@ -125,6 +127,7 @@ EditModal = connect(state => {
      * @param data
      */
     onSubmit (data) {
+        console.log("data",data)
         if (data.id > 0) {
             dispatch(action.updateMenu(data)).then(() => {
                 this.props.onClose();

@@ -10,7 +10,7 @@ class DetailPage extends React.PureComponent {
         super(props);
     }
     componentWillMount(){
-        // this.props.init(this.props.selectedCountry,this.props.data);
+        this.props.init(this.props.selectedCountry,this.props.data);
     }
     render(){
         const {selectedCountry} = this.props;

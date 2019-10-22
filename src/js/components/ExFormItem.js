@@ -58,6 +58,7 @@ export default function ExFormItem (props) {
                 mode={props.mode}
                 showSearch={props.showSearch}
                 onChange={onChange}
+                disabled={props.disabled}
                 allowClear={!props.noClear}
                 optionFilterProp="children">
                 {

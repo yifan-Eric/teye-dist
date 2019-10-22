@@ -59,7 +59,7 @@ class OrgTree extends React.Component {
                                 }
                                 {
                                     operations.include('DELETE') && (
-                                        <Popconfirm placement="right" title="确定要删除该组织吗？" onConfirm={onDelete.bind(this, item.id)}>
+                                        <Popconfirm placement="right" title="确定要删除该组织吗？" onConfirm={onDelete.bind(this, item)}>
                                             <a href="javascript:;" className="text-danger margin-left-xs"><Icon type="delete"/> </a>
                                         </Popconfirm>
                                     )
@@ -123,10 +123,10 @@ OrgTree = connect(state => {
     },
     /**
      * 删除
-     * @param id
+     * @param item
      */
-    onDelete (id) {
-        dispatch(action.deleteOrg(id)).then(() => {
+    onDelete (item) {
+        dispatch(action.deleteOrg(item)).then(() => {
             // 重新加载列表
             dispatch(action.loadOrgData());
         });

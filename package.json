@@ -9,6 +9,7 @@
     "test_yh": "cross-env NODE_ENV=test_yh webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "test_jf": "cross-env NODE_ENV=test_jf webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "test_sx": "cross-env NODE_ENV=test_sx webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "test_yl": "cross-env NODE_ENV=test_yl webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "elec_start": "npm run build&&electron .",
     "elec_restart": "electron .",
     "packageLinux": "electron-packager . 'Teye' --platform=linux --arch=x64 --out=./elec_dist --asar --app-version=2.0.1",

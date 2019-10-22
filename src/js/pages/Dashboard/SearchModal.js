@@ -5,13 +5,14 @@ import { Form } from 'antd';
 import action from 'actions/dashboard';
 
 const SearchForm = Form.create({
-    onFieldsChange(props, changedFields) {
+    onValuesChange(props, changedFields) {
         var changed = Object.keys(changedFields).map(o=>{
             var obj = new Object();
             obj[o] = changedFields[o].value;
             return obj;
         })
-        props.onChange(props.searchParams,changed[0]);
+        // props.onChange(props.searchParams,changed[0]);
+        props.onChange(props.searchParams,changedFields)
     },
     mapPropsToFields: (props) => {
         const params = props.searchParams;
@@ -26,7 +27,7 @@ const SearchForm = Form.create({
     return (
         <Form>
             <ExFormItem type={'select'} label={'Stream'} name={'appName'} noClear={true} list={prodList} getFieldDecorator={getFieldDecorator}/>
-            <ExFormItem type={'select'} label={'App Version'} name={'appVersion'} noClear={true} list={appVersions} withEmpty={true} getFieldDecorator={getFieldDecorator}/>
+            <ExFormItem mode={'multiple'} type={'select'} label={'App Version'} name={'appVersion'} noClear={true} list={appVersions} withEmpty={true} getFieldDecorator={getFieldDecorator}/>
         </Form>
     );
 });
@@ -51,11 +52,10 @@ class SearchModal extends React.Component {
     fieldsOnChange = (props,changeFields) => {
         console.log('changeFields',changeFields)
         var newData = {...props,...changeFields};
-        // if(newData['appName']=='')
-        //     newData.appVersion = '';
+
         if(changeFields.hasOwnProperty('appName')){
             this.props.refreshAppVersion(changeFields['appName']);
-            newData.appVersion = '';
+            newData.appVersion = [];
         }
         this.setState({searchParams: newData});
     }

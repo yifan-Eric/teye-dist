@@ -80,7 +80,6 @@ actions.loadMap = () => (dispatch,getState) => {
         fieldValue:'v8.2.T.0.T060.0'}).then(obj=>{
             let temp = {};
             getAllCountries().forEach(o=>{temp[o] = {name:o,value:0,selected:false};});
-            console.log('temp',temp);
             obj.forEach(o=>{
                 const countryName = getCountryName(o.countryNo);
                 if(countryName)
@@ -108,7 +107,12 @@ actions.loadMap = () => (dispatch,getState) => {
                 },
                 useGeo:false
             }
-            dispatch({type:'HOME_MAP_DATA',option,mapJsonData: preData.mapJsonData,data:temp});
+            // dispatch({type:'HOME_MAP_DATA',option,mapJsonData: preData.mapJsonData,data:temp});
+
+            console.log('temp',JSON.stringify(temp));
+            dispatch(
+                appAction.loadRegion('world', 'HOME_MAP_DATA', { option: option, data: temp })
+            );
     })
     // dispatch(appAction.loadRegion('world','HOME_MAP_DATA',{option:preData.option}));
     // dispatch({type:'HOME_MAP_DATA',option});
@@ -415,7 +419,7 @@ actions.loadThirdChart = () => dispatch => {
     };
     let data = [];
     for (let i = 0; i < mockData.length; i++) {
-        data.push(mockData[i].number)
+        data.push((mockData[i].number / 1000).toFixed(2) )
     }
     dispatch({ type: 'HOME_THIRD_DATA', data: [data], option });
 };
@@ -423,7 +427,7 @@ actions.loadThirdChart = () => dispatch => {
 //horizontal-stack-bar
 actions.loadFourthChart = (country) => dispatch => {
     let option = {
-        'title.text':'使用习惯（日）',
+        'title.text':'使用习惯（分钟）',
         'title.subText':country,
         legendData: ['阅读', '看视频', '游戏', '购物'],
         'yAxis.type':'category',
@@ -433,7 +437,8 @@ actions.loadFourthChart = (country) => dispatch => {
     for (let i = 0; i < 4; i++) {
         for (let j = 0; j < 7; j++) {
             if (!data[i]) { data[i] = []; }
-            data[i].push((Math.random() * 2).toFixed(1) + 1);
+            let val = (((Math.random() * 2).toFixed(1) + 1)*30).toFixed(0);
+            data[i].push(val);
         }
     }
     data.sort((o1, o2) => {

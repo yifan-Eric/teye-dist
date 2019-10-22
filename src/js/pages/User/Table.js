@@ -49,8 +49,8 @@ Table = connect(state => {
      * @param id
      */
     onRowClick (id) {
-        dispatch({ type: 'USER_INFO_SHOW', show: true });
-        dispatch(action.loadUserInfo(id));
+        // dispatch({ type: 'USER_INFO_SHOW', show: true });
+        // dispatch(action.loadUserInfo(id));
     }
 }))(Table);
 

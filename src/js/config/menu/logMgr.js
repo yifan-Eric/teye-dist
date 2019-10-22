@@ -55,27 +55,33 @@ export default {
     //     ],
     //     page: (cb) => { require.ensure([], require => { cb(require('pages/OldDashboard')); }, 'dashboard'); }
     // },
-    'logMgr/dashboard2': {
+    'tBase/dashboard2': {
         name: 'menuName_logMgr_dashboard2',
         icon: 'bars',
+        page: (cb) => { require.ensure([], require => { cb(require('pages/Dashboard2')); }, 'dashboard2'); },
         operations: [
-            { key: 'SEARCH', name: 'logView_operation_search' }
-        ],
-        page: (cb) => { require.ensure([], require => { cb(require('pages/Dashboard2')); }, 'dashboard2'); }
+            { key: 'CREATE', name: 'dashboard_operation_add' },
+            { key: 'UPDATE', name: 'dashboard_operation_modify' },
+            { key: 'DELETE', name: 'dashboard_operation_delete' }
+        ]
     },
-    'logMgr/dashboard3': {
+    'tBase/dashboard3': {
         name: 'menuName_logMgr_dashboard3',
         icon: 'bars',
+        page: (cb) => { require.ensure([], require => { cb(require('pages/Dashboard3')); }, 'dashboard3'); },
         operations: [
-            { key: 'SEARCH', name: 'logView_operation_search' }
-        ],
-        page: (cb) => { require.ensure([], require => { cb(require('pages/Dashboard3')); }, 'dashboard3'); }
+            { key: 'CREATE', name: 'dashboard_operation_add' },
+            { key: 'UPDATE', name: 'dashboard_operation_modify' },
+            { key: 'DELETE', name: 'dashboard_operation_delete' }
+        ]
     },
-    'logMgr/dashboard4': {
+    'tBase/dashboard4': {
         name: 'menuName_logMgr_dashboard4',
         icon: 'bars',
         operations: [
-            { key: 'SEARCH', name: 'logView_operation_search' }
+            { key: 'CREATE', name: 'dashboard_operation_add' },
+            { key: 'UPDATE', name: 'dashboard_operation_modify' },
+            { key: 'DELETE', name: 'dashboard_operation_delete' }
         ],
         page: (cb) => { require.ensure([], require => { cb(require('pages/DashboardDefect')); }, 'dashboard4'); }
     }

@@ -29,7 +29,7 @@ HorizontalStackBar = connect(state => {
     return { fourthChartData,selectedCountry };
 }, dispatch => ({
     reHref(time,type,country){
-        dispatch(action.loadTabPage('logMgr/dashboard2'))
+        dispatch(action.loadTabPage('tBase/dashboard2'))
         dispatch({ type: 'DASHBOARD2_COUNTRY_CHANGE', selectedCountry: country});
         dispatch({type:'DASHBOARD2_SECONDCARD_LOAD',exData:{time,actionType:type}})
     }

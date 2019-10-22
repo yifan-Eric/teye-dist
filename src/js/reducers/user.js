@@ -4,6 +4,8 @@ import { objectAppend } from 'utils';
  * 这里可以唯一知道新旧状态的地方
  */
 const defaultState = {
+    userPageObj:{},
+    orgTree:null,
     loading: false,
     searchParams: {}, // 当前查询参数
     orgData: [],
@@ -26,6 +28,12 @@ const defaultState = {
 export default (state, action) => {
     let newState = {};
     switch (action.type) {
+    case "SAVE_USERPAGEOBJ":
+        newState.userPageObj = action.obj;
+        break;
+    case "SAVE_USERTREE":
+        newState.orgTree = action.orgTree;
+        break;
     case 'USER_LOADING':
         newState.loading = action.loading;
         break;

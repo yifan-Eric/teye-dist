@@ -44,7 +44,7 @@ NormalBar = connect(state => {
     reHref(appName,tempData){
         // dispatch({type:'HOME_FIFTHSUBPAGE_SHOW',subPageShow:true,selectedProduct:appName});
         //暂时不跳转
-        // dispatch(action.loadTabPage('tBase/dashboard'))
+        dispatch(action.loadTabPage('tBase/dashboard'))
         // dispatch({ type: 'DASHBOARD_SEARCHPARAMS_CHANGE', params:{appName:appName} });
         // dispatch({type:'DASHBOARD_SIXTHCHART1_LOAD',tempData});
         // setTimeout(function(){

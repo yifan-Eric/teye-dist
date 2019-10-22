@@ -102,7 +102,8 @@ actions.refreshPage = () => dispatch => {
     Promise.all([dispatch(actions.loadSecondChart()),dispatch(actions.loadHotEvents())]).then((arr)=>{
         dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', ...arr[0],...arr[1] });
     })
-    return true;
+    //选个时间最长的作为加载时间
+    // return dispatch(actions.loadFirstChart()).then(()=>Promise.resolve());
 }
 
 //normalLine
@@ -114,123 +115,124 @@ actions.loadFirstChart = () => (dispatch,getState) => {
     const pkgName = targetProd?targetProd.packageName:'com.tclhz.gallery';
     const url = '/report/'+pkgName+'/appUserActiveInfo';
     //对接代码start
-    return ajax.get(url,{appVersion:appVersion}).then(obj=>{
+    // return ajax.get(url,{appVersion:typeof(appVersion)==='string'?appVersion:appVersion.join(',')}).then(obj=>{
 
-        const option = {
-            // 'xAxis.type':'time',
-            'xAxis.data': [],
-            'xAxis.min':-1,
-            'xAxis.max':30,
-            'xAxis.interval':7*24*3600*1000,
-            'yAxis.type':'value',
-            'yAxis.axisLine.show':false,
-            'yAxis.splitLine.show':true,
-            'yAxis.axisLabel.rotate':45,
+    //     const option = {
+    //         // 'xAxis.type':'time',
+    //         'xAxis.data': [],
+    //         'xAxis.min':-1,
+    //         'xAxis.max':30,
+    //         'xAxis.interval':7*24*3600*1000,
+    //         'yAxis.type':'value',
+    //         'yAxis.axisLine.show':false,
+    //         'yAxis.splitLine.show':true,
+    //         'yAxis.axisLabel.rotate':45,
 
-            'title.text':'Active users',
-            'title.show':false,
+    //         'title.text':'Active users',
+    //         'title.show':false,
 
-            backgroundColor: 'rgba(0, 0, 0, 0)',
-            grid: {
-                left: '2%',
-                right: '2%',
-                bottom: '2%',
-                top: '3%',
-                containLabel: true
-            },
-            multiple: true,
-            color: ['#4285f4','#ab47bc','#00acc1'],
+    //         backgroundColor: 'rgba(0, 0, 0, 0)',
+    //         grid: {
+    //             left: '2%',
+    //             right: '2%',
+    //             bottom: '2%',
+    //             top: '3%',
+    //             containLabel: true
+    //         },
+    //         multiple: true,
+    //         color: ['#4285f4','#ab47bc','#00acc1'],
 
-            // legend: {
-            //     show: false,
-            //     data: ['28-Day', '7-Day', '1-Day']
-            // }
-            'legend.show':false,
-            'legend.data': ['28-Day', '7-Day', '1-Day']
+    //         // legend: {
+    //         //     show: false,
+    //         //     data: ['28-Day', '7-Day', '1-Day']
+    //         // }
+    //         'legend.show':false,
+    //         'legend.data': ['28-Day', '7-Day', '1-Day']
 
-        };
-        // let startDate = moment().subtract(31, "days").format("YYYY-MM-DD");
-        // for(let i=1;i<=30;i++){
-        //     option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
-        // }
-        option['xAxis.data'] = obj['appMonthlyActiveList'].map(o=>o.timeScal);
+    //     };
+    //     // let startDate = moment().subtract(31, "days").format("YYYY-MM-DD");
+    //     // for(let i=1;i<=30;i++){
+    //     //     option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
+    //     // }
+    //     option['xAxis.data'] = obj['appMonthlyActiveList'].map(o=>o.timeScal);
 
-        let data = [];
-        const keyValue = {
-            '28-Day':'appMonthlyActiveList',
-            '7-Day':'appWeeklyActiveList',
-            '1-Day':'appDailyActiveList'
-        }
+    //     let data = [];
+    //     const keyValue = {
+    //         '28-Day':'appMonthlyActiveList',
+    //         '7-Day':'appWeeklyActiveList',
+    //         '1-Day':'appDailyActiveList'
+    //     }
 
-        option['legend.data'].forEach(function (o,i) {
-            var temp = [];
-            const array = arrayFilter3(obj[keyValue[o]],'activeUsers');
-            // const array = obj[keyValue[o]];
-            data.push(array.map(item=>item.activeUsers));
-            // for (let j = 0; j < option['xAxis.data'].length ; j++) {
-            //     temp.push((obj[keyValue[o]][j].activeUsers/1000).toFixed(2));
-            // }
-            // data.push(temp);
-        });
-        dispatch({ type: 'DASHBOARD_FIRSTCHART_LOAD', data, option });
-    })
+    //     option['legend.data'].forEach(function (o,i) {
+    //         var temp = [];
+    //         const array = arrayFilter3(obj[keyValue[o]],'activeUsers');
+    //         // const array = obj[keyValue[o]];
+    //         data.push(array.map(item=>item.activeUsers));
+    //         // for (let j = 0; j < option['xAxis.data'].length ; j++) {
+    //         //     temp.push((obj[keyValue[o]][j].activeUsers/1000).toFixed(2));
+    //         // }
+    //         // data.push(temp);
+    //     });
+    //     dispatch({ type: 'DASHBOARD_FIRSTCHART_LOAD', data, option });
+    // })
     //对接代码end
-    // const option = {
-    //     'xAxis.data': [],
-    //     'xAxis.min':-2,
-    //     'xAxis.max':31,
-    //     'yAxis.type':'value',
-    //     'yAxis.axisLine.show':false,
-    //     'yAxis.splitLine.show':true,
-    //     'yAxis.axisLabel.rotate':45,
-    //
-    //     'title.text':'Active users (K)',
-    //     'title.show':false,
-    //
-    //     backgroundColor: 'rgba(0, 0, 0, 0)',
-    //     grid: {
-    //         left: '2%',
-    //         right: '2%',
-    //         bottom: '2%',
-    //         top: '3%',
-    //         containLabel: true
-    //     },
-    //     multiple: true,
-    //     color: ['#4285f4','#ab47bc','#00acc1'],
-    //
-    //     legend: {
-    //         show: false,
-    //         data: ['28-Day', '7-Day', '1-Day']
-    //     }
-    // };
-    //
-    // let startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
-    // for(let i=1;i<=30;i++){
-    //     option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
-    // }
-    //
-    // let data = [];
-    // const mockData = [
-    //     [569,571,575,578,582,584,588,590,591,591,593,593,600,602,606,608,608,611,616,616,619,621,624,630,633,637,640,643,647,651],
-    //     [397,400,405,408,412,413,416,418,421,421,420,423,423,426,430,432,434,437,440,440,446,450,453,458,462,466,470,473,477,478],
-    //     [258,259,267,266,266,266,268,270,271,271,271,273,274,277,280,283,282,284,293,293,296,295,298,305,306,305,308,314,304,298]
-    // ]
-    // option.legend.data.forEach(function (o,i) {
-    //     var temp = [];
-    //     for (let j = 0; j < option['xAxis.data'].length ; j++) {
-    //         // temp.push(parseInt(((Math.random() * 1) + 2) * 10)*(i+3)*4);
-    //         temp.push(mockData[i][j])
-    //     }
-    //     // temp.sort((o1,o2)=>{
-    //     //     if(o1-o2>0)
-    //     //         return 1;
-    //     //     else
-    //     //         return -1;
-    //     // });
-    //     data.push(temp);
-    // });
-    // // data.reverse();
-    // dispatch({ type: 'DASHBOARD_FIRSTCHART_LOAD', data, option });
+    const option = {
+        'xAxis.data': [],
+        'xAxis.min':-2,
+        'xAxis.max':31,
+        'yAxis.type':'value',
+        'yAxis.axisLine.show':false,
+        'yAxis.splitLine.show':true,
+        'yAxis.axisLabel.rotate':45,
+    
+        'title.text':'Active users (K)',
+        'title.show':false,
+    
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        grid: {
+            left: '2%',
+            right: '2%',
+            bottom: '2%',
+            top: '3%',
+            containLabel: true
+        },
+        multiple: true,
+        color: ['#4285f4','#ab47bc','#00acc1'],
+        'legend.show':false,
+        'legend.data':['28-Day', '7-Day', '1-Day']
+        // legend: {
+        //     show: false,
+        //     data: ['28-Day', '7-Day', '1-Day']
+        // }
+    };
+    
+    let startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
+    for(let i=1;i<=30;i++){
+        option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
+    }
+    
+    let data = [];
+    const mockData = [
+        [569,571,575,578,582,584,588,590,591,591,593,593,600,602,606,608,608,611,616,616,619,621,624,630,633,637,640,643,647,651],
+        [397,400,405,408,412,413,416,418,421,421,420,423,423,426,430,432,434,437,440,440,446,450,453,458,462,466,470,473,477,478],
+        [258,259,267,266,266,266,268,270,271,271,271,273,274,277,280,283,282,284,293,293,296,295,298,305,306,305,308,314,304,298]
+    ]
+    option['legend.data'].forEach(function (o,i) {
+        var temp = [];
+        for (let j = 0; j < option['xAxis.data'].length ; j++) {
+            // temp.push(parseInt(((Math.random() * 1) + 2) * 10)*(i+3)*4);
+            temp.push(mockData[i][j])
+        }
+        // temp.sort((o1,o2)=>{
+        //     if(o1-o2>0)
+        //         return 1;
+        //     else
+        //         return -1;
+        // });
+        data.push(temp);
+    });
+    // data.reverse();
+    dispatch({ type: 'DASHBOARD_FIRSTCHART_LOAD', data, option });
 };
 
 //normalBar
@@ -277,7 +279,7 @@ actions.loadSecondChart = () => (dispatch,getState) => {
         })
         option['xAxis.data'] = x;
 
-        // dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data,option,halfHourNum });
+        dispatch({ type: 'DASHBOARD_SECONDCHART_LOAD', data,option,halfHourNum });
         return {data,option,halfHourNum};
     })
     //对接代码end
@@ -285,6 +287,7 @@ actions.loadSecondChart = () => (dispatch,getState) => {
     //     'title.text':'Users pre minutes',
     //     'title.left':'left',
     //     'title.top':'top',
+    //     'title.show':true,
     //     'title.padding':[5,0],
     //     'title.textStyle':{
     //         fontSize: '12px'
@@ -329,7 +332,7 @@ actions.loadHotEvents = () => (dispatch,getState) => {
     const packageName = state.productList.find(o=>{
         return o.id==searchParams.appName;
     }).packageName;
-    return ajax.get('/report/hotevent',{'packageNames':packageName,'appVersions':version}).then(data=>{
+    return ajax.get('/report/hotevent',{'packageNames':packageName,'appVersions':typeof(version)==='string'?version:version.join(',')}).then(data=>{
         let listData = [];
         if(!isEmpty(data)){
             const list = data.eventSum;
@@ -365,55 +368,55 @@ actions.loadThirdChart = () => (dispatch,getState) => {
         return o.id==searchParams.appName;
     }).packageName;
     //对接代码start
-    return ajax.get('/report/retention',{packageName:packageName}).then((data)=>{
-        const option = {
-            'title.text':'Retention cohorts'
-        }
-        let list = [];
-        data.forEach((o,i)=>{
-            if(o){
-                o.list[0].retention = 1
-                let temp = {
-                    time:moment(o.timeScale.begin).format('MM/DD')+'~'+moment(o.timeScale.end).add(-1).format('MM/DD'),
-                    no:i
-                }
-                o.list.forEach((item,j)=>{
-                    if(item.retention>0)
-                        temp['rate'+j] = (item.retention*100).toFixed(1);
-                })
-                list.push(temp)
-            }
-        })
-        list.reverse();
-        dispatch({type:'DASHBOARD_THIRDCHART_LOAD',list,option})
-    })
-    //对接代码end
-    // const option = {
-    //     'title.text':'Retention cohorts'
-    // }
-    // const mockData = [
-    //     [99],
-    //     [99,62],
-    //     [99,62,52],
-    //     [99,63,53,48],
-    //     [99,62,52,46,43],
-    //     [99,61,50,45,41,39]
-    // ]
-    // let list = [];
-    // for(let i=0;i<6;i++){
-    //     let temp = {
-    //         time:moment().add('days',-7*(i+1)+1).format('MM/DD')+'~'+moment().add('days',-7*(i)).format('MM/DD'),
-    //         no:i,
-    //     };
-    //     const pi = 100/6;
-    //     for(let j=0;j<(i+1);j++){
-    //         // temp['rate'+j] = (Math.random()*(100/6)+(100-(j+1)*pi)).toFixed(1);
-    //         temp['rate'+j] = mockData[i][j];
+    // return ajax.get('/report/retention',{packageName:packageName}).then((data)=>{
+    //     const option = {
+    //         'title.text':'Retention cohorts'
     //     }
-    //     list.push(temp)
-    // }
-    // list.reverse();
-    // dispatch({type:'DASHBOARD_THIRDCHART_LOAD',list,option})
+    //     let list = [];
+    //     data.forEach((o,i)=>{
+    //         if(o){
+    //             o.list[0].retention = 1
+    //             let temp = {
+    //                 time:moment(o.timeScale.begin).format('MM/DD')+'~'+moment(o.timeScale.end).add(-1).format('MM/DD'),
+    //                 no:i
+    //             }
+    //             o.list.forEach((item,j)=>{
+    //                 if(item.retention>0)
+    //                     temp['rate'+j] = (item.retention*100).toFixed(1);
+    //             })
+    //             list.push(temp)
+    //         }
+    //     })
+    //     list.reverse();
+    //     dispatch({type:'DASHBOARD_THIRDCHART_LOAD',list,option})
+    // })
+    //对接代码end
+    const option = {
+        'title.text':'Retention cohorts'
+    }
+    const mockData = [
+        [99],
+        [99,62],
+        [99,62,52],
+        [99,63,53,48],
+        [99,62,52,46,43],
+        [99,61,50,45,41,39]
+    ]
+    let list = [];
+    for(let i=0;i<6;i++){
+        let temp = {
+            time:moment().add('days',-7*(i+1)+1).format('MM/DD')+'~'+moment().add('days',-7*(i)).format('MM/DD'),
+            no:i,
+        };
+        const pi = 100/6;
+        for(let j=0;j<(i+1);j++){
+            // temp['rate'+j] = (Math.random()*(100/6)+(100-(j+1)*pi)).toFixed(1);
+            temp['rate'+j] = mockData[i][j];
+        }
+        list.push(temp)
+    }
+    list.reverse();
+    dispatch({type:'DASHBOARD_THIRDCHART_LOAD',list,option})
 }
 
 actions.loadFourthChart = () => (dispatch,getState) => {
@@ -549,7 +552,7 @@ actions.loadFourthChart = () => (dispatch,getState) => {
     //     data:[[17],[5.5],[4.8],[72.6]],
     //     data2:[[35.9],[17.7],[14.5],[31.8]]
     // }
-    // secondChart.option.yAxis.data = ['周一'];
+    // secondChart.option['yAxis.data'] = ['周一'];
     // for (let i = 0; i < 4; i++) {
     //     for (let j = 0; j < 1; j++) {
     //         if (!secondChart.data[i]) { secondChart.data[i] = []; }
@@ -790,66 +793,14 @@ actions.loadFourthChart = () => (dispatch,getState) => {
 
 actions.loadFifthChart = (obj) => dispatch => {
     //对接代码start
-    const option = {
-        'xAxis.data': [],
-        'title.text':'Top conversion events',
-        'title.show':false,
-        // title: {
-        //     text: 'Top conversion events',
-        //     show: false
-        // },
-        'yAxis.type':'value',
-        'yAxis.axisLine.show':false,
-        'yAxis.splitLine.show':true,
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-        grid: {
-            left: '2%',
-            right: '2%',
-            bottom: '2%',
-            top: '3%',
-            containLabel: true
-        },
-        multiple: true,
-        color: ['#4285f4','#ab47bc','#00acc1'],
-        'legend.show':false,
-        'legend.data':[]
-        // legend: {
-        //     show: false,
-        //     data: []
-        // }
-
-    };
-    let data = [];
-    let startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
-    for(let i=1;i<=30;i++){
-        option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
-    }
-    if(obj){
-        obj.sum = 0;
-        option['xAxis.data'] = obj.scaleList.map((o)=>{
-            return o.scale
-        }).reverse();
-        const map = obj.eventScaleMap;
-        for(let key in map){
-            option['legend.data'].push(key);
-            let temp = [];
-            option['xAxis.data'].forEach((o)=>{
-                if(map[key][o])
-                    temp.push(map[key][o]);
-                else
-                    temp.push(0);
-            })
-            data.push(temp);
-        }
-    }
-    dispatch({ type: 'DASHBOARD_FIFTHCHART_LOAD', data, option });
-    //对接代码end
     // const option = {
     //     'xAxis.data': [],
-    //     title: {
-    //         text: 'Top conversion events(10K)',
-    //         show: false
-    //     },
+    //     'title.text':'Top conversion events',
+    //     'title.show':false,
+    //     // title: {
+    //     //     text: 'Top conversion events',
+    //     //     show: false
+    //     // },
     //     'yAxis.type':'value',
     //     'yAxis.axisLine.show':false,
     //     'yAxis.splitLine.show':true,
@@ -863,33 +814,85 @@ actions.loadFifthChart = (obj) => dispatch => {
     //     },
     //     multiple: true,
     //     color: ['#4285f4','#ab47bc','#00acc1'],
-    //     legend: {
-    //         show: false,
-    //         data: ['screen_view', 'user_engagement', 'select_content']
-    //     }
-    //
+    //     'legend.show':false,
+    //     'legend.data':[]
+    //     // legend: {
+    //     //     show: false,
+    //     //     data: []
+    //     // }
+
     // };
     // let data = [];
     // let startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
     // for(let i=1;i<=30;i++){
     //     option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
     // }
-    //
-    // option.legend.data.forEach(function (o,i) {
-    //     var temp = [];
-    //     let pi = [20,125,150].reverse()
-    //     for (let j = 0; j < 30; j++) {
-    //         temp.push(parseInt(((Math.random() * 1) + 2) * pi[i]));
+    // if(obj){
+    //     obj.sum = 0;
+    //     option['xAxis.data'] = obj.scaleList.map((o)=>{
+    //         return o.scale
+    //     }).reverse();
+    //     const map = obj.eventScaleMap;
+    //     for(let key in map){
+    //         option['legend.data'].push(key);
+    //         let temp = [];
+    //         option['xAxis.data'].forEach((o)=>{
+    //             if(map[key][o])
+    //                 temp.push(map[key][o]);
+    //             else
+    //                 temp.push(0);
+    //         })
+    //         data.push(temp);
     //     }
-    //     temp.sort((o1,o2)=>{
-    //         if(o1-o2>0)
-    //             return 1;
-    //         else
-    //             return -1;
-    //     });
-    //     data.push(temp);
-    // });
+    // }
     // dispatch({ type: 'DASHBOARD_FIFTHCHART_LOAD', data, option });
+    //对接代码end
+    const option = {
+        'xAxis.data': [],
+        title: {
+            text: 'Top conversion events(10K)',
+            show: false
+        },
+        'yAxis.type':'value',
+        'yAxis.axisLine.show':false,
+        'yAxis.splitLine.show':true,
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+        grid: {
+            left: '2%',
+            right: '2%',
+            bottom: '2%',
+            top: '3%',
+            containLabel: true
+        },
+        multiple: true,
+        color: ['#4285f4','#ab47bc','#00acc1'],
+        legend: {
+            show: false,
+            data: ['screen_view', 'user_engagement', 'select_content']
+        }
+    
+    };
+    let data = [];
+    let startDate = moment().subtract(30, "days").format("YYYY-MM-DD");
+    for(let i=1;i<=30;i++){
+        option['xAxis.data'].push(moment(startDate).add(i,'days').format('YYYY-MM-DD'));
+    }
+    
+    option.legend.data.forEach(function (o,i) {
+        var temp = [];
+        let pi = [20,125,150].reverse()
+        for (let j = 0; j < 30; j++) {
+            temp.push(parseInt(((Math.random() * 1) + 2) * pi[i]));
+        }
+        temp.sort((o1,o2)=>{
+            if(o1-o2>0)
+                return 1;
+            else
+                return -1;
+        });
+        data.push(temp);
+    });
+    dispatch({ type: 'DASHBOARD_FIFTHCHART_LOAD', data, option });
 }
 actions.loadSixthChart = () => (dispatch,getState) => {
     const state = getState().dashboard;
@@ -898,7 +901,7 @@ actions.loadSixthChart = () => (dispatch,getState) => {
     const packageName = state.productList.find(o=>{
         return o.id==searchParams.appName;
     }).packageName;
-    return ajax.get('/report/userEngagement',{appVersions:version,days:12,packageNames:packageName}).then((obj)=>{
+    return ajax.get('/report/userEngagement',{appVersions:typeof(version)==='string'?version:version.join(','),days:12,packageNames:packageName}).then((obj)=>{
         !obj&&(obj={})
         const option = {
             'xAxis.data': [],

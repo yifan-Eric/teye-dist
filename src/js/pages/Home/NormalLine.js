@@ -38,7 +38,7 @@ NormalLine = connect(state => {
     return { thirdChartData,selectedCountry };
 }, dispatch => ({
     reHref(country,time,value){
-        dispatch(action.loadTabPage('logMgr/dashboard3'));
+        dispatch(action.loadTabPage('tBase/dashboard3'));
         dispatch(dash3Action.initAllChart(country,time,value))
         dispatch({type:'DASHBOARD3_SEARCHPARAMS_CHANGE',country,time,value});
         // dispatch({ type: 'DASHBOARD3_COUNTRY_CHANGE', selectedCountry: country});

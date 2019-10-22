@@ -1,3 +1,5 @@
+import { isEmpty } from '../utils';
+
 /**
  * Created by user on 18-8-20.
  */
@@ -14,7 +16,8 @@
 // import echarts from "echarts";
 // import world from 'echarts/map/js/world';
 const echarts = require('echarts');
-// import bmap from 'bmap';
+require('bmap');
+// require('echarts/map/js/world');
 
 const backgroundColor = 'rgba(0, 0, 0, 0.2)';
 const maskBgColor = 'rgba(0, 0, 0, 0.1)'
@@ -73,6 +76,7 @@ class ExCharts extends React.Component {
                 this.chart.setOption(drawBubbleChart(data,chartOption));
                 break;
             case 'region-map':
+                
                 this.chart.setOption(drawRegionMap(data,chartOption,this.props.country,option.mapJsonData));
                 break;
             case 'baidu-map':
@@ -111,28 +115,33 @@ class ExCharts extends React.Component {
         }else {
             this.chart.on('click', this.props.onClick);
         }
+        this.chart.hideLoading()
     }
     componentDidMount () {
-        const { container, theme } = this.props;
+        const { container, theme,data } = this.props;
         this.chart = echarts.init(document.getElementById(container), theme || 'dark');
         // 认为一开始没有携带数据就加载进度条，等数据进来再关闭
-        if (!(this.props.data && (this.props.data.length > 0||this.props.data.series))) {
-            this.chart.showLoading('default', {text:'loading...',maskColor: maskBgColor,textColor: '#fff'});
-        }else{
+        this.showLoading()
+        if(data !== 'loading' && data && (data.length > 0|| data.series)){
             this.dispatchType(this.props);
         }
     }
     // 异步加载触发的更新
     componentWillReceiveProps (nextProps) {
-        if (nextProps.data && nextProps.data.length > 0) { this.chart.hideLoading(); }
+        if(nextProps.data === "loading"){
+            this.showLoading();
+        }
         this.dispatchType(nextProps);
         return false;
     }
+    showLoading(){
+        this.chart.showLoading('default', {text:'loading...',maskColor:maskBgColor,textColor: '#fff'});
+    }
     render () {
-        const { container, minHeight, width } = this.props;
+        const { container, minHeight, width,style } = this.props;
         let clientWidth = document.body.clientWidth;
         return (
-            <div id={container} style={{ width: width || clientWidth / 3, height: minHeight || 500 }}></div>
+            <div id={container} style={{ width: width || clientWidth / 3, height: minHeight || 500,...style }}></div>
         );
     }
 }
@@ -142,10 +151,13 @@ class ExCharts extends React.Component {
  * */
 function drawNormalPie (data, option) {
     if (!option.legendData) {
-        option.legendData = data.map(function (o) {
+        option.legendData = data&&data.map(function (o) {
             return o.name;
         });
     }
+    let r = 100;
+    const u = Math.PI*2;
+    const v = Math.cos;
     let opt = {
         title: {
             text: option.title,
@@ -158,7 +170,11 @@ function drawNormalPie (data, option) {
             trigger: 'item',
             formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
-        color:['#520038','#780650','#9e1068','#c41d7f','#d14190','#de68a5','#eb94be'],
+        color:['#520038','#780650','#9e1068','#c41d7f','#eb2f96','#f759ab','#ff85c0','#ffadd2','#ffd6e7','#fff0f6'],
+        // color:option.legendData.map(()=>{
+        //     r-=u/-50;
+        //     return '#'+(v(r)*127+128<<16 | v(r+u/3)*127+128<<8 | v(r+u/3*2)*127+128).toString(16);
+        // }),
         // color:option.color?option.color:['#003a8c','#0050b3','#096dd9','#1890ff','#40a9ff','#69c0ff','#91d5ff'],
         legend: option.legend||{
             orient: 'vertical',
@@ -392,6 +408,7 @@ function drawNormalLine (data, option) {
         opt.legend = option.legend;
         opt.color = option.color || colors;
     }
+    if(data === 'loading') return opt;
     data.forEach(function (o, i) {
         opt.series.push({
             // name: option.multiple ? opt.legend.data[i] : '',
@@ -433,10 +450,11 @@ function drawNormalBar (data, option) {
                 interval: option['xAxis.axisLabel.interval'] || 0,
                 color:option['xAxis.nameTextStyle.color']
             },
-            show: option['xAxis.show'] !== undefined ? option['xAxis.show']:true
+            show: option['xAxis.show'] !== undefined ? option['xAxis.show']:true,
+            name: option['xAxis.name'] || ""
         },
         yAxis: option.yAxis||{},
-        series: [{
+        series: option.series || [{
             type: 'bar',
             data: data
         }],
@@ -453,7 +471,7 @@ function drawNormalBar (data, option) {
  * 绘制横向条形图
  * */
 function drawHorizontalBar (data, option) {
-    if (option.series.length > 0){
+    if (option.series&&option.series.length > 0){
         return option;
     }
     let series = [];
@@ -464,15 +482,16 @@ function drawHorizontalBar (data, option) {
             data: data[i]
         });
     });
+    
     let opt = {
         title: {
             text: option.title,
             padding: [15, 10]
             // subtext: option.subTitle
         },
-        color: ['#096dd9', '#40a9ff'],
+        color: option.color || ['#2f66ff', '#ab47bc'],
         backgroundColor: backgroundColor,
-        tooltip: {
+        tooltip: option.tooltip || {
             trigger: 'axis',
             axisPointer: {
                 type: 'shadow'
@@ -483,17 +502,17 @@ function drawHorizontalBar (data, option) {
             data: option.legendData,
             padding: [15, 10]
         },
-        grid: {
+        grid: option.grid || {
             left: '3%',
             right: '4%',
             bottom: '3%',
             containLabel: true
         },
-        xAxis: {
+        xAxis: option.xAxis || {
             type: 'value',
             boundaryGap: [0, 0.01]
         },
-        yAxis: {
+        yAxis:{
             type: 'category',
             data: option.yAxis
         },
@@ -534,62 +553,6 @@ function drawHorizontalStackBar (data, option) {
             }
         },
         color: ['#faad14', '#13c2c2', '#52c41a', '#1890ff', '#2f54eb', '#722ed1'],
-        legend: {
-            data: option.legendData,
-            x: 'center',
-            y: 'bottom'
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '10%',
-            containLabel: true
-        },
-        xAxis: {
-            type: 'value'
-        },
-        yAxis: {
-            type: option['yAxis.type'],
-            data: option['yAxis.data']
-        },
-        backgroundColor: option.backgroundColor||backgroundColor,
-        series: series
-    };
-    return opt;
-}
-/**
- * 绘制横向堆积条形图
- */
-function drawHorizontalStackBar (data, option) {
-    let series = [];
-    option.legendData.forEach(function (o, i) {
-        series.push({
-            name: o,
-            type: 'bar',
-            stack: '占比',
-            data: data[i]
-        });
-    });
-    let opt = {
-        title: {
-            text: option['title.text']||'',
-            padding: [15, 10],
-            x: option['title.x']||'center',
-            subtext: option['title.subText']||undefined,
-            subtextStyle: {
-                fontSize: 14,
-                fontWeight: 'bold',
-                fontColor: 'white'
-            }
-        },
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: { // 坐标轴指示器，坐标轴触发有效
-                type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-            }
-        },
-        color: ['#faad14', '#13c2c2', '#52c41a', '#1890ff', '#2f54eb', '#722ed1'],
-        // color:['#0050b3','#096dd9','#1890ff','#40a9ff'],
         legend: {
             data: option.legendData,
             x: 'center',
@@ -728,7 +691,7 @@ function drawWithBgPie (data, option, itemStyle) {
  */
 function drawHeatMap (data, option,exData) {
     const {selectedCountry,mapJsonData,feature:myFeature} = exData
-
+    !isEmpty(mapJsonData)&&echarts.registerMap('world', mapJsonData, {});
     let opt = {
         title: {
             text: 'ROM全球用户分布图（热点图）',
@@ -751,7 +714,7 @@ function drawHeatMap (data, option,exData) {
             containLabel: true
         },
         visualMap: option.visualMap||{
-            min: 70000,
+            min: 0,
             max: 1100000,
             splitNumber: 8,
             inRange: {
@@ -771,7 +734,7 @@ function drawHeatMap (data, option,exData) {
             // }
             formatter: function (params) {
                 //使用geo时，获取value有变化
-                return params.name + ' : ' + (params.value[2]?params.value[2]:params.data.value);
+                return params.name + ' : ' + (params.value[2]?params.value[2]:params.data?params.data.value:0);
             }
         },
         toolbox:{
@@ -894,6 +857,7 @@ function drawTimeLineChart (data, option) {
  * Bubble-Chart
  */
 function drawBubbleChart (data, option) {
+    if(option) return option;
     let opt = {
         backgroundColor: 'rgba(0, 0, 0, 0.0)',
         xAxis: {
@@ -942,13 +906,6 @@ function drawBubbleChart (data, option) {
             },
             symbol:o[0][5]?'image://'+o[0][5]:'circle',
             label: {
-                // emphasis: {
-                //     show: true,
-                //     formatter: function (param) {
-                //         return param.data[3];
-                //     },
-                //     position: 'top'
-                // },
                 normal: {
                     show: false,
                     formatter: function (param) {
@@ -988,15 +945,14 @@ function drawBubbleChart (data, option) {
  * @param data
  * @returns {{title: {text: string, subtext: string, sublink: string, left: string}, tooltip: {trigger: string, showDelay: number, transitionDuration: number, formatter: (function(*): string)}, visualMap: {left: string, min: number, max: number, inRange: {color: string[]}, text: string[], calculable: boolean}, toolbox: {show: boolean, left: string, top: string, feature: {dataView: {readOnly: boolean}, restore: {}, saveAsImage: {}}}, backgroundColor: string, series: {name: string, type: string, roam: boolean, map: string, itemStyle: {emphasis: {label: {show: boolean}}}, textFixed: {Alaska: number[]}, data: *}[]}}
  */
-function drawRegionMap(data,option,country,mapJsonData){
+function drawRegionMap(data,option,country = "world",mapJsonData){
     let region;
     try{
         //首字母大写
         country = country.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
         if(JSON.stringify(mapJsonData)!=='{}'){
-            region = country;
-            const json = mapJsonData;
-            echarts.registerMap(region, json, {});
+            region = country || 'world';
+            echarts.registerMap(region, mapJsonData, {});
         }else
             region = 'world';
     }catch (e) {
@@ -1027,12 +983,14 @@ function drawRegionMap(data,option,country,mapJsonData){
             visualMap: {
                 show:false,
                 left: option['visualMap.left']||'right',
-                min: option['visualMap.min']||500000,
+                min: option['visualMap.min']||0,
                 max: option['visualMap.max']||38000000,
                 inRange: {
-                    color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                    color: ['#e6f7ff','#91d5ff','#40a9ff','#1890ff','#096dd9','#0050b3','#003a8c','#002766']
                 },
-                text:['High','Low'],           // 文本，默认为数值文本
+                textStyle: {
+                    color: '#fff'
+                },           // 文本，默认为数值文本
                 calculable: true,
                 textStyle:{
                     color:'black'

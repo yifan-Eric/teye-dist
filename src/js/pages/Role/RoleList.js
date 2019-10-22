@@ -15,7 +15,7 @@ class RoleList extends React.Component {
         return (
             <div>
                 {
-                    list.length ? (
+                    list && list.length ? (
                         <Menu onClick={this.handleClick}>
                             {
                                 list.map((o) => {

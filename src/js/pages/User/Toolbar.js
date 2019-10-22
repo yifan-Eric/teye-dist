@@ -36,12 +36,12 @@ class Toolbar extends React.Component {
                     )
                 }
                 <Col span={18}>
-                    <Input.Search placeholder="输入姓名或角色搜索员工"
+                    {/* <Input.Search placeholder="输入姓名或角色搜索员工"
                         value={searchKey}
                         onChange={this.handleChange}
                         onSearch={onSearch.bind(this)}
                         style={{ maxWidth: 500 }}
-                        suffix={suffix} enterButton/>
+                        suffix={suffix} enterButton/> */}
                 </Col>
             </Row>
         );

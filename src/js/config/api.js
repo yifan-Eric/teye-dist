@@ -1,5 +1,5 @@
 const proBaseUrl = 'https://www.tct-teye.com',
-    devBaseUrl = 'http://63.33.199.83:8066',
+    devBaseUrl = 'https://www.tct-teye.com',
     mapCDN = 'http://d2svindzvhonk3.cloudfront.net';
 export default (function () {
     var config = {};

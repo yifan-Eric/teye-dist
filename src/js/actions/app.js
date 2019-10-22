@@ -189,7 +189,7 @@ action.loadUserInfo = () => dispatch => ajax.get('/profile').then(data => {
  * @returns {Function}
  */
 action.loadUserMenu = (reloadOnly) => dispatch => ajax.get('/menu/user').then(data => {
-    // console.log(data);
+    console.log(data,"data");
     // url -> obj
     let obj = {
         // 固定菜单页面

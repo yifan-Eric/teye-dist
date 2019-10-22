@@ -7,7 +7,8 @@ const defaultState = {
     loading: false,
     list: [],
     editShow: false,
-    editData: {}
+    editData: {},
+    menuList:null
 };
 
 export default (state, action) => {
@@ -15,6 +16,9 @@ export default (state, action) => {
     switch (action.type) {
     case 'MENU_LOADING':
         newState.loading = action.loading;
+        break;
+    case 'SAVE_MENU_LIST':
+        newState.menuList = action.menuList;
         break;
     case 'MENU_LIST':
         newState.list = action.list;

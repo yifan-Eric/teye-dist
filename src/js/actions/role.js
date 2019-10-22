@@ -6,9 +6,14 @@ let action = {};
  * 加载角色列表
  * @returns {Function}
  */
-action.loadList = () => dispatch => ajax.get('/role').then(list => {
-    dispatch({ type: 'ROLE_LIST', list: list });
-});
+action.loadList = () => (dispatch, getState) => {
+    const roleList = getState().role.roleList;
+    if (!roleList) {
+        ajax.get('/role').then(list => {
+            dispatch({ type: 'ROLE_LIST', list: list });
+        });
+    }
+};
 
 /**
  * 加载菜单树状结构数据
@@ -26,7 +31,8 @@ function loadMenuTree () {
                 item.id = String(item.id);
 
                 // 手动添加操作权限
-                if (item.module && menuConfig[item.module].operations) { // 过滤出菜单
+                if (item.module && menuConfig[item.module] && menuConfig[item.module].operations) {
+                    // 过滤出菜单
                     item.list = menuConfig[item.module].operations.map(o => {
                         return { id: item.id + '_' + o.key, name: o.name, type: 'OPT' };
                     });
@@ -65,22 +71,29 @@ action.loadMenuTree = loadMenuTree;
  * @returns {Function}
  */
 function selectRole (role) {
-    return dispatch => {
+    return (dispatch,getState) => {
         dispatch({ type: 'ROLE_SELECT', role: role });
-        return ajax.get('/role/auth', {
-            id: role.id
-        }).then(data => {
+        let roleAuthObj = getState().role.roleAuthObj;
+        return new Promise((resolve,reject)=>{
+            if(roleAuthObj[role.id]){
+                resolve(roleAuthObj[role.id])
+            }else{
+                resolve(ajax.get("/role/auth"))
+            }
+        })
+        .then(data => {
+            dispatch({ type: 'ROLE_AUTH_LIST_LOAD', id: role.id, data });
             let roleAuth = [];
             // 只要有一个勾上，则顶级节点（非实际菜单）也得勾上
             if (data.length) {
                 roleAuth.push('0');
-
                 data.forEach(o => {
                     roleAuth.push(String(o.menuId));
-
                     // 操作类型
                     if (o.functions) {
-                        roleAuth = roleAuth.concat(o.functions.map(func => `${o.menuId}_${func}`));
+                        roleAuth = roleAuth.concat(
+                            o.functions.map(func => `${o.menuId}_${func}`)
+                        );
                     }
                 });
             }
@@ -97,11 +110,9 @@ action.selectRole = selectRole;
  * @returns {Function}
  */
 function updateRoleMenu (roleId, data) {
-    return dispatch => {
-        return ajax.post('/role/auth-update', {
-            id: roleId,
-            data: JSON.stringify(data)
-        });
+    return (dispatch) => {
+        dispatch({ type: 'ROLE_AUTH_LIST_LOAD', id:roleId, data });
+        return Promise.resolve();
     };
 }
 action.updateRoleMenu = updateRoleMenu;
@@ -112,11 +123,16 @@ action.updateRoleMenu = updateRoleMenu;
  * @returns {Function}
  */
 function addRole (data) {
-    return dispatch => {
-        return ajax.post('/role/create', {
+    return (dispatch, getState) => {
+        let roleList = JSON.parse(JSON.stringify(getState().role.roleList));
+        let id = roleList.length + 1;
+        roleList.push({
+            id,
             name: data.name,
             desc: data.desc
         });
+        dispatch({ type: 'ROLE_LIST', list: roleList });
+        return Promise.resolve();
     };
 }
 action.addRole = addRole;
@@ -127,12 +143,16 @@ action.addRole = addRole;
  * @returns {Function}
  */
 function updateRole (data) {
-    return dispatch => {
-        return ajax.post('/role/update', {
+    return (dispatch,getState) => {
+        let roleList = JSON.parse(JSON.stringify(getState().role.roleList));
+        let index  = roleList.findIndex((val)=>val.id === data.id); 
+        roleList.splice(index,1,{
             id: data.id,
             name: data.name,
             desc: data.desc
-        });
+        })
+        dispatch({ type: 'ROLE_LIST', list: roleList });
+        return Promise.resolve();
     };
 }
 action.updateRole = updateRole;
@@ -143,16 +163,13 @@ action.updateRole = updateRole;
  * @returns {Function}
  */
 function deleteRole (id) {
-    return dispatch => {
-        return ajax.post('/role/delete', {
-            id: id
-        }).then(() => {
-            // 取消当前选择的角色
-            dispatch({ type: 'ROLE_SELECT', role: {} });
-
-            // 重新加载角色列表
-            dispatch(action.loadList());
-        });
+    return (dispatch,getState) => {
+        let roleList = JSON.parse(JSON.stringify(getState().role.roleList));
+        let index = roleList.findIndex((val)=>val.id === id); 
+        roleList.splice(index,1);
+        dispatch({ type: 'ROLE_LIST', list: roleList });
+        dispatch({ type: 'ROLE_SELECT', role: {} });
+        dispatch(action.loadList());
     };
 }
 action.deleteRole = deleteRole;

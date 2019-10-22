@@ -4,17 +4,19 @@ import appAction from 'actions/app';
 let actions = {};
 
 actions.loadRegionData = (country) => (dispatch,getState) => {
-    const preData = getState().dashboard2.regionMapCard
-    const data = [{}];
-    let option = {
-        'title.show':false,
-        'title.left':'left',
-        'title.top':'top',
+    ajax.get("/map/initData")
+        .then(data=>{
+            const preData = getState().dashboard2.regionMapCard;
+            let option = {
+                'title.show':false,
+                'title.left':'left',
+                'title.top':'top',
+                'visualMap.left':'left',
+            };
+            dispatch({type:'DASHBOARD2_REGIONMAPCARD_LOAD',data,option,mapJsonData: preData.mapJsonData});
+            dispatch(appAction.loadRegion(country || 'world','DASHBOARD2_REGIONMAPCARD_LOAD',{data,option:option}))
+        })
 
-        'visualMap.left':'left',
-    };
-    dispatch({type:'DASHBOARD2_REGIONMAPCARD_LOAD',data,option,mapJsonData: preData.mapJsonData});
-    dispatch(appAction.loadRegion(country,'DASHBOARD2_REGIONMAPCARD_LOAD',{data:preData.data,option:preData.option}))
 }
 
 actions.loadSecondData = (exData) => dispatch => {
